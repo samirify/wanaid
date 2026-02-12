@@ -36,7 +36,7 @@ const config: Config = {
           800: "#151515",
           900: "#111111",
           950: "#0a0a0a",
-          DEFAULT: "#222222",
+          DEFAULT: "#000000",
         },
       },
       fontFamily: {

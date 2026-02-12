@@ -33,11 +33,16 @@ export function Footer() {
     { url: settings.social_media_twitter, icon: Twitter, label: "Twitter" },
   ].filter((link) => link.url);
 
+  // "Pages" column — matches React footer exactly
   const quickLinks = [
     { href: "/about", label: t("WEBSITE_FOOTER_PAGES_ABOUT_LABEL") },
-    { href: "/#open-causes", label: t("WEBSITE_FOOTER_USEFUL_LINKS_OPEN_CAUSES_LABEL") },
-    { href: "/#blog", label: t("WEBSITE_FOOTER_PAGES_BLOG_LABEL") },
+    { href: "/blog", label: t("WEBSITE_FOOTER_PAGES_BLOG_LABEL") },
     { href: "/contact", label: t("WEBSITE_FOOTER_PAGES_CONTACT_LABEL") },
+  ];
+
+  // "Useful Links" column — matches React footer exactly
+  const usefulLinks = [
+    { href: "/open-causes", label: t("WEBSITE_FOOTER_USEFUL_LINKS_OPEN_CAUSES_LABEL") },
   ];
 
   const legalLinks = [
@@ -105,7 +110,7 @@ export function Footer() {
             )}
           </div>
 
-          {/* Quick Links */}
+          {/* Pages — same as React footer */}
           <div>
             <h3 className="text-white font-semibold text-lg mb-6">
               {t("WEBSITE_FOOTER_PAGES_LABEL")}
@@ -125,13 +130,13 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Legal Links */}
+          {/* Useful Links — same as React footer */}
           <div>
             <h3 className="text-white font-semibold text-lg mb-6">
               {t("WEBSITE_FOOTER_USEFUL_LINKS_LABEL")}
             </h3>
             <ul className="space-y-3">
-              {legalLinks.map((link) => (
+              {usefulLinks.map((link) => (
                 <li key={link.href}>
                   <Link
                     href={link.href}
@@ -187,17 +192,25 @@ export function Footer() {
         </div>
       </div>
 
-      {/* Bottom Bar */}
+      {/* Bottom Bar — copyright + legal links (same as React footer) */}
       <div className="border-t border-slate-800">
         <div className="container-custom py-6">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="flex flex-col items-center gap-4">
             <p className="text-slate-500 text-sm">
               &copy; {new Date().getFullYear()} {copyright}
             </p>
-            <p className="text-slate-600 text-xs flex items-center gap-1">
-              Made with <Heart className="w-3 h-3 text-red-500" /> for a better
-              world
-            </p>
+            <ul className="flex items-center gap-4">
+              {legalLinks.map((link) => (
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    className="text-slate-500 hover:text-primary-400 transition-colors text-xs"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
       </div>

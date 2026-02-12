@@ -7,6 +7,7 @@ import ReCAPTCHA from "react-google-recaptcha";
 import { useAppData } from "@/context/AppContext";
 import { api } from "@/lib/api";
 import { ErrorDisplay } from "@/components/shared/ErrorDisplay";
+import { PageHead } from "@/components/shared/PageHead";
 import {
   MapPin,
   Phone,
@@ -91,6 +92,8 @@ export default function ContactPage() {
 
   return (
     <>
+      <PageHead />
+
       {/* Page Hero */}
       <div className="page-hero">
         <div className="page-hero-content">

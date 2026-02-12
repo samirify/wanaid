@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { useTranslations, useLocale } from "next-intl";
-import { Link, usePathname, useRouter } from "@/i18n/navigation";
+import { Link } from "@/i18n/navigation";
 import { useAppData } from "@/context/AppContext";
 import { ThemeSwitcher } from "./ThemeSwitcher";
 import { LanguageSelector } from "./LanguageSelector";
@@ -12,17 +12,14 @@ import { Menu, X, Heart } from "lucide-react";
 interface NavLink {
   href: string;
   label: string;
-  isHash: boolean;
 }
 
 function DesktopNavLink({
   link,
   isScrolled,
-  onHashClick,
 }: {
   link: NavLink;
   isScrolled: boolean;
-  onHashClick: (e: React.MouseEvent, hash: string) => void;
 }) {
   const cls = cn(
     "px-3 py-2 rounded-xl text-sm font-medium transition-all duration-200",
@@ -30,14 +27,6 @@ function DesktopNavLink({
       ? "text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-primary-600 dark:hover:text-primary-400"
       : "text-white/90 hover:text-white hover:bg-white/10"
   );
-
-  if (link.isHash) {
-    return (
-      <a href={link.href} onClick={(e) => onHashClick(e, link.href)} className={cn(cls, "cursor-pointer")}>
-        {link.label}
-      </a>
-    );
-  }
 
   return (
     <Link href={link.href} className={cls}>
@@ -48,29 +37,12 @@ function DesktopNavLink({
 
 function MobileNavLink({
   link,
-  onHashClick,
   onClose,
 }: {
   link: NavLink;
-  onHashClick: (e: React.MouseEvent, hash: string) => void;
   onClose: () => void;
 }) {
   const cls = "flex items-center px-6 py-3 text-slate-700 dark:text-slate-300 hover:bg-primary-50 dark:hover:bg-slate-800 hover:text-primary-600 dark:hover:text-primary-400 transition-colors";
-
-  if (link.isHash) {
-    return (
-      <a
-        href={link.href}
-        onClick={(e) => {
-          onHashClick(e, link.href);
-          onClose();
-        }}
-        className={cn(cls, "cursor-pointer")}
-      >
-        {link.label}
-      </a>
-    );
-  }
 
   return (
     <Link href={link.href} onClick={onClose} className={cls}>
@@ -82,8 +54,6 @@ function MobileNavLink({
 export function Navigation() {
   const t = useTranslations();
   const locale = useLocale();
-  const router = useRouter();
-  const pathname = usePathname();
   const { settings, blogs, galleryCount } = useAppData();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -105,36 +75,22 @@ export function Navigation() {
     };
   }, [isMobileMenuOpen]);
 
-  const handleHashClick = useCallback(
-    (e: React.MouseEvent, hash: string) => {
-      e.preventDefault();
-      const sectionId = hash.replace("/#", "");
-      if (pathname === "/") {
-        const el = document.getElementById(sectionId);
-        if (el) el.scrollIntoView({ behavior: "smooth" });
-      } else {
-        router.push(`/#${sectionId}`);
-      }
-    },
-    [pathname, router]
-  );
-
   const navLinks: NavLink[] = [
-    { href: "/", label: t("TOP_NAV_HOME_LABEL"), isHash: false },
-    { href: "/about", label: t("TOP_NAV_ABOUT_LABEL"), isHash: false },
+    { href: "/", label: t("TOP_NAV_HOME_LABEL") },
+    { href: "/about", label: t("TOP_NAV_ABOUT_LABEL") },
   ];
 
   if (blogs.length > 0) {
-    navLinks.push({ href: "/#blog", label: t("TOP_NAV_BLOG_LABEL"), isHash: true });
+    navLinks.push({ href: "/blog", label: t("TOP_NAV_BLOG_LABEL") });
   }
 
-  navLinks.push({ href: "/marital-therapy-clinic", label: t("DR_MAGDI_CLINIC_TOP_HEADER"), isHash: false });
+  navLinks.push({ href: "/marital-therapy-clinic", label: t("DR_MAGDI_CLINIC_TOP_HEADER") });
 
   if (galleryCount > 0) {
-    navLinks.push({ href: "/gallery", label: t("GALLERY_TOP_HEADER"), isHash: false });
+    navLinks.push({ href: "/gallery", label: t("GALLERY_TOP_HEADER") });
   }
 
-  navLinks.push({ href: "/contact", label: t("TOP_NAV_CONTACT_LABEL"), isHash: false });
+  navLinks.push({ href: "/contact", label: t("TOP_NAV_CONTACT_LABEL") });
 
   const donateUrl = settings.static_button_get_started_url || "/cause/help-us";
   const closeMobile = () => setIsMobileMenuOpen(false);
@@ -178,7 +134,6 @@ export function Navigation() {
                   key={link.href}
                   link={link}
                   isScrolled={isScrolled}
-                  onHashClick={handleHashClick}
                 />
               ))}
             </div>
@@ -263,7 +218,6 @@ export function Navigation() {
               <MobileNavLink
                 key={link.href}
                 link={link}
-                onHashClick={handleHashClick}
                 onClose={closeMobile}
               />
             ))}

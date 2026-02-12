@@ -7,6 +7,7 @@ import ReCAPTCHA from "react-google-recaptcha";
 import { api } from "@/lib/api";
 import { useRawTranslation } from "@/hooks/useRawTranslation";
 import { ErrorDisplay } from "@/components/shared/ErrorDisplay";
+import { PageHead } from "@/components/shared/PageHead";
 import { AlertCircle, CheckCircle, Loader2, Send } from "lucide-react";
 
 export default function ClinicPage() {
@@ -83,6 +84,8 @@ export default function ClinicPage() {
 
   return (
     <>
+      <PageHead />
+
       {/* Hero — just the title like old React */}
       <div className="page-hero">
         <div className="page-hero-content">

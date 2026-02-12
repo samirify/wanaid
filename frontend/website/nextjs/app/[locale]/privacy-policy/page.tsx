@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import { api } from "@/lib/api";
 import { Loader } from "@/components/shared/Loader";
 import { ErrorDisplay } from "@/components/shared/ErrorDisplay";
+import { PageHead } from "@/components/shared/PageHead";
 import { Shield } from "lucide-react";
 
 export default function PrivacyPolicyPage() {
@@ -32,6 +33,8 @@ export default function PrivacyPolicyPage() {
 
   return (
     <>
+      <PageHead />
+
       <div className="page-hero">
         <div className="page-hero-content">
           <motion.div

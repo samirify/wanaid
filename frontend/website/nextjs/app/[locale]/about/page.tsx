@@ -9,6 +9,7 @@ import { mediaUrl } from "@/lib/utils";
 import { useRawTranslation } from "@/hooks/useRawTranslation";
 import { Loader } from "@/components/shared/Loader";
 import { ErrorDisplay } from "@/components/shared/ErrorDisplay";
+import { PageHead } from "@/components/shared/PageHead";
 import { PageSections } from "@/components/landing/PageSections";
 import { Users, Facebook, Instagram, Linkedin, Twitter, Youtube } from "lucide-react";
 import type { PageHeaders, Pillar, TeamDepartment, TeamMember, MetaData } from "@/lib/types";
@@ -108,7 +109,11 @@ export default function AboutPage() {
         const result = await api.getAboutData(locale);
         setData(result);
       } catch (err) {
-        setError("Failed to load page data.");
+        if (err && typeof err === "object" && "status" in err && (err as { status: number }).status === 404) {
+          setError("Page not found.");
+        } else {
+          setError("Server error.");
+        }
       } finally {
         setLoading(false);
       }
@@ -118,13 +123,22 @@ export default function AboutPage() {
 
   if (loading) return <Loader fullPage />;
   if (error || !data) {
+    const is404 = error === "Page not found.";
     return (
-      <ErrorDisplay variant="page" message={error ?? undefined} showHomeButton />
+      <ErrorDisplay
+        variant="page"
+        errorCode={is404 ? "404" : "500"}
+        title={is404 ? rawT("WEBSITE_ERRORS_PAGE_NOT_FOUND_HEADER") : undefined}
+        message={is404 ? rawT("WEBSITE_ERRORS_PAGE_NOT_FOUND_MESSAGE") : undefined}
+        showHomeButton
+      />
     );
   }
 
   return (
     <>
+      <PageHead />
+
       {/* Page Hero */}
       <div className="page-hero">
         {data.main_header_img && (
