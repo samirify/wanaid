@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useTranslations, useLocale } from "next-intl";
 import { motion } from "framer-motion";
 import { api } from "@/lib/api";
+import { useRawTranslation } from "@/hooks/useRawTranslation";
 import { Loader } from "@/components/shared/Loader";
 import { ErrorDisplay } from "@/components/shared/ErrorDisplay";
 import { PageHead } from "@/components/shared/PageHead";
@@ -11,6 +12,7 @@ import { Shield } from "lucide-react";
 
 export default function PrivacyPolicyPage() {
   const t = useTranslations();
+  const rawT = useRawTranslation();
   const locale = useLocale();
   const [content, setContent] = useState<string>("");
   const [loading, setLoading] = useState(true);
@@ -21,7 +23,14 @@ export default function PrivacyPolicyPage() {
       try {
         setLoading(true);
         const data = await api.getDocument("document_privacy_policy");
-        setContent(data.document?.body || "");
+        const doc = data.document;
+        if (doc?.body) {
+          setContent(doc.body);
+        } else if (doc?.value) {
+          setContent(rawT(doc.value) || "");
+        } else {
+          setContent("");
+        }
       } catch {
         setError("Failed to load document.");
       } finally {

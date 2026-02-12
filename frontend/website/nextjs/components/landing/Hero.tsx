@@ -33,26 +33,44 @@ export function Hero() {
 
   return (
     <section className="relative min-h-screen flex items-center overflow-hidden">
-      {/* Animated Background — deep indigo gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-primary-600 via-primary-700 to-primary-900 dark:from-slate-900 dark:via-primary-950/60 dark:to-slate-900">
-        {/* Decorative orbs */}
-        <div className="absolute top-20 start-10 w-72 h-72 bg-primary-400/20 rounded-full blur-3xl animate-float" />
-        <div
-          className="absolute bottom-20 end-10 w-96 h-96 bg-accent-500/10 rounded-full blur-3xl animate-float"
-          style={{ animationDelay: "3s" }}
-        />
-        <div className="absolute top-1/2 start-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary-500/5 rounded-full blur-3xl" />
+      {/* Rich gradient background — reacts to dark mode via CSS variables */}
+      <div
+        className="absolute inset-0 transition-[background] duration-500"
+        style={{ background: "var(--hero-bg)" }}
+      />
+      {/* Radial spotlight behind content */}
+      <div
+        className="absolute inset-0 opacity-60 transition-opacity duration-500"
+        style={{ background: "var(--hero-spotlight)" }}
+      />
+      {/* Decorative orbs — light mode: brighter; dark mode: subtler */}
+      <div className="absolute top-10 -start-20 w-[420px] h-[420px] bg-primary-400/30 dark:bg-primary-500/15 rounded-full blur-[100px] animate-float transition-colors duration-500" />
+      <div
+        className="absolute bottom-10 -end-20 w-[480px] h-[480px] bg-primary-500/25 dark:bg-primary-600/20 rounded-full blur-[120px] animate-float transition-colors duration-500"
+        style={{ animationDelay: "2s" }}
+      />
+      <div
+        className="absolute top-1/2 end-1/4 w-[320px] h-[320px] bg-white/5 dark:bg-slate-400/5 rounded-full blur-3xl transition-colors duration-500"
+        style={{ animationDelay: "1s" }}
+      />
+      <div className="absolute top-1/3 end-1/3 w-[200px] h-[200px] bg-primary-300/15 dark:bg-primary-500/10 rounded-full blur-2xl transition-colors duration-500" />
 
-        {/* Grid pattern overlay */}
-        <div
-          className="absolute inset-0 opacity-[0.03]"
-          style={{
-            backgroundImage:
-              "radial-gradient(circle at 1px 1px, white 1px, transparent 0)",
-            backgroundSize: "40px 40px",
-          }}
-        />
-      </div>
+      {/* Subtle grid texture */}
+      <div
+        className="absolute inset-0 opacity-[0.04] dark:opacity-[0.06] transition-opacity duration-500"
+        style={{
+          backgroundImage:
+            "radial-gradient(circle at 1px 1px, white 1px, transparent 0)",
+          backgroundSize: "32px 32px",
+        }}
+      />
+      {/* Soft noise overlay for texture */}
+      <div
+        className="absolute inset-0 opacity-[0.03] dark:opacity-[0.04] pointer-events-none transition-opacity duration-500"
+        style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
+        }}
+      />
 
       <div className="container-custom relative z-10 py-32 lg:py-0">
         <div className="grid lg:grid-cols-2 gap-12 items-center min-h-screen">
@@ -63,7 +81,7 @@ export function Hero() {
               initial="hidden"
               animate="visible"
               variants={fadeInUp}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 mb-8"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/25 shadow-lg shadow-black/20 mb-8"
             >
               <Heart className="w-4 h-4 text-accent-50" />
               <span className="text-sm font-medium text-white/90">
@@ -112,7 +130,7 @@ export function Hero() {
                     <Link
                       key={cta.id}
                       href={linkHref}
-                      className="btn bg-accent-500 text-white hover:bg-accent-600 shadow-lg shadow-accent-500/30 hover:shadow-xl hover:shadow-accent-500/40 px-8 py-4 text-base"
+                      className="btn bg-accent-500 text-white hover:bg-accent-600 shadow-xl shadow-black/30 hover:shadow-2xl hover:-translate-y-0.5 px-8 py-4 text-base transition-all duration-300"
                     >
                       <Heart className="w-5 h-5" />
                       {rawT(cta.label)}
@@ -121,7 +139,7 @@ export function Hero() {
                     <Link
                       key={cta.id}
                       href={linkHref}
-                      className="btn bg-white/10 backdrop-blur-sm text-white border-2 border-white/30 hover:bg-white/20 px-8 py-4 text-base"
+                      className="btn bg-white/10 backdrop-blur-sm text-white border-2 border-white/30 hover:bg-white/20 hover:border-white/40 shadow-lg shadow-black/10 px-8 py-4 text-base transition-all duration-300"
                     >
                       {rawT(cta.label)}
                     </Link>
@@ -133,14 +151,14 @@ export function Hero() {
                     href={
                       settings.static_button_get_started_url || "/cause/help-us"
                     }
-                    className="btn bg-accent-500 text-white hover:bg-accent-600 shadow-lg shadow-accent-500/30 hover:shadow-xl hover:shadow-accent-500/40 px-8 py-4 text-base"
+                    className="btn bg-accent-500 text-white hover:bg-accent-600 shadow-xl shadow-black/30 hover:shadow-2xl hover:-translate-y-0.5 px-8 py-4 text-base transition-all duration-300"
                   >
                     <Heart className="w-5 h-5" />
                     {t("OPEN_CAUSES_DONATE_NOW_LABEL")}
                   </Link>
                   <Link
                     href="/about"
-                    className="btn bg-white/10 backdrop-blur-sm text-white border-2 border-white/30 hover:bg-white/20 px-8 py-4 text-base"
+                    className="btn bg-white/10 backdrop-blur-sm text-white border-2 border-white/30 hover:bg-white/20 hover:border-white/40 shadow-lg shadow-black/10 px-8 py-4 text-base transition-all duration-300"
                   >
                     {t("TOP_NAV_ABOUT_LABEL")}
                   </Link>
@@ -165,10 +183,10 @@ export function Hero() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.6 + index * 0.2, duration: 0.5 }}
-                    className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-6 hover:bg-white/15 transition-all duration-300 group"
+                    className="bg-white/10 backdrop-blur-xl border border-white/25 rounded-2xl p-6 shadow-xl shadow-black/20 hover:bg-white/15 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 group"
                   >
                     <div className="flex items-center gap-4">
-                      <div className="w-14 h-14 rounded-xl bg-white/10 flex items-center justify-center group-hover:bg-accent-500/20 transition-colors">
+                      <div className="w-14 h-14 rounded-xl bg-white/15 flex items-center justify-center group-hover:bg-accent-500/25 shadow-inner border border-white/10 transition-colors">
                         <stat.icon className="w-7 h-7 text-accent-50" />
                       </div>
                       <div>

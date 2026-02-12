@@ -305,11 +305,13 @@ export interface SupportPageResponse {
 }
 
 export interface DocumentResponse {
-  success: boolean;
-  document: {
-    title: string;
-    body: string;
-    meta: MetaData;
+  document?: {
+    title?: string;
+    /** Raw HTML when API returns body directly */
+    body?: string;
+    /** Translation key for HTML content (e.g. LEGAL_DOCS_DOCUMENT_DISCLAIMER); resolve via messages for client-formatted HTML */
+    value?: string;
+    meta?: MetaData;
   };
 }
 

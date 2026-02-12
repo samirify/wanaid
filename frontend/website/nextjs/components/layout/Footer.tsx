@@ -4,7 +4,6 @@ import { useTranslations, useLocale } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { useAppData } from "@/context/AppContext";
 import {
-  Heart,
   MapPin,
   Phone,
   Mail,
@@ -80,12 +79,16 @@ export function Footer() {
 
       <div className="container-custom py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
-          {/* Brand Column */}
+          {/* Brand Column — client logo from React site */}
           <div className="lg:col-span-1">
-            <Link href="/" className="flex items-center gap-2 mb-4">
-              <div className="w-10 h-10 rounded-xl bg-primary-600 text-white flex items-center justify-center">
-                <Heart className="w-5 h-5" />
-              </div>
+            <Link href="/" className="inline-block mb-4">
+              <img
+                src="/images/logo-light.svg"
+                alt="WAN Aid"
+                className="h-10 w-auto"
+                width={120}
+                height={42}
+              />
             </Link>
             {tagline && (
               <p className="text-slate-400 text-sm leading-relaxed mb-6">

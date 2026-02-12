@@ -1,49 +1,49 @@
 "use client";
 
-import { useTranslations, useLocale } from "next-intl";
-import { motion } from "framer-motion";
+import { useTranslations } from "next-intl";
 import { useAppData } from "@/context/AppContext";
-import { CauseCard } from "./CauseCard";
-import { useScrollAnimation } from "@/hooks/useScrollAnimation";
+import { CauseStrip } from "./CauseStrip";
 
 export function OpenCauses() {
   const t = useTranslations();
-  const locale = useLocale();
   const { openCauses } = useAppData();
-  const [ref, isInView] = useScrollAnimation();
 
   if (!openCauses || openCauses.length === 0) return null;
 
   return (
     <section
-      ref={ref}
       id="open-causes"
-      className="py-24 bg-slate-50 dark:bg-slate-800/50"
+      className="relative py-20 sm:py-28 overflow-hidden"
+      aria-label={t("OPEN_CAUSES_HEADER_LABEL")}
     >
-      <div className="container-custom">
-        {/* Section Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-center mb-16"
-        >
-          <h2 className="section-heading text-slate-900 dark:text-white mb-4">
+      {/* Ambient background — soft gradient + subtle primary glow so content feels "on stage" */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        aria-hidden
+      >
+        <div className="absolute inset-0 bg-gradient-to-b from-slate-50/80 via-white to-slate-50/60 dark:from-slate-900/80 dark:via-slate-900 dark:to-slate-900/80" />
+        <div className="absolute top-1/4 -left-40 w-80 h-80 rounded-full bg-primary-500/5 dark:bg-primary-500/10 blur-3xl" />
+        <div className="absolute bottom-1/4 -right-40 w-96 h-96 rounded-full bg-primary-400/5 dark:bg-primary-500/5 blur-3xl" />
+      </div>
+
+      <div className="container-custom relative">
+        <header className="mb-14 sm:mb-16 text-center">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 dark:text-white tracking-tight max-w-2xl mx-auto">
             {t("OPEN_CAUSES_HEADER_LABEL")}
           </h2>
-          <div className="divider mb-4" />
-        </motion.div>
+          <div className="mt-4 h-1 w-16 bg-primary-500 rounded-full mx-auto" />
+        </header>
 
-        {/* Causes Grid — centered when fewer than full row */}
-        <div className="flex flex-wrap justify-center gap-8">
+        <div className="max-w-6xl mx-auto space-y-8 sm:space-y-10">
           {openCauses.map((cause, index) => (
-            <div key={cause.id} className="w-full md:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.5rem)]">
-              <CauseCard cause={cause} index={index} />
-            </div>
+            <CauseStrip
+              key={cause.id}
+              cause={cause}
+              index={index}
+              imageOnLeft={index % 2 === 0}
+            />
           ))}
         </div>
-
-        
       </div>
     </section>
   );

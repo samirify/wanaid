@@ -100,31 +100,35 @@ export function Navigation() {
       <nav
         className={cn(
           "fixed top-0 start-0 end-0 z-50 transition-all duration-500",
-          isScrolled ? "glass-strong py-2" : "bg-transparent py-4"
+          isScrolled
+            ? "glass-strong py-2 shadow-lg shadow-black/10"
+            : "py-4 bg-gradient-to-b from-black/20 via-transparent to-transparent dark:from-white/10 dark:via-transparent dark:to-transparent"
         )}
       >
         <div className="container-custom">
           <div className="flex items-center justify-between">
-            {/* Logo */}
-            <Link
-              href="/"
-              className={cn(
-                "flex items-center gap-2 font-bold text-xl transition-colors",
-                isScrolled
-                  ? "text-primary-700 dark:text-primary-400"
-                  : "text-white"
+            {/* Logo — client logo from React site */}
+            <Link href="/" className="flex items-center gap-2 shrink-0">
+              {isScrolled ? (
+                <>
+                  <img
+                    src="/images/logo-dark.svg"
+                    alt="WAN Aid"
+                    className="h-9 w-auto dark:hidden"
+                  />
+                  <img
+                    src="/images/logo-light.svg"
+                    alt="WAN Aid"
+                    className="h-9 w-auto hidden dark:block"
+                  />
+                </>
+              ) : (
+                <img
+                  src="/images/logo-light.svg"
+                  alt="WAN Aid"
+                  className="h-9 w-auto"
+                />
               )}
-            >
-              <div
-                className={cn(
-                  "w-10 h-10 rounded-xl flex items-center justify-center transition-all",
-                  isScrolled
-                    ? "bg-primary-600 text-white"
-                    : "bg-white/20 text-white backdrop-blur-sm"
-                )}
-              >
-                <Heart className="w-5 h-5" />
-              </div>
             </Link>
 
             {/* Desktop Navigation */}
@@ -198,11 +202,13 @@ export function Navigation() {
         >
           {/* Mobile Header */}
           <div className="flex items-center justify-between p-4 border-b border-slate-200 dark:border-slate-700">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-primary-600 text-white flex items-center justify-center">
-                <Heart className="w-4 h-4" />
-              </div>
-            </div>
+            <Link href="/" onClick={closeMobile} className="flex items-center">
+              <img
+                src="/images/logo-dark.svg"
+                alt="WAN Aid"
+                className="h-8 w-auto dark:invert"
+              />
+            </Link>
             <button
               onClick={closeMobile}
               className="p-2 rounded-xl text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800"

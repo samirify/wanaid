@@ -17,6 +17,9 @@
   /* Brand colours — single source of truth for raw CSS usage */
   --color-primary: #c71c69;
   --color-secondary: #222222;
+  /* Hero section — light theme */
+  --hero-bg: linear-gradient(165deg, #9e1554 0%, #77133f 25%, #480521 50%, #2d0314 75%, #1a020c 100%);
+  --hero-spotlight: radial-gradient(ellipse 80% 70% at 30% 50%, rgba(231, 62, 133, 0.35) 0%, transparent 50%);
 }
 
 .dark {
@@ -28,6 +31,9 @@
   --muted-foreground: 148 163 184;
   --border: 51 65 85;
   --ring: 241 112 168;
+  /* Hero section — dark theme (same magenta/burgundy family, deeper) */
+  --hero-bg: linear-gradient(165deg, #2d0314 0%, #1a020c 25%, #0f0108 50%, #1a020c 75%, #2d0314 100%);
+  --hero-spotlight: radial-gradient(ellipse 80% 70% at 30% 50%, rgba(199, 28, 105, 0.25) 0%, rgba(126, 15, 63, 0.12) 40%, transparent 70%);
 }
 
 /* ───────────────── Base Styles ──────────────────────────────────────────── */
@@ -113,7 +119,8 @@
   }
 
   .card-elevated {
-    @apply card shadow-md hover:shadow-xl;
+    @apply card shadow-lg shadow-slate-200/80 dark:shadow-black/30;
+    @apply hover:shadow-xl hover:shadow-slate-300/50 dark:hover:shadow-black/40;
     @apply hover:-translate-y-1;
   }
 
@@ -223,6 +230,46 @@
   /* Divider */
   .divider {
     @apply w-20 h-1 bg-gradient-to-r from-primary-500 to-accent-500 rounded-full mx-auto;
+  }
+
+  /* Blog detail body — clean prose and prevent CMS content from feeling messy */
+  .blog-body {
+    @apply text-slate-700 dark:text-slate-300;
+  }
+  .blog-body > * + * {
+    @apply mt-6;
+  }
+  .blog-body h2 {
+    @apply text-2xl font-bold text-slate-900 dark:text-white mt-10 mb-4 pb-2 border-b border-slate-200 dark:border-slate-700;
+  }
+  .blog-body h3 {
+    @apply text-xl font-bold text-slate-900 dark:text-white mt-8 mb-3;
+  }
+  .blog-body img {
+    @apply max-w-full h-auto rounded-xl shadow-md my-6 block;
+  }
+  .blog-body p {
+    @apply leading-relaxed;
+  }
+  .blog-body ul,
+  .blog-body ol {
+    @apply my-4 pl-6 space-y-1;
+  }
+  .blog-body figure {
+    @apply my-8;
+  }
+  .blog-body figure img {
+    @apply my-2;
+  }
+  .blog-body table {
+    @apply w-full border-collapse my-6 rounded-lg overflow-hidden border border-slate-200 dark:border-slate-700;
+  }
+  .blog-body th,
+  .blog-body td {
+    @apply border border-slate-200 dark:border-slate-700 px-4 py-3 text-left;
+  }
+  .blog-body th {
+    @apply bg-slate-100 dark:bg-slate-800 font-semibold text-slate-900 dark:text-white;
   }
 }
 

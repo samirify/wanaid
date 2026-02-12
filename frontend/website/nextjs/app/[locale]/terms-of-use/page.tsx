@@ -4,12 +4,14 @@ import { useState, useEffect } from "react";
 import { useTranslations, useLocale } from "next-intl";
 import { motion } from "framer-motion";
 import { api } from "@/lib/api";
+import { useRawTranslation } from "@/hooks/useRawTranslation";
 import { Loader } from "@/components/shared/Loader";
 import { ErrorDisplay } from "@/components/shared/ErrorDisplay";
 import { FileText } from "lucide-react";
 
 export default function TermsOfUsePage() {
   const t = useTranslations();
+  const rawT = useRawTranslation();
   const locale = useLocale();
   const [content, setContent] = useState<string>("");
   const [loading, setLoading] = useState(true);
@@ -20,7 +22,14 @@ export default function TermsOfUsePage() {
       try {
         setLoading(true);
         const data = await api.getDocument("document_terms_of_use");
-        setContent(data.document?.body || "");
+        const doc = data.document;
+        if (doc?.body) {
+          setContent(doc.body);
+        } else if (doc?.value) {
+          setContent(rawT(doc.value) || "");
+        } else {
+          setContent("");
+        }
       } catch {
         setError("Failed to load document.");
       } finally {

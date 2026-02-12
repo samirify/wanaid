@@ -28,8 +28,15 @@ const FreeText: FC<{ pillar: Pillar; index: number }> = ({ pillar, index }) => {
   const hasImage = !!pillar.img;
   const isOdd = (index + 1) % 2 !== 0; // 1st=odd, 2nd=even, 3rd=odd...
 
+  const isEven = index % 2 === 0;
   return (
-    <section className="pt-8 md:pt-10 lg:pt-12">
+    <section
+      className={
+        isEven
+          ? "pt-8 md:pt-10 lg:pt-12 bg-white dark:bg-slate-900"
+          : "pt-8 md:pt-10 lg:pt-12 bg-slate-50/50 dark:bg-slate-800/30"
+      }
+    >
       <div className="container-custom">
         <motion.div
           initial={{ opacity: 0, y: 40 }}
