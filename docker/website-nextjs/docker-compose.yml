@@ -1,0 +1,27 @@
+services:
+  website-nextjs:
+    build:
+      context: ../../
+      dockerfile: docker/website-nextjs/Dockerfile
+      args:
+        - PORT=${PORT:-9331}
+        - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL:-https://api.wanaid.org/api}
+        - NEXT_PUBLIC_SITE_URL=${NEXT_PUBLIC_SITE_URL:-http://localhost:${PORT:-9331}}
+        - TRANSLATIONS_URL=${TRANSLATIONS_URL:-https://www.wanaid.org}
+        - NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=${NEXT_PUBLIC_GOOGLE_MAPS_API_KEY:-}
+        - NEXT_PUBLIC_GOOGLE_RECAPTCHA_SITE_KEY=${NEXT_PUBLIC_GOOGLE_RECAPTCHA_SITE_KEY:-}
+        - NEXT_PUBLIC_GA_TRACKING_ID=${NEXT_PUBLIC_GA_TRACKING_ID:-}
+        - NEXT_PUBLIC_PAYPAL_CLIENT_ID=${NEXT_PUBLIC_PAYPAL_CLIENT_ID:-}
+    container_name: charity-website-nextjs
+    ports:
+      - "${PORT:-9331}:${PORT:-9331}"
+    environment:
+      - NODE_ENV=production
+      - PORT=${PORT:-9331}
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:${PORT:-9331}"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s

@@ -1,0 +1,28 @@
+services:
+  website-nextjs-dev:
+    build:
+      context: ../../
+      dockerfile: docker/website-nextjs/Dockerfile.dev
+      args:
+        - PORT=${PORT:-9331}
+    container_name: charity-website-nextjs-dev
+    ports:
+      - "${PORT:-9331}:${PORT:-9331}"
+    environment:
+      - NODE_ENV=development
+      - PORT=${PORT:-9331}
+      - NEXT_PUBLIC_API_URL=https://api.wanaid.org/api
+      - NEXT_PUBLIC_SITE_URL=http://localhost:${PORT:-9331}
+      - TRANSLATIONS_URL=https://www.wanaid.org
+    volumes:
+      - ../../frontend/website/nextjs/app:/app/app
+      - ../../frontend/website/nextjs/components:/app/components
+      - ../../frontend/website/nextjs/context:/app/context
+      - ../../frontend/website/nextjs/hooks:/app/hooks
+      - ../../frontend/website/nextjs/lib:/app/lib
+      - ../../frontend/website/nextjs/i18n:/app/i18n
+      - ../../frontend/website/nextjs/messages:/app/messages
+      - ../../frontend/website/nextjs/public:/app/public
+      - ../../frontend/website/nextjs/.env.local:/app/.env.local:ro
+      - ../../frontend/website/nextjs/tailwind.config.ts:/app/tailwind.config.ts:ro
+    restart: unless-stopped

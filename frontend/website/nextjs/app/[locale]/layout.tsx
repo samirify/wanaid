@@ -1,0 +1,71 @@
+import { NextIntlClientProvider } from "next-intl";
+import { getMessages } from "next-intl/server";
+import { ThemeProvider } from "next-themes";
+import { notFound } from "next/navigation";
+import { Inter, Noto_Kufi_Arabic } from "next/font/google";
+import { routing } from "@/i18n/routing";
+import { AppProvider } from "@/context/AppContext";
+import { Navigation } from "@/components/layout/Navigation";
+import { Footer } from "@/components/layout/Footer";
+import { CookieConsentBanner } from "@/components/shared/CookieConsentBanner";
+import { ScrollToTop } from "@/components/shared/ScrollToTop";
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-sans",
+  display: "swap",
+});
+
+const notoKufiArabic = Noto_Kufi_Arabic({
+  subsets: ["arabic"],
+  variable: "--font-arabic",
+  weight: ["300", "400", "500", "600", "700"],
+  display: "swap",
+});
+
+interface LocaleLayoutProps {
+  children: React.ReactNode;
+  params: Promise<{ locale: string }>;
+}
+
+export default async function LocaleLayout({
+  children,
+  params,
+}: LocaleLayoutProps) {
+  const { locale } = await params;
+
+  if (!routing.locales.includes(locale as "en" | "ar")) {
+    notFound();
+  }
+
+  const messages = await getMessages();
+  const direction = locale === "ar" ? "rtl" : "ltr";
+
+  return (
+    <html
+      lang={locale}
+      dir={direction}
+      suppressHydrationWarning
+      className={`${inter.variable} ${notoKufiArabic.variable}`}
+    >
+      <body className="min-h-screen flex flex-col font-sans">
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="light"
+          enableSystem
+          disableTransitionOnChange={false}
+        >
+          <NextIntlClientProvider messages={messages}>
+            <AppProvider>
+              <Navigation />
+              <main className="flex-1">{children}</main>
+              <Footer />
+              <ScrollToTop />
+              <CookieConsentBanner />
+            </AppProvider>
+          </NextIntlClientProvider>
+        </ThemeProvider>
+      </body>
+    </html>
+  );
+}

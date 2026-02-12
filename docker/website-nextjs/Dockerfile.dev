@@ -1,0 +1,20 @@
+FROM node:20-alpine
+
+RUN apk add --no-cache libc6-compat
+
+WORKDIR /app
+
+COPY frontend/website/nextjs/package.json ./
+
+RUN npm install --legacy-peer-deps
+
+COPY frontend/website/nextjs/ .
+
+ARG PORT=9331
+ENV PORT=${PORT}
+ENV HOSTNAME="0.0.0.0"
+ENV NEXT_TELEMETRY_DISABLED=1
+
+EXPOSE ${PORT}
+
+CMD ["npm", "run", "dev"]
