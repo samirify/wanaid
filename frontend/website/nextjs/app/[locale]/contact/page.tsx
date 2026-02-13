@@ -8,6 +8,7 @@ import { useAppData } from "@/context/AppContext";
 import { api } from "@/lib/api";
 import { ErrorDisplay } from "@/components/shared/ErrorDisplay";
 import { PageHead } from "@/components/shared/PageHead";
+import { PageHero } from "@/components/shared/PageHero";
 import {
   MapPin,
   Phone,
@@ -94,34 +95,15 @@ export default function ContactPage() {
     <>
       <PageHead />
 
-      {/* Page Hero */}
-      <div className="page-hero">
-        <div className="page-hero-content">
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-primary-200 font-medium mb-3"
-          >
-            {t("WEBSITE_CONTACT_HEADER_MAIN_TOP")}
-          </motion.p>
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-4"
-          >
-            {t("WEBSITE_CONTACT_HEADER_LABEL")}
-          </motion.h1>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="text-white/80 text-lg"
-          >
-            {t("WEBSITE_CONTACT_SUB_HEADER_MESSAGE")}
-          </motion.p>
-        </div>
-      </div>
+      <PageHero
+        title={t("WEBSITE_CONTACT_HEADER_LABEL")}
+        topLine={t("WEBSITE_CONTACT_HEADER_MAIN_TOP")}
+        bottomLine={t("WEBSITE_CONTACT_SUB_HEADER_MESSAGE")}
+        variant="auto"
+        align="center"
+        showCurve
+        asHeader
+      />
 
       <section className="overflow-hidden py-16 md:py-20 lg:py-28">
         <div className="container-custom">

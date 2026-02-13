@@ -8,6 +8,7 @@ import { api } from "@/lib/api";
 import { mediaUrl } from "@/lib/utils";
 import { Loader } from "@/components/shared/Loader";
 import { ErrorDisplay } from "@/components/shared/ErrorDisplay";
+import { PageHero } from "@/components/shared/PageHero";
 import { X, ZoomIn } from "lucide-react";
 import type { GalleryItem } from "@/lib/types";
 
@@ -36,34 +37,15 @@ export default function GalleryPage() {
 
   return (
     <>
-      {/* Page Hero */}
-      <div className="page-hero">
-        <div className="page-hero-content">
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-primary-200 font-medium mb-3"
-          >
-            {t("GALLERY_TOP_HEADER")}
-          </motion.p>
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-4"
-          >
-            {t("GALLERY_TITLE_TXT")}
-          </motion.h1>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="text-white/80 text-lg"
-          >
-            {t("GALLERY_SUB_TITLE_TXT")}
-          </motion.p>
-        </div>
-      </div>
+      <PageHero
+        title={t("GALLERY_TITLE_TXT")}
+        topLine={t("GALLERY_TOP_HEADER")}
+        bottomLine={t("GALLERY_SUB_TITLE_TXT")}
+        variant="auto"
+        align="center"
+        showCurve
+        asHeader
+      />
 
       <section className="py-24">
         <div className="container-custom">

@@ -36,6 +36,8 @@ interface RequestOptions {
   body?: Record<string, unknown>;
   cache?: RequestCache;
   revalidate?: number;
+  /** Extra headers (e.g. Cookie for server-side auth) */
+  headers?: Record<string, string>;
 }
 
 async function request<T>(
@@ -47,6 +49,7 @@ async function request<T>(
     body,
     cache = "no-cache",
     revalidate,
+    headers: extraHeaders,
   } = options;
 
   const url = `${getApiUrl()}${endpoint}`;
@@ -54,6 +57,7 @@ async function request<T>(
   const headers: Record<string, string> = {
     "Content-Type": "application/json",
     Accept: "application/json",
+    ...extraHeaders,
   };
 
   const init: RequestInit & { next?: { revalidate: number } } = {
@@ -84,10 +88,14 @@ async function request<T>(
 
 export const api = {
   /** Fetch all initial app data (languages, settings, blogs, causes, etc.) */
-  initialize(locale?: string) {
+  initialize(locale?: string, options?: { cookie?: string; referer?: string }) {
+    const h: Record<string, string> = {};
+    if (options?.cookie) h["Cookie"] = options.cookie;
+    if (options?.referer) h["Referer"] = options.referer;
     return request<InitializeResponse>("/initialize", {
       method: "POST",
       body: locale ? { locale } : undefined,
+      headers: Object.keys(h).length ? h : undefined,
     }).then((res) => res.data);
   },
 

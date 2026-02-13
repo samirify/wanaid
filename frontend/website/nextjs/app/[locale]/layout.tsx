@@ -9,6 +9,7 @@ import { Navigation } from "@/components/layout/Navigation";
 import { Footer } from "@/components/layout/Footer";
 import { CookieConsentBanner } from "@/components/shared/CookieConsentBanner";
 import { ScrollToTop } from "@/components/shared/ScrollToTop";
+import { cookies, headers } from "next/headers";
 import { getDirection } from "@/lib/utils";
 import { api } from "@/lib/api";
 
@@ -51,8 +52,16 @@ export default async function LocaleLayout({
 
   let direction: "ltr" | "rtl" = "ltr";
   let initialData: Awaited<ReturnType<typeof api.initialize>> | null = null;
+  const cookieStore = await cookies();
+  const headerList = await headers();
+  const cookieHeader = cookieStore.toString();
+  const referer =
+    headerList.get("referer") ??
+    headerList.get("referrer") ??
+    process.env.NEXT_PUBLIC_SITE_URL ??
+    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : undefined);
   try {
-    initialData = await api.initialize(locale);
+    initialData = await api.initialize(locale, { cookie: cookieHeader, referer: referer ?? undefined });
     direction = getDirection(locale, initialData.languages);
   } catch {
     direction = getDirection(locale, null);

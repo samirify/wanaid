@@ -20,6 +20,8 @@
   /* Hero section — light theme (darker at top so logo with pink stands out) */
   --hero-bg: linear-gradient(165deg, #2d0314 0%, #480521 18%, #77133f 40%, #480521 65%, #1a020c 100%);
   --hero-spotlight: radial-gradient(ellipse 80% 70% at 30% 50%, rgba(231, 62, 133, 0.35) 0%, transparent 50%);
+  /* Page hero wave fills with content area background for seamless transition */
+  --page-hero-wave: #ffffff;
 }
 
 .dark {
@@ -34,6 +36,7 @@
   /* Hero section — dark theme (same magenta/burgundy family, deeper) */
   --hero-bg: linear-gradient(165deg, #2d0314 0%, #1a020c 25%, #0f0108 50%, #1a020c 75%, #2d0314 100%);
   --hero-spotlight: radial-gradient(ellipse 80% 70% at 30% 50%, rgba(199, 28, 105, 0.25) 0%, rgba(126, 15, 63, 0.12) 40%, transparent 70%);
+  --page-hero-wave: #0f172a; /* slate-900 — matches body dark bg */
 }
 
 /* Hero section — RTL: mirror gradient and spotlight so layout feels correct in Arabic */
@@ -251,6 +254,11 @@
 
   .page-hero-content {
     @apply relative z-10 text-center text-white py-24 px-4;
+  }
+
+  /* PageHero wave fill — matches content area in light/dark for seamless transition */
+  .page-hero-wave-fill {
+    color: var(--page-hero-wave);
   }
 
   /* Skeleton loader */

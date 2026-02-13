@@ -10,6 +10,7 @@ import { useRawTranslation } from "@/hooks/useRawTranslation";
 import { Loader } from "@/components/shared/Loader";
 import { ErrorDisplay } from "@/components/shared/ErrorDisplay";
 import { PageHead } from "@/components/shared/PageHead";
+import { PageHero } from "@/components/shared/PageHero";
 import { PageSections } from "@/components/landing/PageSections";
 import { Users, Facebook, Instagram, Linkedin, Twitter, Youtube } from "lucide-react";
 import type { PageHeaders, Pillar, TeamDepartment, TeamMember, MetaData } from "@/lib/types";
@@ -139,46 +140,22 @@ export default function AboutPage() {
     <>
       <PageHead />
 
-      {/* Page Hero */}
-      <div className="page-hero">
-        {data.main_header_img && (
-          <img
-            src={mediaUrl(data.main_header_img)}
-            alt=""
-            className="absolute inset-0 w-full h-full object-cover opacity-20"
-          />
+      <PageHero
+        title={rawT(
+          data.headers.main_header_middle_big || "ABOUT_MAIN_HEADER_MIDDLE_BIG"
         )}
-        <div className="page-hero-content">
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-primary-200 font-medium mb-3"
-          >
-            {rawT(data.headers.main_header_top || "ABOUT_MAIN_HEADER_TOP")}
-          </motion.p>
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-4"
-          >
-            {rawT(
-              data.headers.main_header_middle_big ||
-                "ABOUT_MAIN_HEADER_MIDDLE_BIG"
-            )}
-          </motion.h1>
-          {data.headers.main_header_bottom && (
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-              className="text-white/80 text-lg max-w-2xl mx-auto"
-            >
-              {rawT(data.headers.main_header_bottom)}
-            </motion.p>
-          )}
-        </div>
-      </div>
+        topLine={rawT(data.headers.main_header_top || "ABOUT_MAIN_HEADER_TOP")}
+        bottomLine={
+          data.headers.main_header_bottom
+            ? rawT(data.headers.main_header_bottom)
+            : undefined
+        }
+        headerImageUrl={data.main_header_img || null}
+        variant="auto"
+        align="center"
+        showCurve
+        asHeader
+      />
 
       {/* Pillars */}
       {data.pillars.length > 0 && <PageSections pillars={data.pillars} />}

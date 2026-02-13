@@ -9,7 +9,6 @@ import {
   type ReactNode,
 } from "react";
 import { useLocale } from "next-intl";
-import { api } from "@/lib/api";
 import type {
   AppData,
   Languages,
@@ -162,7 +161,16 @@ export function AppProvider({
   const fetchData = useCallback(async () => {
     setData((prev) => ({ ...prev, isLoading: true, error: null }));
     try {
-      const result = await api.initialize(locale);
+      const res = await fetch("/api/initialize", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(locale ? { locale } : {}),
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err?.error || `Request failed (${res.status})`);
+      }
+      const result = (await res.json()) as InitialAppData;
       setData(toAppData(result));
     } catch (err) {
       console.error("Failed to initialize app:", err);

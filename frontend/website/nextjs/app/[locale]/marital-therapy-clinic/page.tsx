@@ -8,6 +8,7 @@ import { api } from "@/lib/api";
 import { useRawTranslation } from "@/hooks/useRawTranslation";
 import { ErrorDisplay } from "@/components/shared/ErrorDisplay";
 import { PageHead } from "@/components/shared/PageHead";
+import { PageHero } from "@/components/shared/PageHero";
 import { AlertCircle, CheckCircle, Loader2, Send } from "lucide-react";
 
 export default function ClinicPage() {
@@ -86,18 +87,13 @@ export default function ClinicPage() {
     <>
       <PageHead />
 
-      {/* Hero — just the title like old React */}
-      <div className="page-hero">
-        <div className="page-hero-content">
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-4xl sm:text-5xl lg:text-6xl font-bold"
-          >
-            {rawT("DR_MAGDI_CLINIC_TOP_HEADER")}
-          </motion.h1>
-        </div>
-      </div>
+      <PageHero
+        title={rawT("DR_MAGDI_CLINIC_TOP_HEADER")}
+        variant="auto"
+        align="center"
+        showCurve
+        asHeader
+      />
 
       {/* Content section */}
       <section className="py-16">
