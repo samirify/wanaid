@@ -34,7 +34,7 @@ const FreeText: FC<{ pillar: Pillar; index: number }> = ({ pillar, index }) => {
     <section
       className={
         isFirst
-          ? "pt-12 md:pt-16 lg:pt-20 pb-8 md:pb-10 lg:pb-12 border-t-4 border-primary-500 bg-white dark:bg-slate-900"
+          ? "pt-12 md:pt-16 lg:pt-20 pb-8 md:pb-10 lg:pb-12 bg-white dark:bg-slate-900"
           : isEven
             ? "pt-8 md:pt-10 lg:pt-12 pb-8 md:pb-10 lg:pb-12 bg-white dark:bg-slate-900"
             : "pt-8 md:pt-10 lg:pt-12 pb-8 md:pb-10 lg:pb-12 bg-slate-200 dark:bg-slate-800"

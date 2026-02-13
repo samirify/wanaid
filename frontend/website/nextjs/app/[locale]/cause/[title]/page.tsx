@@ -73,68 +73,68 @@ export default function CauseDetailPage({ params }: PageProps) {
     <>
       <PageHead />
 
-      {/* Page Hero */}
-      <div className="page-hero !overflow-visible">
+      {/* Page Hero — text only, fixed height; widget lives in section below and overlaps here */}
+      <div className="relative h-[min(36rem,36vh)] min-h-[280px] lg:h-[32rem] lg:min-h-[320px] flex flex-col justify-center overflow-hidden bg-gradient-to-br from-primary-700 via-primary-800 to-primary-900 dark:from-primary-950 dark:via-slate-900 dark:to-slate-900">
+        {/* Header image as background flavour (faded) */}
         {cause.header_img_url && (
-          <img
-            src={mediaUrl(cause.header_img_url)}
-            alt=""
-            className="absolute inset-0 w-full h-full object-cover opacity-30"
-          />
+          <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden>
+            <img
+              src={mediaUrl(cause.header_img_url)}
+              alt=""
+              className="absolute inset-0 w-full h-full object-cover opacity-20 dark:opacity-15"
+            />
+            <div
+              className="absolute inset-0 bg-gradient-to-r from-primary-900/95 via-primary-900/70 to-transparent dark:from-slate-900/95 dark:via-slate-900/80"
+              aria-hidden
+            />
+          </div>
         )}
-        <div className="relative z-10 container-custom w-full py-20 pt-32 text-start">
-          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8">
-            {/* Left: headers — same style as other page heroes */}
-            <div className="lg:flex-1 text-white">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_70%_at_50%_50%,rgba(199,28,105,0.2)_0%,transparent_50%)] pointer-events-none" aria-hidden />
+        <div className="relative z-10 container-custom w-full py-16 pt-28 pb-20 text-start h-full flex flex-col justify-center">
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-10">
+            <div className="lg:flex-1 text-white shrink-0">
               {headers?.main_header_top && (
                 <motion.p
-                  initial={{ opacity: 0, y: 20 }}
+                  initial={{ opacity: 0, y: 16 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="text-primary-200 font-medium mb-3"
+                  className="font-display text-primary-200 font-medium mb-3"
                 >
                   {rawT(headers.main_header_top)}
                 </motion.p>
               )}
               <motion.h1
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 }}
-                className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-4"
+                transition={{ delay: 0.05 }}
+                className="display-headline text-4xl sm:text-5xl lg:text-6xl font-bold mb-4 text-white"
               >
                 {rawT(cause.title)}
               </motion.h1>
               {headers?.main_header_bottom && (
                 <motion.p
-                  initial={{ opacity: 0, y: 20 }}
+                  initial={{ opacity: 0, y: 16 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.2 }}
-                  className="text-white/80 text-lg max-w-2xl"
+                  transition={{ delay: 0.1 }}
+                  className="text-white/85 text-lg max-w-2xl"
                 >
                   {rawT(headers.main_header_bottom)}
                 </motion.p>
               )}
             </div>
-
-            {/* Right: PayPal widget — inside hero, aligned with container */}
-            <div className="w-full lg:w-[370px] shrink-0 relative z-[100]">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 }}
-                className="rounded-2xl shadow-xl overflow-visible"
-              >
-                <PayPalPaymentWidget cause={cause} />
-              </motion.div>
-            </div>
+            {/* Spacer on desktop so text doesn't sit under where the widget overlaps */}
+            <div className="hidden lg:block lg:w-[380px] shrink-0" aria-hidden />
           </div>
         </div>
+        <svg className="absolute bottom-0 left-0 right-0 w-full h-16 text-white dark:text-slate-900" viewBox="0 0 1440 64" fill="none" preserveAspectRatio="none" aria-hidden>
+          <path d="M0 64V32C240 0 480 0 720 32s480 32 720 32v32H0z" fill="currentColor" />
+        </svg>
       </div>
 
-      <section className="py-24">
+      <section className="relative py-24">
         <div className="container-custom">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 lg:items-start">
             {/* Main Content — body text */}
-            <div className="lg:col-span-2">
+            <div className="lg:col-span-2 min-w-0">
               <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-4">
                 {rawT(cause.title)}
               </h3>
@@ -145,8 +145,16 @@ export default function CauseDetailPage({ params }: PageProps) {
               />
             </div>
 
-            {/* Sidebar — image */}
-            <div className="lg:col-span-1">
+            {/* Sidebar — PayPal widget (pulled up into hero); z-20 so it's above hero and clickable */}
+            <div className="lg:col-span-1 order-last lg:order-none lg:sticky lg:top-24 lg:-mt-[31rem] lg:z-20 relative">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+                className="rounded-2xl shadow-2xl shadow-black/20 overflow-visible mb-8 lg:mb-10"
+              >
+                <PayPalPaymentWidget cause={cause} />
+              </motion.div>
               {cause.img_url && (
                 <img
                   src={mediaUrl(cause.img_url)}

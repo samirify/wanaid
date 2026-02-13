@@ -15,10 +15,10 @@ interface PayPalPaymentWidgetProps {
 
 /* ── Error boundary to catch PayPal SDK crashes ── */
 class PayPalErrorBoundary extends Component<
-  { children: ReactNode },
+  { children: ReactNode; message?: string },
   { hasError: boolean }
 > {
-  constructor(props: { children: ReactNode }) {
+  constructor(props: { children: ReactNode; message?: string }) {
     super(props);
     this.state = { hasError: false };
   }
@@ -26,7 +26,15 @@ class PayPalErrorBoundary extends Component<
     return { hasError: true };
   }
   render() {
-    if (this.state.hasError) return null;
+    if (this.state.hasError) {
+      return (
+        <div className="min-h-[100px] flex items-center justify-center rounded-lg border border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-amber-900/20 p-4 text-center">
+          <p className="text-sm text-amber-800 dark:text-amber-200">
+            {this.props.message || "PayPal failed to load. Check your connection or try again."}
+          </p>
+        </div>
+      );
+    }
     return this.props.children;
   }
 }
@@ -74,7 +82,29 @@ function PayPalButtonsWrapper({
     });
   }, [clientId]);
 
-  if (!clientId || !PayPalModule) return null;
+  if (!clientId) {
+    return (
+      <div className="min-h-[120px] flex flex-col items-center justify-center rounded-lg border border-dashed border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-800/50 p-4 text-center">
+        <p className="text-sm text-slate-600 dark:text-slate-400 mb-1">
+          PayPal not configured
+        </p>
+        <p className="text-xs text-slate-500 dark:text-slate-500">
+          Set <code className="bg-slate-200 dark:bg-slate-700 px-1 rounded">NEXT_PUBLIC_PAYPAL_CLIENT_ID</code> in your environment.
+        </p>
+      </div>
+    );
+  }
+
+  if (!PayPalModule) {
+    return (
+      <div className="min-h-[120px] flex flex-col items-center justify-center rounded-lg border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-800/50 p-4">
+        <div className="w-8 h-8 border-2 border-primary-500 border-t-transparent rounded-full animate-spin mb-2" aria-hidden />
+        <p className="text-sm text-slate-600 dark:text-slate-400">
+          {rawT("WEBSITE_PROCESSING_PAYMENT_MESSAGE") || "Loading PayPal..."}
+        </p>
+      </div>
+    );
+  }
 
   const { PayPalScriptProvider, PayPalButtons } = PayPalModule;
 
@@ -220,8 +250,8 @@ export function PayPalPaymentWidget({ cause }: PayPalPaymentWidgetProps) {
         </div>
       </div>
 
-      {/* White area — PayPal buttons */}
-      <div className="bg-white rounded-b-2xl p-4">
+      {/* White area — PayPal buttons (min-height so layout doesn't collapse) */}
+      <div className="bg-white dark:bg-slate-800 rounded-b-2xl p-4 min-h-[140px]">
         <PayPalButtonsWrapper
           donationAmount={donationAmount}
           currencyCode={cause.currencies_code || "GBP"}

@@ -58,17 +58,18 @@ export function Footer() {
   );
 
   return (
-    <footer className="relative bg-slate-900 text-slate-300">
-      {/* Decorative top border */}
-      <div className="h-1 bg-gradient-to-r from-primary-500 via-accent-500 to-primary-500" />
+    <footer className="relative bg-slate-900 text-slate-300 overflow-hidden">
+      {/* Decorative top gradient bar */}
+      <div className="h-1 bg-gradient-to-r from-primary-600 via-primary-500 to-primary-600" />
 
-      {/* Wave separator */}
+      {/* Wave separator — dark fill so the curved top edge is the boundary */}
       <div className="relative -mt-1 overflow-hidden">
         <svg
           className="w-full h-12 text-slate-900"
           viewBox="0 0 1440 48"
           fill="none"
           preserveAspectRatio="none"
+          aria-hidden
         >
           <path
             d="M0 48h1440V0C1200 32 960 48 720 48S240 32 0 0v48z"
@@ -103,7 +104,7 @@ export function Footer() {
                     href={social.url!}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-10 h-10 rounded-xl bg-slate-800 hover:bg-primary-600 text-slate-400 hover:text-white flex items-center justify-center transition-all duration-300"
+                    className="w-10 h-10 rounded-xl bg-slate-800 hover:bg-primary-600 text-slate-400 hover:text-white flex items-center justify-center transition-all duration-300 hover:scale-110 hover:-translate-y-0.5"
                     aria-label={social.label}
                   >
                     <social.icon className="w-4 h-4" />
@@ -115,7 +116,7 @@ export function Footer() {
 
           {/* Pages — same as React footer */}
           <div>
-            <h3 className="text-white font-semibold text-lg mb-6">
+            <h3 className="font-display text-white font-semibold text-lg mb-6">
               {t("WEBSITE_FOOTER_PAGES_LABEL")}
             </h3>
             <ul className="space-y-3">
@@ -135,7 +136,7 @@ export function Footer() {
 
           {/* Useful Links — same as React footer */}
           <div>
-            <h3 className="text-white font-semibold text-lg mb-6">
+            <h3 className="font-display text-white font-semibold text-lg mb-6">
               {t("WEBSITE_FOOTER_USEFUL_LINKS_LABEL")}
             </h3>
             <ul className="space-y-3">
@@ -155,7 +156,7 @@ export function Footer() {
 
           {/* Contact Info */}
           <div>
-            <h3 className="text-white font-semibold text-lg mb-6">
+            <h3 className="font-display text-white font-semibold text-lg mb-6">
               {t("WEBSITE_FOOTER_FOLLOW_US_ON_LABEL")}
             </h3>
             <ul className="space-y-4">

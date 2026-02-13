@@ -2,7 +2,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { ThemeProvider } from "next-themes";
 import { notFound } from "next/navigation";
-import { Inter, Noto_Kufi_Arabic } from "next/font/google";
+import { Inter, Sora, Noto_Kufi_Arabic } from "next/font/google";
 import { routing } from "@/i18n/routing";
 import { AppProvider } from "@/context/AppContext";
 import { Navigation } from "@/components/layout/Navigation";
@@ -13,6 +13,13 @@ import { ScrollToTop } from "@/components/shared/ScrollToTop";
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-sans",
+  display: "swap",
+});
+
+const sora = Sora({
+  subsets: ["latin"],
+  variable: "--font-display",
+  weight: ["400", "500", "600", "700", "800"],
   display: "swap",
 });
 
@@ -46,7 +53,7 @@ export default async function LocaleLayout({
       lang={locale}
       dir={direction}
       suppressHydrationWarning
-      className={`${inter.variable} ${notoKufiArabic.variable}`}
+      className={`${inter.variable} ${sora.variable} ${notoKufiArabic.variable}`}
     >
       <body className="min-h-screen flex flex-col font-sans">
         <ThemeProvider

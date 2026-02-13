@@ -18,7 +18,7 @@ function FeaturedBlog({ blog, index }: { blog: BlogSummary; index: number }) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.5 }}
-      className="flex flex-col lg:flex-row min-h-[320px] lg:min-h-[400px] bg-slate-900 dark:bg-slate-950 overflow-hidden rounded-3xl border border-slate-700/50 shadow-2xl shadow-black/20 hover:shadow-primary-500/10 transition-shadow duration-300"
+      className="flex flex-col lg:flex-row min-h-[320px] lg:min-h-[400px] bg-slate-900 dark:bg-slate-950 overflow-hidden rounded-3xl border border-slate-700/50 shadow-2xl shadow-black/20 hover:shadow-2xl hover:shadow-primary-500/15 hover:-translate-y-1 transition-all duration-300"
     >
       <Link
         href={`/blog/${blog.unique_title}`}
@@ -41,7 +41,7 @@ function FeaturedBlog({ blog, index }: { blog: BlogSummary; index: number }) {
         <div className="absolute inset-0 bg-gradient-to-t lg:bg-gradient-to-r from-slate-900/90 via-slate-900/40 to-transparent" />
       </Link>
       <div className="relative w-full lg:w-[54%] flex flex-col justify-center p-8 sm:p-10 lg:p-12 border-t-4 lg:border-t-0 lg:border-l-4 border-primary-500">
-        <h3 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-4 leading-tight">
+        <h3 className="font-display text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-4 leading-tight">
           <Link href={`/blog/${blog.unique_title}`} className="hover:text-primary-300 transition-colors">
             {rawT(blog.title)}
           </Link>
@@ -118,17 +118,17 @@ export function BlogSection() {
   const [featured, ...rest] = blogs;
 
   return (
-    <section id="blog" className="relative py-20 sm:py-28 overflow-hidden border-t-4 border-slate-300 dark:border-slate-600 bg-gradient-to-b from-slate-200 via-slate-100 to-slate-200 dark:from-slate-700 dark:via-slate-800 dark:to-slate-900" aria-label={t("LANDING_PAGE_BLOG_HEADER_LABEL")}>
+    <section id="blog" className="relative py-20 sm:py-28 overflow-hidden bg-gradient-to-b from-slate-200 via-slate-100 to-slate-200 dark:from-slate-800 dark:via-slate-800 dark:to-slate-900" aria-label={t("LANDING_PAGE_BLOG_HEADER_LABEL")}>
       <div className="absolute inset-0 pointer-events-none" aria-hidden />
       <div className="container-custom relative">
         <header className="mb-14 sm:mb-16 text-center">
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 dark:text-white tracking-tight max-w-2xl mx-auto">
+          <h2 className="section-heading text-slate-900 dark:text-white max-w-2xl mx-auto">
             {t("LANDING_PAGE_BLOG_HEADER_LABEL")}
           </h2>
           <p className="mt-3 text-slate-600 dark:text-slate-400 text-lg max-w-xl mx-auto">
             {t("LANDING_PAGE_BLOG_LATEST_FROM_US_LABEL")}
           </p>
-          <div className="mt-4 h-1 w-16 bg-primary-500 rounded-full mx-auto" />
+          <div className="mt-5 h-1 w-20 bg-gradient-to-r from-primary-500 to-primary-400 rounded-full mx-auto" />
         </header>
 
         <div className="max-w-6xl mx-auto space-y-10 sm:space-y-12">

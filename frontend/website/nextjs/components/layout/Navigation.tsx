@@ -101,8 +101,8 @@ export function Navigation() {
         className={cn(
           "fixed top-0 start-0 end-0 z-50 transition-all duration-500",
           isScrolled
-            ? "glass-strong py-2 shadow-lg shadow-black/10"
-            : "py-4 bg-gradient-to-b from-black/20 via-transparent to-transparent dark:from-white/10 dark:via-transparent dark:to-transparent"
+            ? "glass-strong py-2.5 shadow-lg shadow-black/10 dark:shadow-black/20 backdrop-blur-2xl"
+            : "py-4 bg-gradient-to-b from-black/25 via-black/10 to-transparent dark:from-white/15 dark:via-white/5 dark:to-transparent"
         )}
       >
         <div className="container-custom">
@@ -146,7 +146,7 @@ export function Navigation() {
             <div className="hidden lg:flex items-center gap-3">
               <ThemeSwitcher />
               <LanguageSelector />
-              <Link href={donateUrl} className="btn-accent text-sm h-10 px-5 py-2.5">
+              <Link href={donateUrl} className="btn-accent text-sm h-10 px-5 py-2.5 rounded-xl font-display font-semibold shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-200">
                 <Heart className="w-4 h-4" />
                 {t("TOP_NAV_STATIC_BUTTON_GET_STARTED_LABEL")}
               </Link>

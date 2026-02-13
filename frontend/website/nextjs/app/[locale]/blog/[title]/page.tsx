@@ -67,51 +67,54 @@ export default function BlogDetailPage({ params }: PageProps) {
     <>
       <PageHead />
 
-      {/* Page Hero — content starts below nav, title constrained */}
-      <header className="page-hero flex flex-col items-center justify-start pt-24 md:pt-28">
+      {/* Page Hero — aligned with landing hero style */}
+      <header className="relative min-h-[32vh] flex flex-col items-center justify-center overflow-hidden bg-gradient-to-br from-primary-700 via-primary-800 to-primary-900 dark:from-primary-950 dark:via-slate-900 dark:to-slate-900 pt-24 md:pt-28">
         {blog.header_img_url && (
-          <>
+          <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden>
             <img
               src={mediaUrl(blog.header_img_url)}
               alt=""
-              className="absolute inset-0 w-full h-full object-cover opacity-[0.1] pointer-events-none"
+              className="absolute inset-0 w-full h-full object-cover opacity-20 dark:opacity-15"
             />
-            <div className="absolute inset-0 bg-black/45 pointer-events-none" aria-hidden />
-          </>
+            <div className="absolute inset-0 bg-gradient-to-b from-primary-900/80 via-primary-900/50 to-primary-900/90 dark:from-slate-900/90 dark:via-slate-900/70 dark:to-slate-900/95" aria-hidden />
+          </div>
         )}
-        <div className="page-hero-content relative z-10 w-full max-w-4xl mx-auto text-start pt-8 pb-16 md:pt-10 md:pb-20 px-4 sm:px-6">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_70%_at_50%_50%,rgba(199,28,105,0.25)_0%,transparent_50%)] pointer-events-none" aria-hidden />
+        <div className="relative z-10 w-full max-w-4xl mx-auto text-center pt-8 pb-16 md:pt-10 md:pb-20 px-4 sm:px-6">
           {headers?.main_header_top && (
             <motion.p
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
-              className="text-primary-200 font-medium mb-3"
+              className="font-display text-primary-200 font-medium mb-3"
             >
               {rawT(headers.main_header_top)}
             </motion.p>
           )}
           <motion.h1
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-white"
-            style={{ lineHeight: 1.5 }}
+            transition={{ delay: 0.05 }}
+            className="display-headline text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-white leading-tight"
           >
             {rawT(headers?.main_header_middle_big || blog.title)}
           </motion.h1>
           {headers?.main_header_bottom && (
             <>
-              <hr className="divider my-4 w-20 border-0 h-0.5 bg-white/50 rounded-full" aria-hidden />
+              <div className="mt-4 h-0.5 w-16 bg-white/50 rounded-full mx-auto" aria-hidden />
               <motion.p
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.15 }}
-                className="text-white/80 font-light text-lg mt-4"
+                transition={{ delay: 0.1 }}
+                className="text-white/85 text-lg mt-4 max-w-2xl mx-auto"
               >
                 {rawT(headers.main_header_bottom)}
               </motion.p>
             </>
           )}
         </div>
+        <svg className="absolute bottom-0 left-0 right-0 w-full h-14 text-white dark:text-slate-900" viewBox="0 0 1440 56" fill="none" preserveAspectRatio="none" aria-hidden>
+          <path d="M0 56V28C240 0 480 0 720 28s480 28 720 28v28H0z" fill="currentColor" />
+        </svg>
       </header>
 
       <section className="py-12 md:py-16 bg-white dark:bg-slate-900">

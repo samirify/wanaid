@@ -96,13 +96,25 @@
     @apply bg-gradient-to-r from-accent-500 to-accent-400 bg-clip-text text-transparent;
   }
 
-  /* Section heading */
+  /* Section heading — display font for impact */
   .section-heading {
-    @apply text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight;
+    @apply font-display text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight;
   }
 
   .section-subheading {
     @apply text-lg sm:text-xl text-slate-600 dark:text-slate-400 max-w-2xl;
+  }
+
+  /* Display headline for hero and key titles */
+  .display-headline {
+    @apply font-display font-extrabold tracking-tight;
+    letter-spacing: -0.02em;
+  }
+
+  /* Subtle grain overlay for depth (optional use) */
+  .grain-overlay {
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
   }
 
   /* Container with max-width */
@@ -306,6 +318,47 @@
     100% {
       background-position: 0% 50%;
     }
+  }
+
+  /* Headline shine sweep (for hero) */
+  @keyframes shineSweep {
+    0% {
+      transform: translateX(-100%) skewX(-12deg);
+    }
+    100% {
+      transform: translateX(200%) skewX(-12deg);
+    }
+  }
+
+  .shine-sweep {
+    position: relative;
+    overflow: hidden;
+  }
+  .shine-sweep::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      105deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.12) 45%,
+      rgba(255, 255, 255, 0.2) 50%,
+      rgba(255, 255, 255, 0.12) 55%,
+      transparent 100%
+    );
+    animation: shineSweep 6s ease-in-out 1.5s 1;
+    pointer-events: none;
+  }
+
+  /* Curved section divider */
+  .section-curve {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 80px;
+    fill: currentColor;
+    pointer-events: none;
   }
 
   /* Shimmer loading effect */

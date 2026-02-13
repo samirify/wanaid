@@ -22,12 +22,15 @@ export function CauseStrip({ cause, index, imageOnLeft }: CauseStripProps) {
   const imageBlock = (
     <div className="w-full md:w-[46%] relative min-h-[260px] md:min-h-[360px] overflow-hidden">
       {cause.img_url ? (
-        <img
-          src={cause.img_url}
-          alt={rawT(cause.title)}
-          className="absolute inset-0 w-full h-full object-cover"
-          loading="lazy"
-        />
+        <>
+          <img
+            src={cause.img_url}
+            alt={rawT(cause.title)}
+            className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            loading="lazy"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+        </>
       ) : (
         <div className="absolute inset-0 flex items-center justify-center bg-slate-200 dark:bg-slate-700 text-slate-400">
           <Heart className="w-16 h-16" />
@@ -47,7 +50,7 @@ export function CauseStrip({ cause, index, imageOnLeft }: CauseStripProps) {
 
   const contentBlock = (
     <div className="w-full md:w-[54%] flex flex-col justify-center py-10 md:py-12 px-6 sm:px-8 lg:px-12 xl:px-16">
-      <h3 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white mb-3 leading-tight">
+      <h3 className="font-display text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white mb-3 leading-tight group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
         {rawT(cause.title)}
       </h3>
       <p className="text-slate-600 dark:text-slate-400 text-base sm:text-lg leading-relaxed mb-6">
@@ -65,7 +68,7 @@ export function CauseStrip({ cause, index, imageOnLeft }: CauseStripProps) {
       <div className="mt-8">
         <Link
           href={`/cause/${cause.unique_title}`}
-          className="inline-flex items-center justify-center gap-2 rounded-xl bg-primary-600 hover:bg-primary-700 text-white font-semibold py-3.5 px-6 text-base shadow-lg shadow-primary-500/25 hover:shadow-primary-500/30 transition-all"
+          className="inline-flex items-center justify-center gap-2 rounded-xl bg-primary-600 hover:bg-primary-700 text-white font-display font-semibold py-3.5 px-6 text-base shadow-lg shadow-primary-500/25 hover:shadow-primary-500/35 hover:-translate-y-0.5 transition-all duration-200"
         >
           <Heart className="w-5 h-5" />
           {t("OPEN_CAUSES_DONATE_NOW_LABEL")}
@@ -80,7 +83,7 @@ export function CauseStrip({ cause, index, imageOnLeft }: CauseStripProps) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-80px" }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
-      className={`flex flex-col md:flex-row min-h-0 rounded-3xl overflow-hidden bg-white dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700/80 shadow-xl shadow-slate-200/50 dark:shadow-black/30 hover:shadow-2xl hover:shadow-primary-500/5 dark:hover:shadow-primary-500/10 transition-shadow duration-300 ${!imageOnLeft ? "md:flex-row-reverse" : ""}`}
+      className={`group flex flex-col md:flex-row min-h-0 rounded-3xl overflow-hidden bg-white dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700/80 shadow-xl shadow-slate-200/50 dark:shadow-black/30 hover:shadow-2xl hover:shadow-primary-500/10 dark:hover:shadow-primary-500/15 hover:-translate-y-1 hover:border-primary-200/80 dark:hover:border-primary-800/80 transition-all duration-300 ${!imageOnLeft ? "md:flex-row-reverse" : ""}`}
     >
       {imageBlock}
       {contentBlock}

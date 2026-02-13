@@ -202,6 +202,8 @@ export interface PageHeaders {
   main_header_top: string;
   main_header_middle_big: string;
   main_header_bottom: string | null;
+  /** Optional hero image URL (from CMS or relative path e.g. /images/hero.jpg) */
+  main_header_img?: string | null;
 }
 
 export interface Pillar {
