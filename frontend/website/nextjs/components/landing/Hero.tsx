@@ -1,11 +1,11 @@
 "use client";
 
-import { useTranslations, useLocale } from "next-intl";
+import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
 import { useAppData } from "@/context/AppContext";
 import { useRawTranslation } from "@/hooks/useRawTranslation";
 import { Link } from "@/i18n/navigation";
-import { Heart, ArrowDown, Users, Globe2, HandHeart } from "lucide-react";
+import { Heart, ArrowDown, Users, BookOpen, Target, Facebook } from "lucide-react";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
@@ -16,17 +16,11 @@ const fadeInUp = {
   }),
 };
 
-const statsData = [
-  { icon: Users, label: "Community Members", value: "500+" },
-  { icon: Globe2, label: "Countries Reached", value: "3+" },
-  { icon: HandHeart, label: "Lives Impacted", value: "10K+" },
-];
-
 export function Hero() {
   const t = useTranslations();
   const rawT = useRawTranslation();
-  const locale = useLocale();
-  const { pageContents, settings } = useAppData();
+  const { pageContents, settings, openCauses, blogs } = useAppData();
+  const facebookUrl = settings?.social_media_facebook || "https://www.facebook.com/Womenaccessnetwork/";
 
   const header = pageContents?.LANDING?.HEADER;
   const ctas = header?.ctas || [];
@@ -35,6 +29,31 @@ export function Hero() {
     header?.main_header_img ||
     "https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=900&q=80";
 
+  // Hero cards: open causes, blog, Facebook members (external)
+  const heroCards = [
+    {
+      icon: Target,
+      value: openCauses?.length ?? 0,
+      labelKey: "OPEN_CAUSES_HEADER_LABEL",
+      href: "/open-causes",
+      external: false,
+    },
+    {
+      icon: BookOpen,
+      value: blogs?.length ?? 0,
+      labelKey: "LANDING_PAGE_BLOG_HEADER_LABEL",
+      href: "/blog",
+      external: false,
+    },
+    {
+      icon: Facebook,
+      valueDisplay: "2.6k+",
+      labelKey: "FACEBOOK_MEMBERS_LABEL",
+      href: facebookUrl,
+      external: true,
+    },
+  ];
+
   return (
     <section className="relative min-h-screen flex items-center overflow-hidden">
       {/* Rich gradient background — reacts to dark mode via CSS variables */}
@@ -42,11 +61,11 @@ export function Hero() {
         className="absolute inset-0 transition-[background] duration-500"
         style={{ background: "var(--hero-bg)" }}
       />
-      {/* Animated gradient overlay for subtle movement */}
+      {/* Animated gradient overlay; logical direction so it flips in RTL */}
       <div
         className="absolute inset-0 opacity-40 dark:opacity-30 transition-opacity duration-500 animated-gradient"
         style={{
-          background: "linear-gradient(135deg, rgba(199,28,105,0.25) 0%, transparent 40%, rgba(231,62,133,0.15) 70%, transparent 100%)",
+          background: "linear-gradient(to bottom inline-end, rgba(199,28,105,0.25) 0%, transparent 40%, rgba(231,62,133,0.15) 70%, transparent 100%)",
           backgroundSize: "200% 200%",
         }}
       />
@@ -55,7 +74,7 @@ export function Hero() {
         className="absolute inset-0 opacity-60 transition-opacity duration-500"
         style={{ background: "var(--hero-spotlight)" }}
       />
-      {/* Hero image as background flavour — fades into gradient, no canvas */}
+      {/* Hero image as background flavour — on inline-end side (right in LTR, left in RTL); gradient uses logical direction */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden>
         <div className="absolute inset-0 flex justify-end">
           <div className="relative w-full max-w-[55%] min-w-[280px] h-full">
@@ -68,11 +87,11 @@ export function Hero() {
                 e.currentTarget.style.display = "none";
               }}
             />
-            {/* Fade image into background so it feels like a shade, not a card */}
+            {/* Fade image into background; to inline-end so it flips with direction */}
             <div
               className="absolute inset-0 w-full"
               style={{
-                background: "linear-gradient(to right, transparent 0%, rgba(45,3,20,0.4) 45%, rgba(26,2,12,0.97) 85%, rgba(26,2,12,1) 100%)",
+                background: "linear-gradient(to inline-end, transparent 0%, rgba(45,3,20,0.4) 45%, rgba(26,2,12,0.97) 85%, rgba(26,2,12,1) 100%)",
               }}
             />
           </div>
@@ -206,37 +225,63 @@ export function Hero() {
             </motion.div>
           </div>
 
-          {/* Stats */}
+          {/* Hero cards — open causes, blog, Facebook members (sexier glass + glow) */}
           <motion.div
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
             className="hidden lg:block"
           >
-            <div className="grid grid-cols-1 gap-6 max-w-sm ms-auto">
-              {statsData.map((stat, index) => (
-                <motion.div
-                  key={stat.label}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.6 + index * 0.2, duration: 0.5 }}
-                  className="bg-white/10 backdrop-blur-xl border border-white/30 rounded-2xl p-6 shadow-xl shadow-black/20 hover:bg-white/20 hover:shadow-2xl hover:-translate-y-2 hover:border-white/40 transition-all duration-300 group"
-                >
-                  <div className="flex items-center gap-4">
-                    <div className="w-14 h-14 rounded-xl bg-white/15 flex items-center justify-center group-hover:bg-accent-500/25 shadow-inner border border-white/10 transition-colors">
-                      <stat.icon className="w-7 h-7 text-accent-50" />
-                    </div>
-                    <div>
-                      <div className="text-2xl font-bold text-white">
-                        {stat.value}
+            <div className="grid grid-cols-1 gap-5 max-w-sm ms-auto">
+              {heroCards.map((card, index) => {
+                const displayValue = "valueDisplay" in card && card.valueDisplay != null ? card.valueDisplay : String(card.value);
+                const resolvedLabel = "label" in card && card.label != null ? card.label : t(card.labelKey);
+                const displayLabel: string =
+                  typeof resolvedLabel === "string" ? resolvedLabel : "";
+                const cardContent = (
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.6 + index * 0.2, duration: 0.5 }}
+                    whileHover={{ scale: 1.02, y: -4 }}
+                    className="relative overflow-hidden rounded-2xl p-6
+                      bg-white/[0.12] backdrop-blur-2xl
+                      border border-white/25 shadow-2xl shadow-black/25
+                      hover:bg-white/[0.18] hover:border-white/40 hover:shadow-accent-500/20 hover:shadow-[0_0_40px_-8px_rgba(231,62,133,0.5)]
+                      transition-all duration-300 ease-out group"
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-br from-white/[0.08] to-transparent pointer-events-none" />
+                    <div className="relative flex items-center gap-5">
+                      <div className="w-16 h-16 rounded-2xl bg-white/20 flex items-center justify-center shadow-lg border border-white/20 group-hover:bg-accent-500/30 group-hover:border-accent-300/40 transition-all duration-300 shrink-0">
+                        <card.icon className="w-8 h-8 text-white drop-shadow-sm" />
                       </div>
-                      <div className="text-sm text-white/60">
-                        {stat.label}
+                      <div className="min-w-0">
+                        <div className="text-3xl font-bold tabular-nums text-white tracking-tight drop-shadow-sm">
+                          {displayValue}
+                        </div>
+                        <div className="text-sm font-medium text-white/70 mt-0.5">
+                          {displayLabel}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </motion.div>
-              ))}
+                  </motion.div>
+                );
+                return card.external ? (
+                  <a
+                    key={card.labelKey}
+                    href={card.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block focus:outline-none focus-visible:ring-2 focus-visible:ring-white/50 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent rounded-2xl"
+                  >
+                    {cardContent}
+                  </a>
+                ) : (
+                  <Link key={card.labelKey} href={card.href}>
+                    {cardContent}
+                  </Link>
+                );
+              })}
             </div>
           </motion.div>
         </div>

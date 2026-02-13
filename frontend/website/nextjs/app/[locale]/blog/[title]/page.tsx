@@ -67,8 +67,9 @@ export default function BlogDetailPage({ params }: PageProps) {
     <>
       <PageHead />
 
-      {/* Page Hero — aligned with landing hero style */}
-      <header className="relative min-h-[32vh] flex flex-col items-center justify-center overflow-hidden bg-gradient-to-br from-primary-700 via-primary-800 to-primary-900 dark:from-primary-950 dark:via-slate-900 dark:to-slate-900 pt-24 md:pt-28">
+      {/* Page Hero — grows with content so all text is visible; texture + curved bottom */}
+      <header className="relative min-h-[260px] flex flex-col overflow-hidden bg-gradient-to-br from-primary-700 via-primary-800 to-primary-900 dark:from-primary-950 dark:via-slate-900 dark:to-slate-900 pt-24 md:pt-28">
+        {/* Header image as background flavour (faded) */}
         {blog.header_img_url && (
           <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden>
             <img
@@ -76,50 +77,56 @@ export default function BlogDetailPage({ params }: PageProps) {
               alt=""
               className="absolute inset-0 w-full h-full object-cover opacity-20 dark:opacity-15"
             />
-            <div className="absolute inset-0 bg-gradient-to-b from-primary-900/80 via-primary-900/50 to-primary-900/90 dark:from-slate-900/90 dark:via-slate-900/70 dark:to-slate-900/95" aria-hidden />
+            <div
+              className="absolute inset-0 bg-gradient-to-b from-primary-900/90 via-primary-900/60 to-primary-900/95 dark:from-slate-900/95 dark:via-slate-900/70 dark:to-slate-900/95"
+              aria-hidden
+            />
           </div>
         )}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_70%_at_50%_50%,rgba(199,28,105,0.25)_0%,transparent_50%)] pointer-events-none" aria-hidden />
-        <div className="relative z-10 w-full max-w-4xl mx-auto text-center pt-8 pb-16 md:pt-10 md:pb-20 px-4 sm:px-6">
-          {headers?.main_header_top && (
-            <motion.p
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="font-display text-primary-200 font-medium mb-3"
-            >
-              {rawT(headers.main_header_top)}
-            </motion.p>
-          )}
-          <motion.h1
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.05 }}
-            className="display-headline text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-white leading-tight"
-          >
-            {rawT(headers?.main_header_middle_big || blog.title)}
-          </motion.h1>
-          {headers?.main_header_bottom && (
-            <>
-              <div className="mt-4 h-0.5 w-16 bg-white/50 rounded-full mx-auto" aria-hidden />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_70%_at_50%_50%,rgba(199,28,105,0.2)_0%,transparent_50%)] pointer-events-none" aria-hidden />
+        {/* Content: use most of container width; description kept to readable line length */}
+        <div className="relative z-10 container-custom w-full mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-24 md:pt-10 md:pb-28">
+          <div className="flex flex-col items-center text-center max-w-6xl mx-auto">
+            {headers?.main_header_top && (
               <motion.p
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 }}
-                className="text-white/85 text-lg mt-4 max-w-2xl mx-auto"
+                className="font-display text-primary-200 font-medium mb-3"
               >
-                {rawT(headers.main_header_bottom)}
+                {rawT(headers.main_header_top)}
               </motion.p>
-            </>
-          )}
+            )}
+            <motion.h1
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.05 }}
+              className="display-headline text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-white leading-tight w-full"
+            >
+              {rawT(headers?.main_header_middle_big || blog.title)}
+            </motion.h1>
+            {headers?.main_header_bottom && (
+              <>
+                <div className="mt-4 h-0.5 w-16 bg-white/50 rounded-full shrink-0" aria-hidden />
+                <motion.p
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.1 }}
+                  className="text-white/85 text-lg mt-4 max-w-4xl text-center leading-relaxed"
+                >
+                  {rawT(headers.main_header_bottom)}
+                </motion.p>
+              </>
+            )}
+          </div>
         </div>
-        <svg className="absolute bottom-0 left-0 right-0 w-full h-14 text-white dark:text-slate-900" viewBox="0 0 1440 56" fill="none" preserveAspectRatio="none" aria-hidden>
-          <path d="M0 56V28C240 0 480 0 720 28s480 28 720 28v28H0z" fill="currentColor" />
+        <svg className="relative w-full h-16 shrink-0 text-white dark:text-slate-900" viewBox="0 0 1440 64" fill="none" preserveAspectRatio="none" aria-hidden>
+          <path d="M0 64V32C240 0 480 0 720 32s480 32 720 32v32H0z" fill="currentColor" />
         </svg>
       </header>
 
       <section className="py-12 md:py-16 bg-white dark:bg-slate-900">
-        <div className="container-custom max-w-6xl">
-          <div className="lg:grid lg:grid-cols-[1fr_minmax(280px,360px)] lg:gap-12 lg:items-start">
+        <div className="container-custom">
+          <div className="lg:grid lg:grid-cols-[1fr_minmax(300px,400px)] lg:gap-14 lg:items-start">
             {/* Main content — reading starts here without scrolling past image */}
             <div className="min-w-0">
               {/* Back link */}

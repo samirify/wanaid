@@ -36,6 +36,16 @@
   --hero-spotlight: radial-gradient(ellipse 80% 70% at 30% 50%, rgba(199, 28, 105, 0.25) 0%, rgba(126, 15, 63, 0.12) 40%, transparent 70%);
 }
 
+/* Hero section — RTL: mirror gradient and spotlight so layout feels correct in Arabic */
+[dir="rtl"] {
+  --hero-bg: linear-gradient(15deg, #2d0314 0%, #480521 18%, #77133f 40%, #480521 65%, #1a020c 100%);
+  --hero-spotlight: radial-gradient(ellipse 80% 70% at 70% 50%, rgba(231, 62, 133, 0.35) 0%, transparent 50%);
+}
+[dir="rtl"].dark {
+  --hero-bg: linear-gradient(15deg, #2d0314 0%, #1a020c 25%, #0f0108 50%, #1a020c 75%, #2d0314 100%);
+  --hero-spotlight: radial-gradient(ellipse 80% 70% at 70% 50%, rgba(199, 28, 105, 0.25) 0%, rgba(126, 15, 63, 0.12) 40%, transparent 70%);
+}
+
 /* ───────────────── Base Styles ──────────────────────────────────────────── */
 
 @layer base {
@@ -54,7 +64,7 @@
     @apply transition-colors duration-300;
   }
 
-  /* Arabic font override */
+  /* Arabic font override — body and all text use Arabic font in RTL */
   [dir="rtl"] body,
   [dir="rtl"] {
     font-family: var(--font-arabic), var(--font-sans), system-ui, sans-serif;
@@ -109,6 +119,14 @@
   .display-headline {
     @apply font-display font-extrabold tracking-tight;
     letter-spacing: -0.02em;
+  }
+
+  /* RTL: use Arabic font for headlines/display so Arabic isn't squashed (Sora has no Arabic glyphs) */
+  [dir="rtl"] .display-headline,
+  [dir="rtl"] .section-heading,
+  [dir="rtl"] .font-display {
+    font-family: var(--font-arabic), var(--font-sans), system-ui, sans-serif;
+    letter-spacing: normal;
   }
 
   /* Subtle grain overlay for depth (optional use) */

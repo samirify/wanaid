@@ -9,6 +9,8 @@ import { Navigation } from "@/components/layout/Navigation";
 import { Footer } from "@/components/layout/Footer";
 import { CookieConsentBanner } from "@/components/shared/CookieConsentBanner";
 import { ScrollToTop } from "@/components/shared/ScrollToTop";
+import { getDirection } from "@/lib/utils";
+import { api } from "@/lib/api";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -46,7 +48,15 @@ export default async function LocaleLayout({
   }
 
   const messages = await getMessages();
-  const direction = locale === "ar" ? "rtl" : "ltr";
+
+  let direction: "ltr" | "rtl" = "ltr";
+  let initialData: Awaited<ReturnType<typeof api.initialize>> | null = null;
+  try {
+    initialData = await api.initialize(locale);
+    direction = getDirection(locale, initialData.languages);
+  } catch {
+    direction = getDirection(locale, null);
+  }
 
   return (
     <html
@@ -63,7 +73,7 @@ export default async function LocaleLayout({
           disableTransitionOnChange={false}
         >
           <NextIntlClientProvider messages={messages}>
-            <AppProvider>
+            <AppProvider initialData={initialData}>
               <Navigation />
               <main className="flex-1">{children}</main>
               <Footer />

@@ -119,27 +119,51 @@ const AppContext = createContext<AppContextValue>({
   refetch: async () => {},
 });
 
-export function AppProvider({ children }: { children: ReactNode }) {
+/** Initial data from server (e.g. layout) to avoid duplicate fetch on first load */
+export type InitialAppData = {
+  languages: Languages;
+  currencies: Currencies;
+  blogs: BlogSummary[];
+  gallery_count: number;
+  categories: unknown[];
+  open_causes: CauseSummary[];
+  settings: AppSettings;
+  page_contents: PageContents;
+};
+
+function toAppData(init: InitialAppData): AppData {
+  return {
+    languages: init.languages,
+    currencies: init.currencies,
+    blogs: init.blogs,
+    galleryCount: init.gallery_count,
+    categories: init.categories,
+    openCauses: init.open_causes,
+    settings: init.settings,
+    pageContents: init.page_contents,
+    isInitialized: true,
+    isLoading: false,
+    error: null,
+  };
+}
+
+export function AppProvider({
+  children,
+  initialData,
+}: {
+  children: ReactNode;
+  initialData?: InitialAppData | null;
+}) {
   const locale = useLocale();
-  const [data, setData] = useState<AppData>(defaultAppData);
+  const [data, setData] = useState<AppData>(() =>
+    initialData ? toAppData(initialData) : defaultAppData
+  );
 
   const fetchData = useCallback(async () => {
     setData((prev) => ({ ...prev, isLoading: true, error: null }));
     try {
       const result = await api.initialize(locale);
-      setData({
-        languages: result.languages,
-        currencies: result.currencies,
-        blogs: result.blogs as BlogSummary[],
-        galleryCount: result.gallery_count,
-        categories: result.categories,
-        openCauses: result.open_causes as CauseSummary[],
-        settings: result.settings,
-        pageContents: result.page_contents,
-        isInitialized: true,
-        isLoading: false,
-        error: null,
-      });
+      setData(toAppData(result));
     } catch (err) {
       console.error("Failed to initialize app:", err);
       setData((prev) => ({
@@ -151,8 +175,12 @@ export function AppProvider({ children }: { children: ReactNode }) {
   }, [locale]);
 
   useEffect(() => {
-    fetchData();
-  }, [fetchData, locale]);
+    if (initialData) {
+      setData(toAppData(initialData));
+    } else {
+      fetchData();
+    }
+  }, [locale, initialData, fetchData]);
 
   return (
     <AppContext.Provider value={{ ...data, refetch: fetchData }}>

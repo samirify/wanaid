@@ -1,11 +1,26 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
+import type { Languages } from "./types";
 
 /**
  * Merge Tailwind CSS classes with clsx and tailwind-merge.
  */
 export function cn(...inputs: ClassValue[]): string {
   return twMerge(clsx(inputs));
+}
+
+/**
+ * Resolve text direction from API languages data. Use this instead of hardcoding locale === "ar".
+ * @param locale - Current locale (e.g. "en", "ar")
+ * @param languages - Languages from API (e.g. from initialize response); if omitted, falls back to locale-based guess
+ */
+export function getDirection(
+  locale: string,
+  languages?: Languages | null
+): "ltr" | "rtl" {
+  const fromApi = languages?.data?.[locale]?.direction;
+  if (fromApi === "ltr" || fromApi === "rtl") return fromApi;
+  return locale === "ar" ? "rtl" : "ltr";
 }
 
 /**
