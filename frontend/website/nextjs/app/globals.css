@@ -17,8 +17,8 @@
   /* Brand colours — single source of truth for raw CSS usage */
   --color-primary: #c71c69;
   --color-secondary: #222222;
-  /* Hero section — light theme */
-  --hero-bg: linear-gradient(165deg, #9e1554 0%, #77133f 25%, #480521 50%, #2d0314 75%, #1a020c 100%);
+  /* Hero section — light theme (darker at top so logo with pink stands out) */
+  --hero-bg: linear-gradient(165deg, #2d0314 0%, #480521 18%, #77133f 40%, #480521 65%, #1a020c 100%);
   --hero-spotlight: radial-gradient(ellipse 80% 70% at 30% 50%, rgba(231, 62, 133, 0.35) 0%, transparent 50%);
 }
 
@@ -141,6 +141,7 @@
 
   .btn-accent {
     @apply btn bg-accent-500 text-white;
+    @apply border-2 border-accent-600/80 dark:border-accent-400/60;
     @apply hover:bg-accent-600 active:bg-accent-700;
     @apply focus-visible:ring-accent-500;
     @apply shadow-lg shadow-accent-500/25 hover:shadow-xl hover:shadow-accent-500/30;

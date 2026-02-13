@@ -12,7 +12,7 @@ const fadeInUp = {
   visible: (i: number) => ({
     opacity: 1,
     y: 0,
-    transition: { delay: i * 0.15, duration: 0.6, ease: "easeOut" },
+    transition: { delay: i * 0.15, duration: 0.6, ease: "easeOut" as const },
   }),
 };
 
@@ -130,7 +130,7 @@ export function Hero() {
                     <Link
                       key={cta.id}
                       href={linkHref}
-                      className="btn bg-accent-500 text-white hover:bg-accent-600 shadow-xl shadow-black/30 hover:shadow-2xl hover:-translate-y-0.5 px-8 py-4 text-base transition-all duration-300"
+                      className="btn bg-accent-500 text-white border-2 border-white/30 hover:bg-accent-600 shadow-xl shadow-black/30 hover:shadow-2xl hover:-translate-y-0.5 px-8 py-4 text-base transition-all duration-300"
                     >
                       <Heart className="w-5 h-5" />
                       {rawT(cta.label)}
@@ -139,8 +139,9 @@ export function Hero() {
                     <Link
                       key={cta.id}
                       href={linkHref}
-                      className="btn bg-white/10 backdrop-blur-sm text-white border-2 border-white/30 hover:bg-white/20 hover:border-white/40 shadow-lg shadow-black/10 px-8 py-4 text-base transition-all duration-300"
+                      className="btn bg-white/10 backdrop-blur-sm text-white border-2 border-white/30 hover:bg-white/20 hover:border-white/40 shadow-lg shadow-black/10 px-8 py-4 text-base transition-all duration-300 inline-flex items-center gap-2"
                     >
+                      <Users className="w-5 h-5 shrink-0" />
                       {rawT(cta.label)}
                     </Link>
                   );
@@ -151,15 +152,16 @@ export function Hero() {
                     href={
                       settings.static_button_get_started_url || "/cause/help-us"
                     }
-                    className="btn bg-accent-500 text-white hover:bg-accent-600 shadow-xl shadow-black/30 hover:shadow-2xl hover:-translate-y-0.5 px-8 py-4 text-base transition-all duration-300"
+                    className="btn bg-accent-500 text-white border-2 border-white/30 hover:bg-accent-600 shadow-xl shadow-black/30 hover:shadow-2xl hover:-translate-y-0.5 px-8 py-4 text-base transition-all duration-300"
                   >
                     <Heart className="w-5 h-5" />
                     {t("OPEN_CAUSES_DONATE_NOW_LABEL")}
                   </Link>
                   <Link
                     href="/about"
-                    className="btn bg-white/10 backdrop-blur-sm text-white border-2 border-white/30 hover:bg-white/20 hover:border-white/40 shadow-lg shadow-black/10 px-8 py-4 text-base transition-all duration-300"
+                    className="btn bg-white/10 backdrop-blur-sm text-white border-2 border-white/30 hover:bg-white/20 hover:border-white/40 shadow-lg shadow-black/10 px-8 py-4 text-base transition-all duration-300 inline-flex items-center gap-2"
                   >
+                    <Users className="w-5 h-5 shrink-0" />
                     {t("TOP_NAV_ABOUT_LABEL")}
                   </Link>
                 </>

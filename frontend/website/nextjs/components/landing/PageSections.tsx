@@ -29,12 +29,15 @@ const FreeText: FC<{ pillar: Pillar; index: number }> = ({ pillar, index }) => {
   const isOdd = (index + 1) % 2 !== 0; // 1st=odd, 2nd=even, 3rd=odd...
 
   const isEven = index % 2 === 0;
+  const isFirst = index === 0;
   return (
     <section
       className={
-        isEven
-          ? "pt-8 md:pt-10 lg:pt-12 bg-white dark:bg-slate-900"
-          : "pt-8 md:pt-10 lg:pt-12 bg-slate-50/50 dark:bg-slate-800/30"
+        isFirst
+          ? "pt-12 md:pt-16 lg:pt-20 pb-8 md:pb-10 lg:pb-12 border-t-4 border-primary-500 bg-white dark:bg-slate-900"
+          : isEven
+            ? "pt-8 md:pt-10 lg:pt-12 pb-8 md:pb-10 lg:pb-12 bg-white dark:bg-slate-900"
+            : "pt-8 md:pt-10 lg:pt-12 pb-8 md:pb-10 lg:pb-12 bg-slate-200 dark:bg-slate-800"
       }
     >
       <div className="container-custom">
@@ -43,7 +46,7 @@ const FreeText: FC<{ pillar: Pillar; index: number }> = ({ pillar, index }) => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="border-b border-slate-200 dark:border-slate-700 pb-8 md:pb-10 lg:pb-12"
+          className={!isFirst ? "border-t border-slate-200 dark:border-slate-700 pt-8 md:pt-10 lg:pt-12" : ""}
         >
           {hasImage ? (
             <div
@@ -101,3 +104,4 @@ const FreeText: FC<{ pillar: Pillar; index: number }> = ({ pillar, index }) => {
     </section>
   );
 };
+

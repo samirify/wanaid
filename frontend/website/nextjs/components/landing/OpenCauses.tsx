@@ -13,17 +13,16 @@ export function OpenCauses() {
   return (
     <section
       id="open-causes"
-      className="relative py-20 sm:py-28 overflow-hidden"
+      className="relative py-20 sm:py-28 overflow-hidden border-t-4 border-primary-500 bg-gradient-to-b from-primary-100 via-primary-50 to-white dark:from-primary-950/80 dark:via-primary-950/50 dark:to-slate-900"
       aria-label={t("OPEN_CAUSES_HEADER_LABEL")}
     >
-      {/* Ambient background — soft gradient + subtle primary glow so content feels "on stage" */}
+      {/* Ambient orbs — keep subtle glow */}
       <div
         className="absolute inset-0 pointer-events-none"
         aria-hidden
       >
-        <div className="absolute inset-0 bg-gradient-to-b from-slate-50/80 via-white to-slate-50/60 dark:from-slate-900/80 dark:via-slate-900 dark:to-slate-900/80" />
-        <div className="absolute top-1/4 -left-40 w-80 h-80 rounded-full bg-primary-500/5 dark:bg-primary-500/10 blur-3xl" />
-        <div className="absolute bottom-1/4 -right-40 w-96 h-96 rounded-full bg-primary-400/5 dark:bg-primary-500/5 blur-3xl" />
+        <div className="absolute top-1/4 -left-40 w-80 h-80 rounded-full bg-primary-500/15 dark:bg-primary-500/20 blur-3xl" />
+        <div className="absolute bottom-1/4 -right-40 w-96 h-96 rounded-full bg-primary-400/15 dark:bg-primary-500/15 blur-3xl" />
       </div>
 
       <div className="container-custom relative">

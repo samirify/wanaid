@@ -118,8 +118,8 @@ export function BlogSection() {
   const [featured, ...rest] = blogs;
 
   return (
-    <section id="blog" className="relative py-20 sm:py-28 overflow-hidden">
-      <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-slate-50/60 via-white to-slate-50/80 dark:from-slate-900/60 dark:via-slate-900 dark:to-slate-900/80" aria-hidden />
+    <section id="blog" className="relative py-20 sm:py-28 overflow-hidden border-t-4 border-slate-300 dark:border-slate-600 bg-gradient-to-b from-slate-200 via-slate-100 to-slate-200 dark:from-slate-700 dark:via-slate-800 dark:to-slate-900" aria-label={t("LANDING_PAGE_BLOG_HEADER_LABEL")}>
+      <div className="absolute inset-0 pointer-events-none" aria-hidden />
       <div className="container-custom relative">
         <header className="mb-14 sm:mb-16 text-center">
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 dark:text-white tracking-tight max-w-2xl mx-auto">
