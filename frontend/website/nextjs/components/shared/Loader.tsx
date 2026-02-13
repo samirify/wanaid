@@ -28,8 +28,8 @@ export function Loader({
 
   if (fullPage) {
     return (
-      <div className="fixed inset-0 z-[100] bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm flex items-center justify-center">
-        {spinner}
+      <div className="area-loader-container" aria-hidden="true">
+        <div className="area-loader" />
       </div>
     );
   }
