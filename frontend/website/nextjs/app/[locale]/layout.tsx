@@ -9,7 +9,6 @@ import { Navigation } from "@/components/layout/Navigation";
 import { Footer } from "@/components/layout/Footer";
 import { CookieConsentBanner } from "@/components/shared/CookieConsentBanner";
 import { ScrollToTop } from "@/components/shared/ScrollToTop";
-import { NavigationProgress } from "@/components/shared/NavigationProgress";
 import { getDirection } from "@/lib/utils";
 import { api } from "@/lib/api";
 
@@ -75,7 +74,6 @@ export default async function LocaleLayout({
         >
           <NextIntlClientProvider messages={messages}>
             <AppProvider initialData={initialData}>
-              <NavigationProgress />
               <Navigation />
               <main className="flex-1">{children}</main>
               <Footer />
