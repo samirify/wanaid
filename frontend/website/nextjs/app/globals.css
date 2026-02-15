@@ -85,11 +85,6 @@
   }
 }
 
-/* Reserve bottom space for cookie banner to prevent CLS when it appears */
-html.cookie-banner-reserved body {
-  padding-bottom: 100px;
-}
-
 /* ───────────────── Component Utilities ──────────────────────────────────── */
 
 @layer components {

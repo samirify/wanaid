@@ -79,14 +79,19 @@ export default async function LocaleLayout({
       className={`${inter.variable} ${sora.variable} ${notoKufiArabic.variable}`}
     >
       <head>
-        <link rel="icon" href="/images/favicon.png" type="image/png" />
-        <meta name="theme-color" content={SEO_DEFAULTS.themeColor} />
-        {/* Reserve space for cookie banner on first paint to avoid CLS (0.439) */}
+        {/* First: reserve space for cookie banner so first layout has it (avoids CLS). Inline = no extra network, applies before body. */}
+        <style
+          dangerouslySetInnerHTML={{
+            __html: "html.cookie-banner-reserved body{padding-bottom:100px}",
+          }}
+        />
         <script
           dangerouslySetInnerHTML={{
             __html: `(function(){try{if(!localStorage.getItem("charity-cookie-consent"))document.documentElement.classList.add("cookie-banner-reserved");}catch(e){}})();`,
           }}
         />
+        <link rel="icon" href="/images/favicon.png" type="image/png" />
+        <meta name="theme-color" content={SEO_DEFAULTS.themeColor} />
       </head>
       <body className="min-h-screen flex flex-col font-sans">
         <ThemeProvider
