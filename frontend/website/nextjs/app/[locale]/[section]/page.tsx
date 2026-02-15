@@ -12,7 +12,6 @@ import { OpenCauses } from "@/components/landing/OpenCauses";
 import { BlogSection } from "@/components/landing/BlogSection";
 import { PageSections } from "@/components/landing/PageSections";
 import { SectionSeparator } from "@/components/shared/SectionSeparator";
-import { PageHead } from "@/components/shared/PageHead";
 import { Loader } from "@/components/shared/Loader";
 import { ErrorDisplay } from "@/components/shared/ErrorDisplay";
 import type { PageHeaders, Pillar } from "@/lib/types";
@@ -149,7 +148,6 @@ function SupportPage({ section }: { section: string }) {
 
   return (
     <>
-      <PageHead />
 
       {/* Hero — only if headers exist (same as React Dynamic) */}
       {data.headers?.main_header_middle_big && (

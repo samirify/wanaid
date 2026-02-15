@@ -58,7 +58,7 @@ export function Footer() {
   );
 
   return (
-    <footer className="relative bg-slate-900 text-slate-300 overflow-hidden">
+    <footer className="relative bg-slate-900 text-slate-200 overflow-hidden" role="contentinfo">
       {/* Decorative top gradient bar */}
       <div className="h-1 bg-gradient-to-r from-primary-600 via-primary-500 to-primary-600" />
 
@@ -92,7 +92,7 @@ export function Footer() {
               />
             </Link>
             {tagline && (
-              <p className="text-slate-400 text-sm leading-relaxed mb-6">
+              <p className="text-slate-300 text-sm leading-relaxed mb-6">
                 {tagline}
               </p>
             )}
@@ -104,7 +104,7 @@ export function Footer() {
                     href={social.url!}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-10 h-10 rounded-xl bg-slate-800 hover:bg-primary-600 text-slate-400 hover:text-white flex items-center justify-center transition-all duration-300 hover:scale-110 hover:-translate-y-0.5"
+                    className="w-10 h-10 rounded-xl bg-slate-800 hover:bg-primary-600 text-slate-300 hover:text-white flex items-center justify-center transition-all duration-300 hover:scale-110 hover:-translate-y-0.5"
                     aria-label={social.label}
                   >
                     <social.icon className="w-4 h-4" />
@@ -124,7 +124,7 @@ export function Footer() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-slate-400 hover:text-primary-400 transition-colors duration-200 text-sm flex items-center gap-2 group"
+                    className="text-slate-300 hover:text-primary-400 transition-colors duration-200 text-sm flex items-center gap-2 group"
                   >
                     <ArrowRight className="w-3 h-3 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all rtl:rotate-180" />
                     <span>{link.label}</span>
@@ -144,7 +144,7 @@ export function Footer() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-slate-400 hover:text-primary-400 transition-colors duration-200 text-sm flex items-center gap-2 group"
+                    className="text-slate-300 hover:text-primary-400 transition-colors duration-200 text-sm flex items-center gap-2 group"
                   >
                     <ArrowRight className="w-3 h-3 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all rtl:rotate-180" />
                     <span>{link.label}</span>
@@ -163,7 +163,7 @@ export function Footer() {
               {settings.main_contact_address && (
                 <li className="flex items-start gap-3 text-sm">
                   <MapPin className="w-4 h-4 text-primary-400 mt-0.5 shrink-0" />
-                  <span className="text-slate-400">
+                  <span className="text-slate-300">
                     {settings.main_contact_address}
                   </span>
                 </li>
@@ -173,7 +173,7 @@ export function Footer() {
                   <Phone className="w-4 h-4 text-primary-400 shrink-0" />
                   <a
                     href={`tel:${settings.main_contact_phone_number}`}
-                    className="text-slate-400 hover:text-primary-400 transition-colors"
+                    className="text-slate-300 hover:text-primary-400 transition-colors"
                     dir="ltr"
                   >
                     {settings.main_contact_phone_number}
@@ -185,7 +185,7 @@ export function Footer() {
                   <Mail className="w-4 h-4 text-primary-400 shrink-0" />
                   <a
                     href={`mailto:${settings.main_contact_email}`}
-                    className="text-slate-400 hover:text-primary-400 transition-colors"
+                    className="text-slate-300 hover:text-primary-400 transition-colors"
                   >
                     {settings.main_contact_email}
                   </a>
@@ -200,7 +200,7 @@ export function Footer() {
       <div className="border-t border-slate-800">
         <div className="container-custom py-6">
           <div className="flex flex-col items-center gap-4">
-            <p className="text-slate-500 text-sm">
+            <p className="text-slate-400 text-sm">
               &copy; {new Date().getFullYear()} {copyright}
             </p>
             <ul className="flex items-center gap-4">
@@ -208,7 +208,7 @@ export function Footer() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-slate-500 hover:text-primary-400 transition-colors text-xs"
+                    className="text-slate-400 hover:text-primary-400 transition-colors text-xs"
                   >
                     {link.label}
                   </Link>

@@ -6,9 +6,9 @@ import { motion } from "framer-motion";
 import { api } from "@/lib/api";
 import { mediaUrl } from "@/lib/utils";
 import { useRawTranslation } from "@/hooks/useRawTranslation";
+import { usePageTitleOverride } from "@/context/PageTitleContext";
 import { Loader } from "@/components/shared/Loader";
 import { ErrorDisplay } from "@/components/shared/ErrorDisplay";
-import { PageHead } from "@/components/shared/PageHead";
 import { PageHero } from "@/components/shared/PageHero";
 import { PayPalPaymentWidget } from "@/components/shared/PayPalPaymentWidget";
 import { PageSections } from "@/components/landing/PageSections";
@@ -24,6 +24,7 @@ export default function CauseDetailPage({ params }: PageProps) {
   const { title } = use(params);
   const rawT = useRawTranslation();
   const locale = useLocale();
+  const { setPageTitleOverride } = usePageTitleOverride();
   const [data, setData] = useState<CauseDetailResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -71,10 +72,9 @@ export default function CauseDetailPage({ params }: PageProps) {
 
   return (
     <>
-      <PageHead />
-
       <PageHero
         title={rawT(cause.title)}
+        onTitleResolved={setPageTitleOverride}
         topLine={headers?.main_header_top ? rawT(headers.main_header_top) : undefined}
         bottomLine={headers?.main_header_bottom ? rawT(headers.main_header_bottom) : undefined}
         headerImageUrl={cause.header_img_url}

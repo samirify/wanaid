@@ -21,8 +21,8 @@ export function LanguageSelector() {
   };
 
   return (
-    <div className="flex items-center gap-1 bg-slate-100 dark:bg-slate-800 rounded-xl p-1 h-10">
-      <Globe className="w-4 h-4 text-slate-500 dark:text-slate-400 ms-1.5" />
+    <div className="flex items-center gap-1 bg-slate-100 dark:bg-slate-800 rounded-xl p-1 h-10" role="group" aria-label="Language selection">
+      <Globe className="w-4 h-4 text-slate-600 dark:text-slate-400 ms-1.5 shrink-0" aria-hidden />
       {routing.locales.map((loc) => (
         <button
           key={loc}
@@ -31,9 +31,10 @@ export function LanguageSelector() {
             "px-2.5 py-1 rounded-lg text-xs font-semibold transition-all duration-200",
             locale === loc
               ? "bg-white dark:bg-slate-700 text-primary-600 dark:text-primary-400 shadow-sm"
-              : "text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300"
+              : "text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100"
           )}
-          aria-label={`Switch to ${loc}`}
+          aria-label={`Switch to ${loc === "en" ? "English" : "Arabic"}`}
+          aria-pressed={locale === loc}
         >
           {languageLabels[loc] || loc.toUpperCase()}
         </button>

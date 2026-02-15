@@ -5,8 +5,8 @@ import { motion } from "framer-motion";
 import { Link } from "@/i18n/navigation";
 import { mediaUrl } from "@/lib/utils";
 import { useRawTranslation } from "@/hooks/useRawTranslation";
+import { usePageTitleOverride } from "@/context/PageTitleContext";
 import { ErrorDisplay } from "@/components/shared/ErrorDisplay";
-import { PageHead } from "@/components/shared/PageHead";
 import { PageHero } from "@/components/shared/PageHero";
 import { ArrowLeft, Facebook, Instagram, Linkedin, Twitter, Youtube } from "lucide-react";
 import type { TeamMember, PageHeaders, Pillar } from "@/lib/types";
@@ -27,6 +27,7 @@ interface Props {
 export default function TeamMemberContent({ pageData, memberData, locale }: Props) {
   const t = useTranslations();
   const rawT = useRawTranslation();
+  const { setPageTitleOverride } = usePageTitleOverride();
 
   if (!pageData && !memberData) {
     return <ErrorDisplay variant="page" message="Failed to load team member details." showHomeButton />;
@@ -37,10 +38,9 @@ export default function TeamMemberContent({ pageData, memberData, locale }: Prop
     const { headers, pillars } = pageData;
     return (
       <>
-        <PageHead />
-
         <PageHero
           title={headers?.main_header_middle_big ?? ""}
+          onTitleResolved={setPageTitleOverride}
           bottomLine={headers?.main_header_bottom}
           headerImageUrl={pageData.main_header_img ?? null}
           variant="auto"
@@ -102,10 +102,9 @@ export default function TeamMemberContent({ pageData, memberData, locale }: Prop
 
   return (
     <>
-      <PageHead />
-
       <PageHero
         title={rawT(tm.full_name)}
+        onTitleResolved={setPageTitleOverride}
         bottomLine={tm.position ? rawT(tm.position) : undefined}
         variant="auto"
         align="center"

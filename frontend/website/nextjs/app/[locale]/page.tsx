@@ -4,7 +4,6 @@ import { Hero } from "@/components/landing/Hero";
 import { OpenCauses } from "@/components/landing/OpenCauses";
 import { BlogSection } from "@/components/landing/BlogSection";
 import { PageSections } from "@/components/landing/PageSections";
-import { PageHead } from "@/components/shared/PageHead";
 import { SectionSeparator } from "@/components/shared/SectionSeparator";
 import { useAppData } from "@/context/AppContext";
 import { Loader } from "@/components/shared/Loader";
@@ -23,7 +22,6 @@ export default function LandingPage() {
 
   return (
     <>
-      <PageHead />
       <Hero />
       {pillars.length > 0 && <PageSections pillars={pillars} />}
       <SectionSeparator />

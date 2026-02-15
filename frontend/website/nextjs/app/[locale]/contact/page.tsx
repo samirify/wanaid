@@ -7,7 +7,6 @@ import ReCAPTCHA from "react-google-recaptcha";
 import { useAppData } from "@/context/AppContext";
 import { api } from "@/lib/api";
 import { ErrorDisplay } from "@/components/shared/ErrorDisplay";
-import { PageHead } from "@/components/shared/PageHead";
 import { PageHero } from "@/components/shared/PageHero";
 import {
   MapPin,
@@ -93,8 +92,6 @@ export default function ContactPage() {
 
   return (
     <>
-      <PageHead />
-
       <PageHero
         title={t("WEBSITE_CONTACT_HEADER_LABEL")}
         topLine={t("WEBSITE_CONTACT_HEADER_MAIN_TOP")}

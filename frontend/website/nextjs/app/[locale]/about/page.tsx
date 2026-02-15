@@ -9,7 +9,6 @@ import { mediaUrl } from "@/lib/utils";
 import { useRawTranslation } from "@/hooks/useRawTranslation";
 import { Loader } from "@/components/shared/Loader";
 import { ErrorDisplay } from "@/components/shared/ErrorDisplay";
-import { PageHead } from "@/components/shared/PageHead";
 import { PageHero } from "@/components/shared/PageHero";
 import { PageSections } from "@/components/landing/PageSections";
 import { SectionSeparator } from "@/components/shared/SectionSeparator";
@@ -139,8 +138,6 @@ export default function AboutPage() {
 
   return (
     <>
-      <PageHead />
-
       <PageHero
         title={rawT(
           data.headers.main_header_middle_big || "ABOUT_MAIN_HEADER_MIDDLE_BIG"

@@ -3,19 +3,20 @@
 import { useLocale } from "next-intl";
 import { usePathname } from "next/navigation";
 import { useAppData } from "@/context/AppContext";
+import { SEO_DEFAULTS, PATH_META } from "@/lib/seo-defaults";
 
-interface PageMeta {
+export interface PageMeta {
   title?: string;
   description?: string;
   keywords?: string;
 }
 
 /**
- * Page meta for <PageHead>. Only landing (main) has meta from the API (initialize).
- * All other pages use the fallback title in PageHead — no /pages/{path} calls here,
- * since the backend does not expose /pages/ for about, contact, blog, cause, etc.
+ * Page meta for <PageHead>. Landing (main) uses API meta when available.
+ * All other routes use path-based defaults from PATH_META so every page
+ * has a proper title and description for SEO.
  */
-export function usePageMeta(): PageMeta | null {
+export function usePageMeta(): PageMeta {
   const pathname = usePathname();
   const locale = useLocale();
   const { pageContents } = useAppData();
@@ -24,15 +25,32 @@ export function usePageMeta(): PageMeta | null {
     .replace(new RegExp(`^/${locale}/?`), "")
     .replace(/^\/+|\/+$/g, "") || "main";
 
-  if (pagePath !== "main") {
-    return null;
+  // Landing: prefer API meta
+  if (pagePath === "main") {
+    const landing = pageContents?.LANDING?.META;
+    if (landing?.title || landing?.description || landing?.keywords) {
+      return {
+        title: landing.title ?? SEO_DEFAULTS.title,
+        description: landing.description ?? SEO_DEFAULTS.description,
+        keywords: landing.keywords ?? SEO_DEFAULTS.keywords,
+      };
+    }
   }
 
-  const landing = pageContents?.LANDING?.META;
-  if (!landing) return null;
+  // Per-route defaults (gallery, about, contact, etc.) with page-specific keywords
+  const pathMeta = PATH_META[pagePath];
+  if (pathMeta) {
+    return {
+      title: pathMeta.title,
+      description: pathMeta.description ?? SEO_DEFAULTS.description,
+      keywords: pathMeta.keywords ?? SEO_DEFAULTS.keywords,
+    };
+  }
+
+  // Fallback so every page has at least a title
   return {
-    title: landing.title ?? undefined,
-    description: landing.description ?? undefined,
-    keywords: landing.keywords ?? undefined,
+    title: SEO_DEFAULTS.title,
+    description: SEO_DEFAULTS.description,
+    keywords: SEO_DEFAULTS.keywords,
   };
 }

@@ -1,19 +1,20 @@
 "use client";
 
-import { useState, useEffect, use } from "react";
+import { useState, useEffect, useRef, use } from "react";
 import { useTranslations, useLocale } from "next-intl";
 import { motion } from "framer-motion";
 import { Link } from "@/i18n/navigation";
 import { api } from "@/lib/api";
 import { formatDate, mediaUrl } from "@/lib/utils";
 import { useRawTranslation } from "@/hooks/useRawTranslation";
+import { usePageTitleOverride } from "@/context/PageTitleContext";
 import { Loader } from "@/components/shared/Loader";
 import { ErrorDisplay } from "@/components/shared/ErrorDisplay";
-import { PageHead } from "@/components/shared/PageHead";
 import { PageHero } from "@/components/shared/PageHero";
 import { PageSections } from "@/components/landing/PageSections";
 import { SectionSeparator } from "@/components/shared/SectionSeparator";
 import { Calendar, User, ArrowLeft } from "lucide-react";
+import { SEO_DEFAULTS } from "@/lib/seo-defaults";
 import type { BlogDetailResponse } from "@/lib/types";
 
 interface PageProps {
@@ -25,6 +26,7 @@ export default function BlogDetailPage({ params }: PageProps) {
   const t = useTranslations();
   const rawT = useRawTranslation();
   const locale = useLocale();
+  const { setPageTitleOverride } = usePageTitleOverride();
   const [data, setData] = useState<BlogDetailResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -48,8 +50,20 @@ export default function BlogDetailPage({ params }: PageProps) {
     fetchBlog();
   }, [title, locale]);
 
-  if (loading) return <Loader fullPage />;
+  const docTitleRef = useRef<string | null>(null);
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+    const v = docTitleRef.current;
+    const plain = v && String(v).replace(/<[^>]*>/g, "").trim();
+    document.title = plain ? `${plain} | ${SEO_DEFAULTS.title}` : SEO_DEFAULTS.title;
+  });
+
+  if (loading) {
+    docTitleRef.current = null;
+    return <Loader fullPage />;
+  }
   if (error || !data || !data.blog) {
+    docTitleRef.current = null;
     const is404 = error === "Page not found.";
     return (
       <ErrorDisplay
@@ -64,12 +78,35 @@ export default function BlogDetailPage({ params }: PageProps) {
 
   const { blog, headers, pillars } = data;
 
+  const heroTitle = rawT(headers?.main_header_middle_big || blog.title);
+
+  const looksLikeKey = (s: string) => /^[A-Z0-9_]+$/.test(String(s).trim());
+  const resolve = (key: string | null | undefined): string => {
+    if (key == null || key === "") return "";
+    const r = rawT(key) || t(key) || "";
+    return (r && !looksLikeKey(r) ? r : key).replace(/<[^>]*>/g, "").trim();
+  };
+  const fromMiddle = resolve(headers?.main_header_middle_big ?? undefined);
+  const fromBlogTitle = resolve(blog.title ?? undefined);
+  const fromTop = resolve(headers?.main_header_top ?? undefined);
+  const fromBottom = resolve(headers?.main_header_bottom ?? undefined);
+  const slugToTitle = (slug: string) =>
+    slug.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+
+  const docTitleOnly =
+    (fromMiddle && !looksLikeKey(fromMiddle) ? fromMiddle : null) ||
+    (fromBlogTitle && !looksLikeKey(fromBlogTitle) ? fromBlogTitle : null) ||
+    (fromTop && !looksLikeKey(fromTop) ? fromTop : null) ||
+    (fromBottom && !looksLikeKey(fromBottom) ? fromBottom : null) ||
+    slugToTitle(title);
+
+  docTitleRef.current = docTitleOnly || null;
+
   return (
     <>
-      <PageHead />
-
       <PageHero
-        title={rawT(headers?.main_header_middle_big || blog.title)}
+        title={heroTitle}
+        onTitleResolved={setPageTitleOverride}
         topLine={headers?.main_header_top ? rawT(headers.main_header_top) : undefined}
         bottomLine={headers?.main_header_bottom ? rawT(headers.main_header_bottom) : undefined}
         headerImageUrl={blog.header_img_url}

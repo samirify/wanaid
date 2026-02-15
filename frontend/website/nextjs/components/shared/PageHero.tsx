@@ -1,6 +1,6 @@
 "use client";
 
-import { useId } from "react";
+import { useId, useLayoutEffect } from "react";
 import { motion } from "framer-motion";
 import { mediaUrl } from "@/lib/utils";
 
@@ -40,6 +40,8 @@ export interface PageHeroProps {
   asHeader?: boolean;
   /** Extra class names for the outer wrapper */
   className?: string;
+  /** Called with the title string when rendered (for document title). Plain string only, no HTML. */
+  onTitleResolved?: (title: string | null) => void;
 }
 
 const motionProps = {
@@ -59,8 +61,14 @@ export function PageHero({
   trailingSlot,
   asHeader = false,
   className = "",
+  onTitleResolved,
 }: PageHeroProps) {
   const id = useId();
+  const titleStr = typeof title === "string" ? title.replace(/<[^>]*>/g, "").trim() || null : null;
+  useLayoutEffect(() => {
+    onTitleResolved?.(titleStr ?? null);
+    return () => onTitleResolved?.(null);
+  }, [titleStr, onTitleResolved]);
   const isFixed = variant === "fixed";
   const isCenter = align === "center";
   const wave1 = `${id}-w1`;

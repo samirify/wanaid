@@ -9,10 +9,13 @@ import { Navigation } from "@/components/layout/Navigation";
 import { Footer } from "@/components/layout/Footer";
 import { CookieConsentBanner } from "@/components/shared/CookieConsentBanner";
 import { ScrollToTop } from "@/components/shared/ScrollToTop";
+import { PageHead } from "@/components/shared/PageHead";
+import { PageTitleProvider } from "@/context/PageTitleContext";
 // import { NotificationDemo } from "@/components/shared/NotificationDemo";
 import { cookies, headers } from "next/headers";
 import { getDirection } from "@/lib/utils";
 import { api } from "@/lib/api";
+import { SEO_DEFAULTS } from "@/lib/seo-defaults";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -77,6 +80,7 @@ export default async function LocaleLayout({
     >
       <head>
         <link rel="icon" href="/images/favicon.png" type="image/png" />
+        <meta name="theme-color" content={SEO_DEFAULTS.themeColor} />
       </head>
       <body className="min-h-screen flex flex-col font-sans">
         <ThemeProvider
@@ -87,12 +91,15 @@ export default async function LocaleLayout({
         >
           <NextIntlClientProvider messages={messages}>
             <AppProvider initialData={initialData}>
-              <Navigation />
-              <main className="flex-1">{children}</main>
-              <Footer />
-              <ScrollToTop />
-              <CookieConsentBanner />
-              {/* <NotificationDemo /> */}
+              <PageTitleProvider>
+                <PageHead />
+                <Navigation />
+                <main className="flex-1">{children}</main>
+                <Footer />
+                <ScrollToTop />
+                <CookieConsentBanner />
+                {/* <NotificationDemo /> */}
+              </PageTitleProvider>
             </AppProvider>
           </NextIntlClientProvider>
         </ThemeProvider>
