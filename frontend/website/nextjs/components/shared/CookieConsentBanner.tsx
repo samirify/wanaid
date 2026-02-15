@@ -14,6 +14,7 @@ export function CookieConsentBanner() {
   const handleAccept = () => {
     acceptAll();
     updateConsent({ essential: true, analytics: true, functional: true });
+    document.documentElement.classList.remove("cookie-banner-reserved");
   };
 
   return (

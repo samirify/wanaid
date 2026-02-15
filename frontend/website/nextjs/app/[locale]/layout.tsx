@@ -81,6 +81,12 @@ export default async function LocaleLayout({
       <head>
         <link rel="icon" href="/images/favicon.png" type="image/png" />
         <meta name="theme-color" content={SEO_DEFAULTS.themeColor} />
+        {/* Reserve space for cookie banner on first paint to avoid CLS (0.439) */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{if(!localStorage.getItem("charity-cookie-consent"))document.documentElement.classList.add("cookie-banner-reserved");}catch(e){}})();`,
+          }}
+        />
       </head>
       <body className="min-h-screen flex flex-col font-sans">
         <ThemeProvider

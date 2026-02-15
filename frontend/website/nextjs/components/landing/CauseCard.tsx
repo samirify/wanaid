@@ -32,6 +32,8 @@ export function CauseCard({ cause, index = 0 }: CauseCardProps) {
             <img
               src={cause.img_url}
               alt={rawT(cause.title)}
+              width={400}
+              height={224}
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
               loading="lazy"
             />

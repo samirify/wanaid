@@ -28,6 +28,8 @@ function FeaturedBlog({ blog, index }: { blog: BlogSummary; index: number }) {
           <img
             src={blog.img_url}
             alt={rawT(blog.title)}
+            width={600}
+            height={400}
             className="absolute inset-0 w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-500"
             loading="eager"
           />
@@ -81,6 +83,8 @@ function BlogListItem({ blog, index }: { blog: BlogSummary; index: number }) {
             <img
               src={blog.img_url}
               alt={rawT(blog.title)}
+              width={112}
+              height={112}
               className="w-full h-full object-cover group-hover:scale-105 transition-transform"
               loading="lazy"
             />

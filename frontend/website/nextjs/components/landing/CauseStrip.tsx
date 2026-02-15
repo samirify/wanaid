@@ -26,6 +26,8 @@ export function CauseStrip({ cause, index, imageOnLeft }: CauseStripProps) {
           <img
             src={cause.img_url}
             alt={rawT(cause.title)}
+            width={600}
+            height={400}
             className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
             loading="lazy"
           />

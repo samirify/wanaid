@@ -32,6 +32,8 @@ export function BlogCard({ blog, index = 0 }: BlogCardProps) {
             <img
               src={blog.img_url}
               alt={rawT(blog.title)}
+              width={400}
+              height={224}
               className="w-full h-full object-cover group-hover/cover:scale-[1.02] transition-transform duration-300"
               loading="lazy"
             />

@@ -8,11 +8,11 @@ import { Link } from "@/i18n/navigation";
 import { Heart, ArrowDown, Users, BookOpen, Target, Facebook } from "lucide-react";
 
 const fadeInUp = {
-  hidden: { opacity: 0, y: 30 },
+  hidden: { opacity: 0, y: 20 },
   visible: (i: number) => ({
     opacity: 1,
     y: 0,
-    transition: { delay: i * 0.15, duration: 0.6, ease: "easeOut" as const },
+    transition: { delay: i * 0.08, duration: 0.4, ease: "easeOut" as const },
   }),
 };
 
@@ -82,8 +82,11 @@ export function Hero() {
             <img
               src={heroImageUrl}
               alt=""
+              width={1200}
+              height={800}
               className="absolute inset-0 w-full h-full object-cover object-center opacity-30 dark:opacity-25"
               loading="eager"
+              fetchPriority="high"
               onError={(e) => {
                 const el = e.currentTarget;
                 if (el.src !== fallbackHeroUrl) {
@@ -233,9 +236,9 @@ export function Hero() {
 
           {/* Hero cards — open causes, blog, Facebook members (sexier glass + glow) */}
           <motion.div
-            initial={{ opacity: 0, x: 50 }}
+            initial={{ opacity: 0, x: 30 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
             className="hidden lg:block"
           >
             <div className="grid grid-cols-1 gap-5 max-w-sm ms-auto">
@@ -246,9 +249,9 @@ export function Hero() {
                   typeof resolvedLabel === "string" ? resolvedLabel : "";
                 const cardContent = (
                   <motion.div
-                    initial={{ opacity: 0, y: 20 }}
+                    initial={{ opacity: 0, y: 16 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.6 + index * 0.2, duration: 0.5 }}
+                    transition={{ delay: 0.25 + index * 0.1, duration: 0.35 }}
                     whileHover={{ scale: 1.02, y: -4 }}
                     className="relative overflow-hidden rounded-2xl p-6
                       bg-white/[0.12] backdrop-blur-2xl
@@ -296,7 +299,7 @@ export function Hero() {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 1.5 }}
+          transition={{ delay: 0.8 }}
           className="absolute bottom-12 sm:bottom-8 start-1/2 -translate-x-1/2 rtl:translate-x-1/2 text-white/60"
         >
           <motion.div
