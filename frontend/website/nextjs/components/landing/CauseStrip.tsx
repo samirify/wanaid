@@ -50,8 +50,13 @@ export function CauseStrip({ cause, index, imageOnLeft }: CauseStripProps) {
 
   const contentBlock = (
     <div className="w-full md:w-[54%] flex flex-col justify-center py-10 md:py-12 px-6 sm:px-8 lg:px-12 xl:px-16">
-      <h3 className="font-display text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white mb-3 leading-tight group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
-        {rawT(cause.title)}
+      <h3 className="font-display text-2xl sm:text-3xl font-bold mb-3 leading-tight">
+        <Link
+          href={`/cause/${cause.unique_title}`}
+          className="text-slate-900 dark:text-white hover:text-primary-600 dark:hover:text-primary-400 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 rounded"
+        >
+          {rawT(cause.title)}
+        </Link>
       </h3>
       <p className="text-slate-600 dark:text-slate-400 text-base sm:text-lg leading-relaxed mb-6">
         {rawT(cause.short_description)}

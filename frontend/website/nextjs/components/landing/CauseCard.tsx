@@ -54,8 +54,13 @@ export function CauseCard({ cause, index = 0 }: CauseCardProps) {
       </div>
 
       <div className="flex-1 flex flex-col p-5 sm:p-6">
-        <h3 className="font-display text-lg font-bold text-slate-900 dark:text-white mb-2 line-clamp-2 leading-snug group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
-          {rawT(cause.title)}
+        <h3 className="font-display text-lg font-bold mb-2 line-clamp-2 leading-snug">
+          <Link
+            href={`/cause/${cause.unique_title}`}
+            className="text-slate-900 dark:text-white hover:text-primary-600 dark:hover:text-primary-400 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 rounded"
+          >
+            {rawT(cause.title)}
+          </Link>
         </h3>
         <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed line-clamp-3 mb-4 flex-1 min-h-0">
           {rawT(cause.short_description)}

@@ -9,7 +9,7 @@ import { Navigation } from "@/components/layout/Navigation";
 import { Footer } from "@/components/layout/Footer";
 import { CookieConsentBanner } from "@/components/shared/CookieConsentBanner";
 import { ScrollToTop } from "@/components/shared/ScrollToTop";
-import { NotificationDemo } from "@/components/shared/NotificationDemo";
+// import { NotificationDemo } from "@/components/shared/NotificationDemo";
 import { cookies, headers } from "next/headers";
 import { getDirection } from "@/lib/utils";
 import { api } from "@/lib/api";
@@ -89,7 +89,7 @@ export default async function LocaleLayout({
               <Footer />
               <ScrollToTop />
               <CookieConsentBanner />
-              <NotificationDemo />
+              {/* <NotificationDemo /> */}
             </AppProvider>
           </NextIntlClientProvider>
         </ThemeProvider>

@@ -12,6 +12,7 @@ import { ErrorDisplay } from "@/components/shared/ErrorDisplay";
 import { PageHead } from "@/components/shared/PageHead";
 import { PageHero } from "@/components/shared/PageHero";
 import { PageSections } from "@/components/landing/PageSections";
+import { SectionSeparator } from "@/components/shared/SectionSeparator";
 import { Users, Facebook, Instagram, Linkedin, Twitter, Youtube } from "lucide-react";
 import type { PageHeaders, Pillar, TeamDepartment, TeamMember, MetaData } from "@/lib/types";
 
@@ -159,6 +160,8 @@ export default function AboutPage() {
 
       {/* Pillars */}
       {data.pillars.length > 0 && <PageSections pillars={data.pillars} />}
+
+      {data.pillars.length > 0 && data.teams && data.teams.length > 0 && <SectionSeparator />}
 
       {/* Team Sections — grouped by department */}
       {data.teams && data.teams.length > 0 && (

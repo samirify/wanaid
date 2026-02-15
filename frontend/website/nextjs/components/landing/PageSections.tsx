@@ -1,8 +1,9 @@
 "use client";
 
-import { FC } from "react";
+import { FC, Fragment } from "react";
 import { motion } from "framer-motion";
 import { useRawTranslation } from "@/hooks/useRawTranslation";
+import { SectionSeparator } from "@/components/shared/SectionSeparator";
 import type { Pillar } from "@/lib/types";
 
 interface PageSectionsProps {
@@ -15,7 +16,10 @@ export function PageSections({ pillars }: PageSectionsProps) {
   return (
     <>
       {pillars.map((pillar, index) => (
-        <FreeText key={pillar.code} pillar={pillar} index={index} />
+        <Fragment key={pillar.code}>
+          <FreeText pillar={pillar} index={index} />
+          {index < pillars.length - 1 && <SectionSeparator />}
+        </Fragment>
       ))}
     </>
   );

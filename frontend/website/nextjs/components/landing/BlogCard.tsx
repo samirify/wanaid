@@ -16,6 +16,8 @@ export function BlogCard({ blog, index = 0 }: BlogCardProps) {
   const t = useTranslations();
   const rawT = useRawTranslation();
 
+  const href = `/blog/${blog.unique_title}`;
+
   return (
     <motion.article
       initial={{ opacity: 0, y: 20 }}
@@ -24,13 +26,13 @@ export function BlogCard({ blog, index = 0 }: BlogCardProps) {
       transition={{ delay: index * 0.08, duration: 0.4 }}
       className="flex flex-col h-full rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md transition-shadow overflow-hidden"
     >
-      <Link href={`/blog/${blog.unique_title}`} className="flex flex-col h-full group">
+      <Link href={href} className="block group/cover">
         <div className="relative h-56 overflow-hidden bg-slate-100 dark:bg-slate-700 shrink-0">
           {blog.img_url ? (
             <img
               src={blog.img_url}
               alt={rawT(blog.title)}
-              className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-300"
+              className="w-full h-full object-cover group-hover/cover:scale-[1.02] transition-transform duration-300"
               loading="lazy"
             />
           ) : (
@@ -41,20 +43,28 @@ export function BlogCard({ blog, index = 0 }: BlogCardProps) {
             </div>
           )}
         </div>
-
-        <div className="flex-1 flex flex-col p-5 sm:p-6 min-h-0">
-          <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2 line-clamp-2 leading-snug group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
-            {rawT(blog.title)}
-          </h3>
-          <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed line-clamp-3 flex-1 min-h-0 mb-4">
-            {rawT(blog.short_description)}
-          </p>
-          <span className="inline-flex items-center gap-1.5 text-primary-600 dark:text-primary-400 font-semibold text-sm">
-            {t("LANDING_PAGE_BLOG_MORE_BTN_LABEL")}
-            <ArrowRight className="w-4 h-4 rtl:rotate-180 group-hover:translate-x-0.5 rtl:group-hover:-translate-x-0.5 transition-transform" />
-          </span>
-        </div>
       </Link>
+
+      <div className="flex-1 flex flex-col p-5 sm:p-6 min-h-0">
+        <h3 className="font-display text-lg font-bold mb-2 line-clamp-2 leading-snug">
+          <Link
+            href={href}
+            className="text-slate-900 dark:text-white hover:text-primary-600 dark:hover:text-primary-400 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 rounded"
+          >
+            {rawT(blog.title)}
+          </Link>
+        </h3>
+        <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed line-clamp-3 flex-1 min-h-0 mb-4">
+          {rawT(blog.short_description)}
+        </p>
+        <Link
+          href={href}
+          className="inline-flex items-center gap-1.5 text-primary-600 dark:text-primary-400 font-semibold text-sm hover:text-primary-700 dark:hover:text-primary-300 transition-colors self-start group/more"
+        >
+          {t("LANDING_PAGE_BLOG_MORE_BTN_LABEL")}
+          <ArrowRight className="w-4 h-4 rtl:rotate-180 group-hover/more:translate-x-0.5 rtl:group-hover/more:-translate-x-0.5 transition-transform" />
+        </Link>
+      </div>
     </motion.article>
   );
 }

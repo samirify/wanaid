@@ -12,6 +12,7 @@ import { ErrorDisplay } from "@/components/shared/ErrorDisplay";
 import { PageHead } from "@/components/shared/PageHead";
 import { PageHero } from "@/components/shared/PageHero";
 import { PageSections } from "@/components/landing/PageSections";
+import { SectionSeparator } from "@/components/shared/SectionSeparator";
 import { Calendar, User, ArrowLeft } from "lucide-react";
 import type { BlogDetailResponse } from "@/lib/types";
 
@@ -145,9 +146,10 @@ export default function BlogDetailPage({ params }: PageProps) {
 
       {/* Pillars — clear separation */}
       {pillars && pillars.length > 0 && (
-        <div className="border-t border-slate-200 dark:border-slate-700">
+        <>
+          <SectionSeparator />
           <PageSections pillars={pillars} />
-        </div>
+        </>
       )}
     </>
   );

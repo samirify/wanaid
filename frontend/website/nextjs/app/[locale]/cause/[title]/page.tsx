@@ -12,6 +12,7 @@ import { PageHead } from "@/components/shared/PageHead";
 import { PageHero } from "@/components/shared/PageHero";
 import { PayPalPaymentWidget } from "@/components/shared/PayPalPaymentWidget";
 import { PageSections } from "@/components/landing/PageSections";
+import { SectionSeparator } from "@/components/shared/SectionSeparator";
 import { ArrowLeft } from "lucide-react";
 import type { CauseDetailResponse } from "@/lib/types";
 
@@ -122,8 +123,12 @@ export default function CauseDetailPage({ params }: PageProps) {
         </div>
       </section>
 
-      {/* Pillars */}
-      {pillars && pillars.length > 0 && <PageSections pillars={pillars} />}
+      {pillars && pillars.length > 0 && (
+        <>
+          <SectionSeparator />
+          <PageSections pillars={pillars} />
+        </>
+      )}
     </>
   );
 }

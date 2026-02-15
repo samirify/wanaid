@@ -7,6 +7,7 @@ import { mediaUrl } from "@/lib/utils";
 import { useRawTranslation } from "@/hooks/useRawTranslation";
 import { ErrorDisplay } from "@/components/shared/ErrorDisplay";
 import { PageHead } from "@/components/shared/PageHead";
+import { SectionSeparator } from "@/components/shared/SectionSeparator";
 import { ArrowLeft, Facebook, Instagram, Linkedin, Twitter, Youtube } from "lucide-react";
 import type { TeamMember, PageHeaders, Pillar } from "@/lib/types";
 
@@ -68,6 +69,8 @@ export default function TeamMemberContent({ pageData, memberData, locale }: Prop
             )}
           </div>
         </div>
+
+        <SectionSeparator />
 
         <section className="py-24">
           <div className="container-custom max-w-5xl">
@@ -145,6 +148,8 @@ export default function TeamMemberContent({ pageData, memberData, locale }: Prop
           )}
         </div>
       </div>
+
+      <SectionSeparator />
 
       <section className="py-24">
         <div className="container-custom max-w-5xl">

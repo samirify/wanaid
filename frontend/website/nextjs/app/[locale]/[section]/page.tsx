@@ -11,6 +11,7 @@ import { Hero } from "@/components/landing/Hero";
 import { OpenCauses } from "@/components/landing/OpenCauses";
 import { BlogSection } from "@/components/landing/BlogSection";
 import { PageSections } from "@/components/landing/PageSections";
+import { SectionSeparator } from "@/components/shared/SectionSeparator";
 import { PageHead } from "@/components/shared/PageHead";
 import { Loader } from "@/components/shared/Loader";
 import { ErrorDisplay } from "@/components/shared/ErrorDisplay";
@@ -87,9 +88,11 @@ function LandingWithScroll({ section }: { section: string }) {
       {pageTitle && <title>{pageTitle}</title>}
       <Hero />
       {pillars.length > 0 && <PageSections pillars={pillars} />}
+      <SectionSeparator />
       <div ref={section === "open-causes" ? scrollTargetRef : undefined}>
         <OpenCauses />
       </div>
+      <SectionSeparator />
       <div ref={section === "blog" ? scrollTargetRef : undefined}>
         <BlogSection />
       </div>
@@ -190,9 +193,11 @@ function SupportPage({ section }: { section: string }) {
         </div>
       )}
 
-      {/* Pillars */}
       {data.pillars && data.pillars.length > 0 && (
-        <PageSections pillars={data.pillars} />
+        <>
+          {data.headers?.main_header_middle_big && <SectionSeparator />}
+          <PageSections pillars={data.pillars} />
+        </>
       )}
 
       {/* No hero and no pillars = error (same as React Dynamic) */}

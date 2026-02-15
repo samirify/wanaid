@@ -41,8 +41,8 @@ function FeaturedBlog({ blog, index }: { blog: BlogSummary; index: number }) {
         <div className="absolute inset-0 bg-gradient-to-t lg:bg-gradient-to-r from-slate-900/90 via-slate-900/40 to-transparent" />
       </Link>
       <div className="relative w-full lg:w-[54%] flex flex-col justify-center p-8 sm:p-10 lg:p-12 border-t-4 lg:border-t-0 lg:border-l-4 border-primary-500">
-        <h3 className="font-display text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-4 leading-tight">
-          <Link href={`/blog/${blog.unique_title}`} className="hover:text-primary-300 transition-colors">
+        <h3 className="font-display text-[1.4rem] sm:text-[1.8rem] lg:text-[2.1rem] font-bold text-white mb-4 leading-tight">
+          <Link href={`/blog/${blog.unique_title}`} className="text-white hover:text-primary-400 transition-colors">
             {rawT(blog.title)}
           </Link>
         </h3>
