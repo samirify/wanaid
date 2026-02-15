@@ -66,11 +66,19 @@ function PayPalButtonsWrapper({
     PayPalScriptProvider: React.ComponentType<Record<string, unknown>>;
     PayPalButtons: React.ComponentType<Record<string, unknown>>;
   } | null>(null);
+  const [readyToMount, setReadyToMount] = useState(false);
 
   const clientId = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID || "";
 
+  // Defer loading so we skip React Strict Mode / HMR unmount and avoid "zoid destroyed all components"
   useEffect(() => {
     if (!clientId) return;
+    const stableTimer = window.setTimeout(() => setReadyToMount(true), 150);
+    return () => window.clearTimeout(stableTimer);
+  }, [clientId]);
+
+  useEffect(() => {
+    if (!clientId || !readyToMount) return;
     import("@paypal/react-paypal-js").then((mod) => {
       setPayPalModule({
         PayPalScriptProvider:
@@ -83,7 +91,7 @@ function PayPalButtonsWrapper({
           >,
       });
     });
-  }, [clientId]);
+  }, [clientId, readyToMount]);
 
   if (!clientId) {
     return (
@@ -98,7 +106,7 @@ function PayPalButtonsWrapper({
     );
   }
 
-  if (!PayPalModule) {
+  if (!readyToMount || !PayPalModule) {
     return (
       <div className="min-h-[120px] flex flex-col items-center justify-center rounded-lg border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-800/50 p-4">
         <div className="w-8 h-8 border-2 border-primary-500 border-t-transparent rounded-full animate-spin mb-2" aria-hidden />
@@ -114,6 +122,7 @@ function PayPalButtonsWrapper({
   return (
     <PayPalErrorBoundary>
       <PayPalScriptProvider
+        key={`paypal-${causeId}`}
         options={{ clientId, currency: currencyCode }}
       >
         {processing && (
