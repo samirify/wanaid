@@ -75,6 +75,9 @@ export default async function LocaleLayout({
       suppressHydrationWarning
       className={`${inter.variable} ${sora.variable} ${notoKufiArabic.variable}`}
     >
+      <head>
+        <link rel="icon" href="/images/favicon.png" type="image/png" />
+      </head>
       <body className="min-h-screen flex flex-col font-sans">
         <ThemeProvider
           attribute="class"
