@@ -74,6 +74,21 @@ export function stripHtml(html: string): string {
 }
 
 /**
+ * Normalize a YouTube (or youtu.be) URL to an embed URL for iframes.
+ */
+export function youtubeEmbedUrl(url: string): string {
+  if (!url) return "";
+  try {
+    const u = new URL(url);
+    if ((u.hostname === "www.youtube.com" || u.hostname === "youtube.com") && u.pathname.startsWith("/embed/")) return url;
+    const vid = u.searchParams.get("v") ?? (u.hostname === "youtu.be" ? u.pathname.slice(1).split("/")[0] : null);
+    return vid ? `https://www.youtube.com/embed/${vid}` : url;
+  } catch {
+    return url;
+  }
+}
+
+/**
  * Generate a media URL with optional width parameter.
  */
 export function mediaUrl(url: string, width?: number): string {

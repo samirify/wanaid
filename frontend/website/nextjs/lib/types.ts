@@ -146,6 +146,13 @@ export interface GalleryItem {
   img_url: string;
   title?: string;
   description?: string;
+  /** When "video", item is a YouTube (or similar) video; lightbox shows embed. */
+  type?: "image" | "video";
+  /** YouTube embed URL, or watch URL (will be normalized to embed). API may send embedUrl. */
+  video_url?: string | null;
+  embed_url?: string | null;
+  /** Legacy: same as embed_url (original React gallery used this). */
+  embedUrl?: string | null;
 }
 
 /* ─────────────────────────── Settings ────────────────────────────────────── */
