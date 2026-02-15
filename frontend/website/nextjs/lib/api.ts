@@ -123,10 +123,8 @@ export const api = {
   },
 
   /** Generic page data (used by the reference app for all pages including team member detail). */
-  async getPageData(path: string, locale: string) {
-    const res = await request<Record<string, unknown>>(
-      `/pages/${path}?locale=${locale}&t=${Date.now()}`
-    );
+  async getPageData(path: string, _locale: string) {
+    const res = await request<Record<string, unknown>>(`/pages/${path}`);
     // API may return { data: { ... } } or { meta, headers, pillars, ... }
     const data = (res as { data?: Record<string, unknown> }).data ?? res;
     return data as {

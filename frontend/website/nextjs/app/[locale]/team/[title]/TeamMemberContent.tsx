@@ -7,7 +7,7 @@ import { mediaUrl } from "@/lib/utils";
 import { useRawTranslation } from "@/hooks/useRawTranslation";
 import { ErrorDisplay } from "@/components/shared/ErrorDisplay";
 import { PageHead } from "@/components/shared/PageHead";
-import { SectionSeparator } from "@/components/shared/SectionSeparator";
+import { PageHero } from "@/components/shared/PageHero";
 import { ArrowLeft, Facebook, Instagram, Linkedin, Twitter, Youtube } from "lucide-react";
 import type { TeamMember, PageHeaders, Pillar } from "@/lib/types";
 
@@ -39,38 +39,15 @@ export default function TeamMemberContent({ pageData, memberData, locale }: Prop
       <>
         <PageHead />
 
-        <div className="page-hero">
-          {pageData.main_header_img && (
-            <img
-              src={mediaUrl(pageData.main_header_img)}
-              alt=""
-              className="absolute inset-0 w-full h-full object-cover opacity-20"
-            />
-          )}
-          <div className="page-hero-content">
-            {headers?.main_header_middle_big && (
-              <motion.h1
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-4"
-              >
-                {headers.main_header_middle_big}
-              </motion.h1>
-            )}
-            {headers?.main_header_bottom && (
-              <motion.p
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 }}
-                className="text-primary-200 text-lg"
-              >
-                {headers.main_header_bottom}
-              </motion.p>
-            )}
-          </div>
-        </div>
-
-        <SectionSeparator />
+        <PageHero
+          title={headers?.main_header_middle_big ?? ""}
+          bottomLine={headers?.main_header_bottom}
+          headerImageUrl={pageData.main_header_img ?? null}
+          variant="auto"
+          align="center"
+          showCurve
+          asHeader
+        />
 
         <section className="py-24">
           <div className="container-custom max-w-5xl">
@@ -127,29 +104,14 @@ export default function TeamMemberContent({ pageData, memberData, locale }: Prop
     <>
       <PageHead />
 
-      <div className="page-hero">
-        <div className="page-hero-content">
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-4"
-          >
-            {rawT(tm.full_name)}
-          </motion.h1>
-          {tm.position && (
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
-              className="text-primary-200 text-lg"
-            >
-              {rawT(tm.position)}
-            </motion.p>
-          )}
-        </div>
-      </div>
-
-      <SectionSeparator />
+      <PageHero
+        title={rawT(tm.full_name)}
+        bottomLine={tm.position ? rawT(tm.position) : undefined}
+        variant="auto"
+        align="center"
+        showCurve
+        asHeader
+      />
 
       <section className="py-24">
         <div className="container-custom max-w-5xl">
