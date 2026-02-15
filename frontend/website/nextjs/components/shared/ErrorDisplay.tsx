@@ -5,6 +5,7 @@ import { AlertTriangle, RefreshCw, Home } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
+import { FullScreenNotificationToast } from "@/components/shared/FullScreenNotificationToast";
 
 interface ErrorDisplayProps {
   title?: string;
@@ -13,6 +14,10 @@ interface ErrorDisplayProps {
   onRetry?: () => void;
   showHomeButton?: boolean;
   variant?: "inline" | "page" | "toast";
+  /** For variant="toast": when false, toast animates out. Default true. */
+  visible?: boolean;
+  /** For variant="toast": called when the user closes the toast. */
+  onClose?: () => void;
   className?: string;
 }
 
@@ -23,37 +28,21 @@ export function ErrorDisplay({
   onRetry,
   showHomeButton = false,
   variant = "inline",
+  visible = true,
+  onClose,
   className,
 }: ErrorDisplayProps) {
   const t = useTranslations();
 
   if (variant === "toast") {
     return (
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: -20 }}
-        className={cn(
-          "fixed top-20 start-1/2 -translate-x-1/2 rtl:translate-x-1/2 z-[70]",
-          "glass-strong rounded-xl px-6 py-4 max-w-md",
-          "border-l-4 rtl:border-l-0 rtl:border-r-4 border-red-500",
-          className
-        )}
-      >
-        <div className="flex items-start gap-3">
-          <AlertTriangle className="w-5 h-5 text-red-500 shrink-0 mt-0.5" />
-          <div>
-            {title && (
-              <p className="font-semibold text-slate-900 dark:text-white text-sm">
-                {title}
-              </p>
-            )}
-            <p className="text-sm text-slate-600 dark:text-slate-400">
-              {message || t("WEBSITE_ERRORS_INITIALISATION_FAILED_MESSAGE")}
-            </p>
-          </div>
-        </div>
-      </motion.div>
+      <FullScreenNotificationToast
+        variant="error"
+        title={title}
+        message={message || t("WEBSITE_ERRORS_INITIALISATION_FAILED_MESSAGE")}
+        visible={visible}
+        onClose={onClose}
+      />
     );
   }
 

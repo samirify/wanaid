@@ -1,5 +1,6 @@
 "use client";
 
+import { useId } from "react";
 import { motion } from "framer-motion";
 import { mediaUrl } from "@/lib/utils";
 
@@ -59,8 +60,12 @@ export function PageHero({
   asHeader = false,
   className = "",
 }: PageHeroProps) {
+  const id = useId();
   const isFixed = variant === "fixed";
   const isCenter = align === "center";
+  const wave1 = `${id}-w1`;
+  const wave2 = `${id}-w2`;
+  const wave3 = `${id}-w3`;
 
   const wrapperClass =
     "relative flex flex-col overflow-hidden transition-[background] duration-300 " +
@@ -127,6 +132,96 @@ export function PageHero({
         aria-hidden
       />
       <div className="absolute top-1/3 end-1/3 w-32 h-32 sm:w-40 sm:h-40 bg-primary-300/15 dark:bg-primary-500/8 rounded-full blur-2xl animate-float pointer-events-none transition-opacity duration-300" style={{ animationDelay: "0.5s" }} aria-hidden />
+      {/* Floating particles — gentle drift + twinkle */}
+      <div
+        className="page-hero-particles absolute inset-0 overflow-hidden pointer-events-none opacity-70 dark:opacity-60 transition-opacity duration-300 rtl:-scale-x-100"
+        aria-hidden
+      >
+        <svg className="absolute inset-0 w-full h-full" viewBox="0 0 1440 400" fill="none" preserveAspectRatio="xMidYMid slice">
+          {[
+            [8, 12, 24, 48, 72, 96, 120, 144].flatMap((x) =>
+              [40, 80, 120, 160, 200, 240, 280, 320, 360].map((y, i) => (
+                <circle
+                  key={`${x}-${y}-${i}`}
+                  cx={(x * 17 + (y % 3) * 31) % 1440}
+                  cy={(y + (x % 5) * 22) % 400}
+                  r={1.2 + (x % 3) * 0.4}
+                  fill="rgba(255,255,255,0.5)"
+                  className="page-hero-particle"
+                  style={{ animationDelay: `${(x + y) % 5 * 0.4}s` }}
+                />
+              ))
+            ),
+          ].flat()}
+          {[
+            [200, 400, 600, 800, 1000, 1200].flatMap((x) =>
+              [60, 140, 220, 300].map((y, i) => (
+                <circle
+                  key={`p-${x}-${y}-${i}`}
+                  cx={(x + (i * 47) % 80) % 1440}
+                  cy={y}
+                  r={2 + (i % 2)}
+                  fill="rgba(231,62,133,0.35)"
+                  className="page-hero-particle-accent dark:fill-[rgba(199,28,105,0.28)]"
+                  style={{ animationDelay: `${(x + i) % 4 * 0.5}s` }}
+                />
+              ))
+            ),
+          ].flat()}
+        </svg>
+      </div>
+      {/* Soft flowing waves + shimmer */}
+      <div
+        className="page-hero-waves-drift absolute inset-0 overflow-hidden pointer-events-none opacity-[0.18] dark:opacity-[0.12] transition-opacity duration-300 rtl:scale-x-[-1]"
+        aria-hidden
+      >
+        <svg className="absolute bottom-0 left-0 w-[120%] h-full min-h-[280px]" viewBox="0 0 1200 280" fill="none" preserveAspectRatio="none">
+          <path
+            d="M0 120 Q300 80 600 120 T1200 120 V280 H0 Z"
+            fill={`url(#${wave1})`}
+          />
+          <path
+            d="M0 160 Q300 200 600 160 T1200 160 V280 H0 Z"
+            fill={`url(#${wave2})`}
+          />
+          <path
+            d="M0 200 Q400 140 800 200 T1200 200 V280 H0 Z"
+            fill={`url(#${wave3})`}
+            className="opacity-80"
+          />
+          <defs>
+            <linearGradient id={wave1} x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stopColor="white" stopOpacity="0" />
+              <stop offset="100%" stopColor="white" stopOpacity="0.5" />
+            </linearGradient>
+            <linearGradient id={wave2} x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stopColor="white" stopOpacity="0" />
+              <stop offset="100%" stopColor="white" stopOpacity="0.32" />
+            </linearGradient>
+            <linearGradient id={wave3} x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stopColor="white" stopOpacity="0" />
+              <stop offset="100%" stopColor="white" stopOpacity="0.2" />
+            </linearGradient>
+          </defs>
+        </svg>
+        {/* Moving shimmer across waves */}
+        <div
+          className="page-hero-wave-shimmer absolute inset-0 pointer-events-none rtl:scale-x-[-1]"
+          style={{
+            background: "linear-gradient(105deg, transparent 0%, rgba(255,255,255,0.15) 45%, rgba(255,255,255,0.35) 50%, rgba(255,255,255,0.15) 55%, transparent 100%)",
+            backgroundSize: "60% 100%",
+          }}
+          aria-hidden
+        />
+        {/* Soft glow at bottom center */}
+        <div
+          className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[80%] max-w-2xl h-32 pointer-events-none opacity-60 dark:opacity-40"
+          style={{
+            background: "radial-gradient(ellipse 80% 100% at 50% 100%, rgba(255,255,255,0.2) 0%, transparent 70%)",
+          }}
+          aria-hidden
+        />
+      </div>
       {/* Subtle dot grid texture — matches landing hero */}
       <div
         className="absolute inset-0 opacity-[0.04] dark:opacity-[0.06] pointer-events-none transition-opacity duration-300"

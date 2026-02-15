@@ -24,10 +24,11 @@ export function Hero() {
 
   const header = pageContents?.LANDING?.HEADER;
   const ctas = header?.ctas || [];
-  // Hero image: from CMS (e.g. your gallery) or placeholder for now
+  // Hero image: from CMS, then local wallpaper, then placeholder
   const heroImageUrl =
     header?.main_header_img ||
-    "https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=900&q=80";
+    "/images/home-wallpaper-bg.jpg";
+  const fallbackHeroUrl = "https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=900&q=80";
 
   // Hero cards: open causes, blog, Facebook members (external)
   const heroCards = [
@@ -74,24 +75,29 @@ export function Hero() {
         className="absolute inset-0 opacity-60 transition-opacity duration-500"
         style={{ background: "var(--hero-spotlight)" }}
       />
-      {/* Hero image as background flavour — on inline-end side (right in LTR, left in RTL); gradient uses logical direction */}
+      {/* Hero image on inline-end; on mobile softer left-edge blend to avoid a hard split line */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden>
         <div className="absolute inset-0 flex justify-end">
-          <div className="relative w-full max-w-[55%] min-w-[280px] h-full">
+          <div className="relative w-full max-w-[55%] min-w-0 sm:min-w-[200px] md:min-w-[280px] h-full">
             <img
               src={heroImageUrl}
               alt=""
               className="absolute inset-0 w-full h-full object-cover object-center opacity-30 dark:opacity-25"
               loading="eager"
               onError={(e) => {
-                e.currentTarget.style.display = "none";
+                const el = e.currentTarget;
+                if (el.src !== fallbackHeroUrl) {
+                  el.src = fallbackHeroUrl;
+                } else {
+                  el.style.display = "none";
+                }
               }}
             />
-            {/* Fade image into background; to inline-end so it flips with direction */}
+            {/* Gradient fade: on mobile add soft blend on left edge so no harsh line; on desktop standard fade to inline-end */}
             <div
               className="absolute inset-0 w-full"
               style={{
-                background: "linear-gradient(to inline-end, transparent 0%, rgba(45,3,20,0.4) 45%, rgba(26,2,12,0.97) 85%, rgba(26,2,12,1) 100%)",
+                background: "linear-gradient(to inline-end, rgba(45,3,20,0.75) 0%, rgba(45,3,20,0.4) 25%, rgba(26,2,12,0.97) 85%, rgba(26,2,12,1) 100%)",
               }}
             />
           </div>
@@ -130,8 +136,8 @@ export function Hero() {
         <path d="M0 96V70C240 20 480 0 720 0s480 20 720 70V96H0z" fill="currentColor" />
       </svg>
 
-      <div className="container-custom relative z-10 py-32 lg:py-0">
-        <div className="grid lg:grid-cols-2 gap-12 items-center min-h-screen">
+      <div className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8 relative z-10 w-full py-12 sm:py-16 lg:py-0">
+        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center min-h-0 lg:min-h-screen">
           {/* Text Content */}
           <div className="text-white">
             <motion.div
@@ -139,7 +145,7 @@ export function Hero() {
               initial="hidden"
               animate="visible"
               variants={fadeInUp}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/30 shadow-lg shadow-black/20 mb-8 font-display font-semibold"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/30 shadow-lg shadow-black/20 mb-5 sm:mb-6 md:mb-8 font-display font-semibold"
             >
               <Heart className="w-4 h-4 text-accent-50" />
               <span className="text-sm text-white/95">
@@ -152,7 +158,7 @@ export function Hero() {
               initial="hidden"
               animate="visible"
               variants={fadeInUp}
-              className="display-headline text-4xl sm:text-5xl lg:text-6xl xl:text-7xl leading-[1.1] mb-6 text-white shine-sweep"
+              className="display-headline text-[2.5rem] sm:text-5xl lg:text-6xl xl:text-7xl leading-[1.1] mb-4 sm:mb-5 md:mb-6 text-white shine-sweep"
             >
               {rawT(
                 header?.main_header_middle_big ||
@@ -165,7 +171,7 @@ export function Hero() {
               initial="hidden"
               animate="visible"
               variants={fadeInUp}
-              className="text-lg sm:text-xl text-white/85 leading-relaxed mb-10 max-w-lg font-medium"
+              className="text-lg sm:text-xl text-white/85 leading-relaxed mb-7 sm:mb-8 md:mb-10 max-w-lg font-medium"
             >
               {rawT(header?.main_header_bottom || "LANDING_MAIN_HEADER_BOTTOM")}
             </motion.p>
@@ -175,7 +181,7 @@ export function Hero() {
               initial="hidden"
               animate="visible"
               variants={fadeInUp}
-              className="flex flex-wrap items-center gap-4"
+              className="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-3 sm:gap-4"
             >
               {ctas.length > 0 ? (
                 ctas.map((cta) => {
@@ -186,7 +192,7 @@ export function Hero() {
                     <Link
                       key={cta.id}
                       href={linkHref}
-                      className="btn font-display font-semibold bg-accent-500 text-white border-2 border-white/30 hover:bg-accent-600 shadow-xl shadow-black/30 hover:shadow-2xl hover:-translate-y-1 hover:scale-[1.02] active:scale-[0.98] px-8 py-4 text-base transition-all duration-300 rounded-2xl"
+                      className="btn font-display font-semibold bg-accent-500 text-white border-2 border-white/30 hover:bg-accent-600 shadow-xl shadow-black/30 hover:shadow-2xl hover:-translate-y-1 hover:scale-[1.02] active:scale-[0.98] px-8 py-4 text-base transition-all duration-300 rounded-2xl w-full sm:w-auto justify-center"
                     >
                       <Heart className="w-5 h-5" />
                       {rawT(cta.label)}
@@ -195,7 +201,7 @@ export function Hero() {
                     <Link
                       key={cta.id}
                       href={linkHref}
-                      className="btn font-display font-semibold bg-white/10 backdrop-blur-md text-white border-2 border-white/30 hover:bg-white/20 hover:border-white/50 shadow-lg shadow-black/10 hover:shadow-xl px-8 py-4 text-base transition-all duration-300 inline-flex items-center gap-2 rounded-2xl"
+                      className="btn font-display font-semibold bg-white/10 backdrop-blur-md text-white border-2 border-white/30 hover:bg-white/20 hover:border-white/50 shadow-lg shadow-black/10 hover:shadow-xl px-8 py-4 text-base transition-all duration-300 inline-flex items-center justify-center gap-2 rounded-2xl w-full sm:w-auto"
                     >
                       <Users className="w-5 h-5 shrink-0" />
                       {rawT(cta.label)}
@@ -208,14 +214,14 @@ export function Hero() {
                     href={
                       settings.static_button_get_started_url || "/cause/help-us"
                     }
-                    className="btn font-display font-semibold bg-accent-500 text-white border-2 border-white/30 hover:bg-accent-600 shadow-xl shadow-black/30 hover:shadow-2xl hover:-translate-y-1 hover:scale-[1.02] active:scale-[0.98] px-8 py-4 text-base transition-all duration-300 rounded-2xl"
+                    className="btn font-display font-semibold bg-accent-500 text-white border-2 border-white/30 hover:bg-accent-600 shadow-xl shadow-black/30 hover:shadow-2xl hover:-translate-y-1 hover:scale-[1.02] active:scale-[0.98] px-8 py-4 text-base transition-all duration-300 rounded-2xl w-full sm:w-auto justify-center"
                   >
                     <Heart className="w-5 h-5" />
                     {t("OPEN_CAUSES_DONATE_NOW_LABEL")}
                   </Link>
                   <Link
                     href="/about"
-                    className="btn font-display font-semibold bg-white/10 backdrop-blur-md text-white border-2 border-white/30 hover:bg-white/20 hover:border-white/50 shadow-lg shadow-black/10 hover:shadow-xl px-8 py-4 text-base transition-all duration-300 inline-flex items-center gap-2 rounded-2xl"
+                    className="btn font-display font-semibold bg-white/10 backdrop-blur-md text-white border-2 border-white/30 hover:bg-white/20 hover:border-white/50 shadow-lg shadow-black/10 hover:shadow-xl px-8 py-4 text-base transition-all duration-300 inline-flex items-center justify-center gap-2 rounded-2xl w-full sm:w-auto"
                   >
                     <Users className="w-5 h-5 shrink-0" />
                     {t("TOP_NAV_ABOUT_LABEL")}
@@ -286,12 +292,12 @@ export function Hero() {
           </motion.div>
         </div>
 
-        {/* Scroll indicator */}
+        {/* Scroll indicator — above safe area and fixed UI on mobile */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1.5 }}
-          className="absolute bottom-8 start-1/2 -translate-x-1/2 rtl:translate-x-1/2 text-white/60"
+          className="absolute bottom-12 sm:bottom-8 start-1/2 -translate-x-1/2 rtl:translate-x-1/2 text-white/60"
         >
           <motion.div
             animate={{ y: [0, 8, 0] }}

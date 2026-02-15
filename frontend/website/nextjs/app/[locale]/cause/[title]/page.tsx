@@ -86,8 +86,8 @@ export default function CauseDetailPage({ params }: PageProps) {
       <section className="relative py-24">
         <div className="container-custom">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 lg:items-start">
-            {/* Main Content — body text */}
-            <div className="lg:col-span-2 min-w-0">
+            {/* Main Content — body text; on mobile appears below donate */}
+            <div className="lg:col-span-2 min-w-0 order-last lg:order-none">
               <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-4">
                 {rawT(cause.title)}
               </h3>
@@ -98,22 +98,24 @@ export default function CauseDetailPage({ params }: PageProps) {
               />
             </div>
 
-            {/* Sidebar — PayPal widget (pulled up into hero); z-20 so it's above hero and clickable */}
-            <div className="lg:col-span-1 order-last lg:order-none lg:sticky lg:top-24 lg:-mt-[31rem] lg:z-20 relative">
+            {/* Sidebar — PayPal widget (pulled up into hero); on mobile first (above content); z-20 so it's above hero and clickable */}
+            <div className="lg:col-span-1 order-first lg:order-none lg:sticky lg:top-24 lg:-mt-[31rem] lg:z-20 relative">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
-                className="rounded-2xl shadow-2xl shadow-black/20 overflow-visible mb-8 lg:mb-10"
+                className="rounded-2xl shadow-2xl shadow-black/20 overflow-hidden mb-8 lg:mb-10 border-2 border-white/25 dark:border-slate-500/60 ring-2 ring-white/15 dark:ring-slate-400/25"
               >
                 <PayPalPaymentWidget cause={cause} />
               </motion.div>
               {cause.img_url && (
-                <img
-                  src={mediaUrl(cause.img_url)}
-                  alt={rawT(cause.title)}
-                  className="w-full h-auto rounded-2xl shadow-xl"
-                />
+                <div className="rounded-2xl overflow-hidden shadow-xl border-2 border-white/25 dark:border-slate-500/60 ring-2 ring-white/15 dark:ring-slate-400/25">
+                  <img
+                    src={mediaUrl(cause.img_url)}
+                    alt={rawT(cause.title)}
+                    className="w-full h-auto object-cover"
+                  />
+                </div>
               )}
             </div>
           </div>

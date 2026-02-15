@@ -130,7 +130,7 @@ export default function BlogDetailPage({ params }: PageProps) {
                 transition={{ delay: 0.15 }}
                 className="lg:sticky lg:top-24"
               >
-                <div className="rounded-2xl overflow-hidden shadow-lg border border-slate-200/50 dark:border-slate-700/50">
+                <div className="rounded-2xl overflow-hidden shadow-lg border-2 border-slate-200/90 dark:border-slate-500/60 ring-2 ring-slate-200/60 dark:ring-slate-400/25">
                   <img
                     src={mediaUrl(blog.img_url)}
                     alt={rawT(blog.title)}

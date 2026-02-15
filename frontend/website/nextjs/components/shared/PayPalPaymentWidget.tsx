@@ -2,6 +2,7 @@
 
 import { useState, useEffect, Component, type ReactNode } from "react";
 import { useRawTranslation } from "@/hooks/useRawTranslation";
+import { DonationSuccessToast } from "@/components/shared/DonationSuccessToast";
 import { useLocale } from "next-intl";
 import getSymbolFromCurrency from "currency-symbol-map";
 
@@ -49,6 +50,7 @@ function PayPalButtonsWrapper({
   rawT,
   setProcessing,
   processing,
+  onDonationSuccess,
 }: {
   donationAmount: number;
   currencyCode: string;
@@ -58,6 +60,7 @@ function PayPalButtonsWrapper({
   rawT: (key: string) => string;
   setProcessing: (v: boolean) => void;
   processing: boolean;
+  onDonationSuccess?: () => void;
 }) {
   const [PayPalModule, setPayPalModule] = useState<{
     PayPalScriptProvider: React.ComponentType<Record<string, unknown>>;
@@ -175,17 +178,9 @@ function PayPalButtonsWrapper({
                 }),
               });
 
-              alert(
-                rawT("WEBSITE_CONTACT_WRITE_TO_FORM_THANK_YOU_LABEL") ||
-                  "Thank you for your donation!"
-              );
-              window.location.href = `/${locale}`;
+              onDonationSuccess?.();
             } catch {
-              alert(
-                rawT(
-                  "WEBSITE_PAYMENT_PROCESSED_SUCCESS_WITH_INTERNAL_ERROR_MESSAGE"
-                ) || "Payment processed. Thank you!"
-              );
+              onDonationSuccess?.();
             } finally {
               setProcessing(false);
             }
@@ -205,10 +200,30 @@ export function PayPalPaymentWidget({ cause }: PayPalPaymentWidgetProps) {
   const locale = useLocale();
   const [donationAmount, setDonationAmount] = useState(10);
   const [processing, setProcessing] = useState(false);
+  const [showSuccessToast, setShowSuccessToast] = useState(false);
 
   const currencySymbol =
     getSymbolFromCurrency(cause.currencies_code) || "£";
   const presetAmounts = [1, 5, 10, 20];
+
+  const handleDonationSuccess = () => {
+    setShowSuccessToast(true);
+    setTimeout(() => {
+      setShowSuccessToast(false);
+      window.location.href = `/${locale}`;
+    }, 8000);
+  };
+
+  const handleCloseToast = () => {
+    setShowSuccessToast(false);
+    setTimeout(() => {
+      window.location.href = `/${locale}`;
+    }, 350);
+  };
+
+  const successMessage =
+    rawT("WEBSITE_CONTACT_WRITE_TO_FORM_THANK_YOU_LABEL") ||
+    "Thank you for your donation!";
 
   return (
     <div>
@@ -261,8 +276,16 @@ export function PayPalPaymentWidget({ cause }: PayPalPaymentWidgetProps) {
           rawT={rawT}
           setProcessing={setProcessing}
           processing={processing}
+          onDonationSuccess={handleDonationSuccess}
         />
       </div>
+
+      {/* On-screen success notification — shows for 8s (or close button), then redirects */}
+      <DonationSuccessToast
+        message={successMessage}
+        visible={showSuccessToast}
+        onClose={handleCloseToast}
+      />
     </div>
   );
 }

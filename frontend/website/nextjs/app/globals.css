@@ -346,6 +346,78 @@
     }
   }
 
+  /* Page hero: floating particles */
+  .page-hero-particles {
+    animation: particlesFloat 20s ease-in-out infinite;
+  }
+
+  @keyframes particlesFloat {
+    0%,
+    100% {
+      transform: translate(0, 0) scale(1);
+    }
+    25% {
+      transform: translate(2%, -1.5%) scale(1.02);
+    }
+    50% {
+      transform: translate(-1.5%, 1%) scale(0.98);
+    }
+    75% {
+      transform: translate(1%, 2%) scale(1.01);
+    }
+  }
+
+  /* Page hero: particle twinkle */
+  .page-hero-particle {
+    animation: particleTwinkle 2.8s ease-in-out infinite;
+  }
+
+  .page-hero-particle-accent {
+    animation: particleTwinkle 3.2s ease-in-out infinite;
+  }
+
+  @keyframes particleTwinkle {
+    0%,
+    100% {
+      opacity: 0.4;
+    }
+    50% {
+      opacity: 0.9;
+    }
+  }
+
+  /* Page hero: drifting waves */
+  .page-hero-waves-drift {
+    animation: wavesDrift 25s ease-in-out infinite;
+  }
+
+  @keyframes wavesDrift {
+    0%,
+    100% {
+      transform: translateX(0);
+    }
+    50% {
+      transform: translateX(-4%);
+    }
+  }
+
+  /* Page hero: wave shimmer overlay */
+  .page-hero-wave-shimmer {
+    animation: waveShimmer 6s ease-in-out infinite;
+  }
+
+  @keyframes waveShimmer {
+    0%,
+    100% {
+      opacity: 0;
+      transform: translateX(-20%) scaleX(0.5);
+    }
+    50% {
+      opacity: 0.5;
+      transform: translateX(120%) scaleX(0.6);
+    }
+  }
+
   /* Headline shine sweep (for hero) */
   @keyframes shineSweep {
     0% {

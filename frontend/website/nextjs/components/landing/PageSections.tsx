@@ -49,45 +49,36 @@ const FreeText: FC<{ pillar: Pillar; index: number }> = ({ pillar, index }) => {
           className={!isFirst ? "border-t border-slate-200 dark:border-slate-700 pt-8 md:pt-10 lg:pt-12" : ""}
         >
           {hasImage ? (
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "1fr 1fr",
-                gap: "2rem",
-                alignItems: "center",
-              }}
-            >
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 items-center">
               {isOdd ? (
                 <>
-                  {/* Odd: content LEFT, image RIGHT */}
+                  {/* Odd: content LEFT on desktop; on mobile content first, then image */}
                   <div
-                    className="prose prose-lg dark:prose-invert max-w-none text-slate-700 dark:text-slate-300 leading-relaxed"
-                    style={{ gridColumn: "1" }}
+                    className="prose prose-lg dark:prose-invert max-w-none text-slate-700 dark:text-slate-300 leading-relaxed order-1"
                     dangerouslySetInnerHTML={{ __html: htmlContent }}
                   />
-                  <div style={{ gridColumn: "2", textAlign: "end" }}>
+                  <div className="flex justify-center md:justify-end order-2">
                     <img
                       src={pillar.img}
                       alt=""
-                      style={{ display: "inline-block", maxWidth: "100%", maxHeight: "300px", objectFit: "contain" }}
+                      className="w-full max-w-sm md:max-w-full max-h-[280px] md:max-h-[300px] object-contain mx-auto md:mx-0"
                       loading="lazy"
                     />
                   </div>
                 </>
               ) : (
                 <>
-                  {/* Even: image LEFT, content RIGHT */}
-                  <div style={{ gridColumn: "1", textAlign: "start" }}>
+                  {/* Even: image LEFT on desktop; on mobile image first, then content */}
+                  <div className="flex justify-center md:justify-start order-1">
                     <img
                       src={pillar.img}
                       alt=""
-                      style={{ display: "inline-block", maxWidth: "100%", maxHeight: "300px", objectFit: "contain" }}
+                      className="w-full max-w-sm md:max-w-full max-h-[280px] md:max-h-[300px] object-contain mx-auto md:mx-0"
                       loading="lazy"
                     />
                   </div>
                   <div
-                    className="prose prose-lg dark:prose-invert max-w-none text-slate-700 dark:text-slate-300 leading-relaxed"
-                    style={{ gridColumn: "2" }}
+                    className="prose prose-lg dark:prose-invert max-w-none text-slate-700 dark:text-slate-300 leading-relaxed order-2"
                     dangerouslySetInnerHTML={{ __html: htmlContent }}
                   />
                 </>

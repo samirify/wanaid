@@ -182,9 +182,9 @@ export function Navigation() {
             : "opacity-0 pointer-events-none"
         )}
       >
-        {/* Backdrop */}
+        {/* Backdrop — opaque so hero doesn’t show through */}
         <div
-          className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+          className="absolute inset-0 bg-black/70 backdrop-blur-md"
           onClick={closeMobile}
         />
 
@@ -206,7 +206,12 @@ export function Navigation() {
               <img
                 src="/images/logo-dark.svg"
                 alt="WAN Aid"
-                className="h-8 w-auto dark:invert"
+                className="h-8 w-auto dark:hidden"
+              />
+              <img
+                src="/images/logo-light.svg"
+                alt="WAN Aid"
+                className="h-8 w-auto hidden dark:block"
               />
             </Link>
             <button
