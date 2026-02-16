@@ -592,13 +592,29 @@
   height: 100%;
   min-height: 200px;
   z-index: 1000;
-  background-color: rgba(255, 255, 255, 0.75);
+  background-color: #ffffff;
   visibility: visible;
   opacity: 1;
 }
 
 .dark .area-loader-container {
-  background-color: rgba(0, 0, 0, 0.75);
+  background-color: #0f172a;
+}
+
+/* Navigation overlay — hidden by default, smooth fade-out on hide */
+.area-loader-container.area-loader-nav {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+/* Navigation overlay — active: appears instantly (no transition) */
+.area-loader-container.area-loader-nav.area-loader-nav-active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transition: none;
 }
 
 .area-loader-container.hide {

@@ -11,6 +11,7 @@ import { CookieConsentBanner } from "@/components/shared/CookieConsentBanner";
 import { ScrollToTop } from "@/components/shared/ScrollToTop";
 import { PageHead } from "@/components/shared/PageHead";
 import { PageTitleProvider } from "@/context/PageTitleContext";
+import { NavigationProgress } from "@/components/shared/NavigationProgress";
 // import { NotificationDemo } from "@/components/shared/NotificationDemo";
 import { cookies, headers } from "next/headers";
 import { getDirection } from "@/lib/utils";
@@ -103,6 +104,7 @@ export default async function LocaleLayout({
           <NextIntlClientProvider messages={messages}>
             <AppProvider initialData={initialData}>
               <PageTitleProvider>
+                <NavigationProgress />
                 <PageHead />
                 <Navigation />
                 <main className="flex-1">{children}</main>
