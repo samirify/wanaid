@@ -125,10 +125,17 @@ export function Footer() {
                   <Link
                     href={link.href}
                     prefetch={false}
-                    className="text-slate-300 hover:text-primary-400 transition-colors duration-200 text-sm flex items-center gap-2 group"
+                    className="group relative inline-flex items-center text-slate-300 hover:text-primary-400 transition-colors duration-200 text-sm"
                   >
-                    <ArrowRight className="w-3 h-3 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all rtl:rotate-180" />
-                    <span>{link.label}</span>
+                    <span
+                      className="absolute start-0 top-1/2 -translate-y-1/2 rtl:start-auto rtl:end-0 text-primary-400 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none"
+                      aria-hidden
+                    >
+                      <ArrowRight className="w-3.5 h-3.5 rtl:rotate-180" />
+                    </span>
+                    <span className="inline-block transition-transform duration-200 group-hover:translate-x-4 rtl:group-hover:-translate-x-4">
+                      {link.label}
+                    </span>
                   </Link>
                 </li>
               ))}
@@ -146,10 +153,17 @@ export function Footer() {
                   <Link
                     href={link.href}
                     prefetch={false}
-                    className="text-slate-300 hover:text-primary-400 transition-colors duration-200 text-sm flex items-center gap-2 group"
+                    className="group relative inline-flex items-center text-slate-300 hover:text-primary-400 transition-colors duration-200 text-sm"
                   >
-                    <ArrowRight className="w-3 h-3 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all rtl:rotate-180" />
-                    <span>{link.label}</span>
+                    <span
+                      className="absolute start-0 top-1/2 -translate-y-1/2 rtl:start-auto rtl:end-0 text-primary-400 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none"
+                      aria-hidden
+                    >
+                      <ArrowRight className="w-3.5 h-3.5 rtl:rotate-180" />
+                    </span>
+                    <span className="inline-block transition-transform duration-200 group-hover:translate-x-4 rtl:group-hover:-translate-x-4">
+                      {link.label}
+                    </span>
                   </Link>
                 </li>
               ))}
