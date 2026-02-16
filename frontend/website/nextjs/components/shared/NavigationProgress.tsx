@@ -30,6 +30,9 @@ function RouteChangeLoader() {
       prevPathRef.current = pathname;
       prevSearchRef.current = currentSearch;
 
+      // Scroll to top on navigation so the new page is shown from the top
+      window.scrollTo(0, 0);
+
       if (active) {
         const elapsed = Date.now() - showTimeRef.current;
         const delay = Math.max(0, MIN_DISPLAY_MS - elapsed);
