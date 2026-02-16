@@ -23,11 +23,13 @@ export default function LandingPage() {
   return (
     <>
       <Hero />
-      {pillars.length > 0 && <PageSections pillars={pillars} />}
-      <SectionSeparator />
-      <OpenCauses />
-      <SectionSeparator />
-      <BlogSection />
+      <div id="content" className="scroll-mt-20 sm:scroll-mt-24 pt-6 sm:pt-8">
+        {pillars.length > 0 && <PageSections pillars={pillars} />}
+        <SectionSeparator />
+        <OpenCauses />
+        <SectionSeparator />
+        <BlogSection />
+      </div>
     </>
   );
 }

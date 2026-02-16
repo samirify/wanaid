@@ -296,19 +296,25 @@ export function Hero() {
           </motion.div>
         </div>
 
-        {/* Scroll indicator — on mobile pushed down to clear buttons; above safe area on larger screens */}
+        {/* Scroll indicator — clickable, smooth-scrolls to first section */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.8 }}
           className="absolute bottom-6 sm:bottom-8 start-1/2 -translate-x-1/2 rtl:translate-x-1/2 text-white/60"
         >
-          <motion.div
-            animate={{ y: [0, 8, 0] }}
-            transition={{ repeat: Infinity, duration: 2 }}
+          <a
+            href="#content"
+            className="inline-flex items-center justify-center p-2 rounded-full text-white/60 hover:text-white hover:bg-white/10 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-white/50 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
+            aria-label="Scroll to content"
           >
-            <ArrowDown className="w-6 h-6" />
-          </motion.div>
+            <motion.div
+              animate={{ y: [0, 8, 0] }}
+              transition={{ repeat: Infinity, duration: 2 }}
+            >
+              <ArrowDown className="w-6 h-6" />
+            </motion.div>
+          </a>
         </motion.div>
       </div>
     </section>

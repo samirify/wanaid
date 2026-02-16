@@ -86,14 +86,16 @@ function LandingWithScroll({ section }: { section: string }) {
     <>
       {pageTitle && <title>{pageTitle}</title>}
       <Hero />
-      {pillars.length > 0 && <PageSections pillars={pillars} />}
-      <SectionSeparator />
-      <div ref={section === "open-causes" ? scrollTargetRef : undefined}>
-        <OpenCauses />
-      </div>
-      <SectionSeparator />
-      <div ref={section === "blog" ? scrollTargetRef : undefined}>
-        <BlogSection />
+      <div id="content" className="scroll-mt-20 sm:scroll-mt-24 pt-6 sm:pt-8">
+        {pillars.length > 0 && <PageSections pillars={pillars} />}
+        <SectionSeparator />
+        <div ref={section === "open-causes" ? scrollTargetRef : undefined}>
+          <OpenCauses />
+        </div>
+        <SectionSeparator />
+        <div ref={section === "blog" ? scrollTargetRef : undefined}>
+          <BlogSection />
+        </div>
       </div>
     </>
   );
