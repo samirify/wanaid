@@ -23,7 +23,7 @@ export default function LandingPage() {
   return (
     <>
       <Hero />
-      <div id="content" className="scroll-mt-20 sm:scroll-mt-24 pt-6 sm:pt-8">
+      <div id="content" className="scroll-mt-14 sm:scroll-mt-16 pt-6 sm:pt-8 bg-white dark:bg-slate-900 relative z-10">
         {pillars.length > 0 && <PageSections pillars={pillars} />}
         <SectionSeparator />
         <OpenCauses />

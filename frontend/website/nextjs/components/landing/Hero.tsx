@@ -6,6 +6,7 @@ import { useAppData } from "@/context/AppContext";
 import { useRawTranslation } from "@/hooks/useRawTranslation";
 import { Link } from "@/i18n/navigation";
 import { Heart, ArrowDown, Users, BookOpen, Target, Facebook } from "lucide-react";
+import { HeroAnimatedPattern } from "./HeroAnimatedPattern";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 20 },
@@ -24,11 +25,6 @@ export function Hero() {
 
   const header = pageContents?.LANDING?.HEADER;
   const ctas = header?.ctas || [];
-  // Hero image: from CMS, then local wallpaper, then placeholder
-  const heroImageUrl =
-    header?.main_header_img ||
-    "/images/home-wallpaper-bg.jpg";
-  const fallbackHeroUrl = "https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=900&q=80";
 
   // Hero cards: open causes, blog, Facebook members (external)
   const heroCards = [
@@ -75,37 +71,8 @@ export function Hero() {
         className="absolute inset-0 opacity-60 transition-opacity duration-500"
         style={{ background: "var(--hero-spotlight)" }}
       />
-      {/* Hero image on inline-end; on mobile softer left-edge blend to avoid a hard split line */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden>
-        <div className="absolute inset-0 flex justify-end">
-          <div className="relative w-full max-w-[55%] min-w-0 sm:min-w-[200px] md:min-w-[280px] h-full">
-            <img
-              src={heroImageUrl}
-              alt=""
-              width={1200}
-              height={800}
-              className="absolute inset-0 w-full h-full object-cover object-center opacity-30 dark:opacity-25"
-              loading="eager"
-              fetchPriority="high"
-              onError={(e) => {
-                const el = e.currentTarget;
-                if (el.src !== fallbackHeroUrl) {
-                  el.src = fallbackHeroUrl;
-                } else {
-                  el.style.display = "none";
-                }
-              }}
-            />
-            {/* Gradient fade: on mobile add soft blend on left edge so no harsh line; on desktop standard fade to inline-end */}
-            <div
-              className="absolute inset-0 w-full"
-              style={{
-                background: "linear-gradient(to inline-end, rgba(45,3,20,0.75) 0%, rgba(45,3,20,0.4) 25%, rgba(26,2,12,0.97) 85%, rgba(26,2,12,1) 100%)",
-              }}
-            />
-          </div>
-        </div>
-      </div>
+      {/* Animated children's charity pattern — replaces hero image */}
+      <HeroAnimatedPattern />
       {/* Decorative orbs — light mode: brighter; dark mode: subtler */}
       <div className="absolute top-10 -start-20 w-[420px] h-[420px] bg-primary-400/30 dark:bg-primary-500/15 rounded-full blur-[100px] animate-float transition-colors duration-500" />
       <div
@@ -139,7 +106,7 @@ export function Hero() {
         <path d="M0 96V70C240 20 480 0 720 0s480 20 720 70V96H0z" fill="currentColor" />
       </svg>
 
-      {/* On mobile: less top padding so hero content sits higher and doesn’t overlap the scroll arrow */}
+      {/* On mobile: less top padding so hero content sits higher and doesn't overlap the scroll arrow */}
       <div className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8 relative z-10 w-full pt-6 pb-20 sm:pt-12 sm:pb-16 sm:py-16 lg:py-0">
         <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center min-h-0 lg:min-h-screen">
           {/* Text Content */}
@@ -205,7 +172,7 @@ export function Hero() {
                     <Link
                       key={cta.id}
                       href={linkHref}
-                      className="btn font-display font-semibold bg-white/10 backdrop-blur-md text-white border-2 border-white/30 hover:bg-white/20 hover:border-white/50 shadow-lg shadow-black/10 hover:shadow-xl px-8 py-4 text-base transition-all duration-300 inline-flex items-center justify-center gap-2 rounded-2xl w-full sm:w-auto"
+                      className="btn font-display font-semibold bg-white/10 backdrop-blur-md text-white border-2 border-white/30 hover:bg-white/20 hover:border-white/50 shadow-lg shadow-black/10 hover:shadow-xl hover:-translate-y-1 hover:scale-[1.02] active:scale-[0.98] px-8 py-4 text-base transition-all duration-300 inline-flex items-center justify-center gap-2 rounded-2xl w-full sm:w-auto"
                     >
                       <Users className="w-5 h-5 shrink-0" />
                       {rawT(cta.label)}
@@ -225,7 +192,7 @@ export function Hero() {
                   </Link>
                   <Link
                     href="/about"
-                    className="btn font-display font-semibold bg-white/10 backdrop-blur-md text-white border-2 border-white/30 hover:bg-white/20 hover:border-white/50 shadow-lg shadow-black/10 hover:shadow-xl px-8 py-4 text-base transition-all duration-300 inline-flex items-center justify-center gap-2 rounded-2xl w-full sm:w-auto"
+                    className="btn font-display font-semibold bg-white/10 backdrop-blur-md text-white border-2 border-white/30 hover:bg-white/20 hover:border-white/50 shadow-lg shadow-black/10 hover:shadow-xl hover:-translate-y-1 hover:scale-[1.02] active:scale-[0.98] px-8 py-4 text-base transition-all duration-300 inline-flex items-center justify-center gap-2 rounded-2xl w-full sm:w-auto"
                   >
                     <Users className="w-5 h-5 shrink-0" />
                     {t("TOP_NAV_ABOUT_LABEL")}
@@ -296,27 +263,70 @@ export function Hero() {
           </motion.div>
         </div>
 
-        {/* Scroll indicator — clickable, smooth-scrolls to first section */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.8 }}
-          className="absolute bottom-6 sm:bottom-8 start-1/2 -translate-x-1/2 rtl:translate-x-1/2 text-white/60"
-        >
-          <a
-            href="#content"
-            className="inline-flex items-center justify-center p-2 rounded-full text-white/60 hover:text-white hover:bg-white/10 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-white/50 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
-            aria-label="Scroll to content"
-          >
-            <motion.div
-              animate={{ y: [0, 8, 0] }}
-              transition={{ repeat: Infinity, duration: 2 }}
-            >
-              <ArrowDown className="w-6 h-6" />
-            </motion.div>
-          </a>
-        </motion.div>
       </div>
+
+      {/* Scroll indicator — centered with left-0 right-0 flex (RTL-safe) */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.6 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ delay: 1.2, duration: 0.7, ease: "easeOut" }}
+        className="absolute bottom-28 sm:bottom-32 left-0 right-0 flex justify-center z-20"
+      >
+        <a
+          href="#content"
+          className="group relative flex items-center justify-center w-20 h-20 sm:w-24 sm:h-24 focus:outline-none"
+          aria-label="Scroll to content"
+        >
+          {/* Ripple rings radiating outward */}
+          <span className="absolute inset-0 rounded-full border border-white/25 hero-scroll-ripple" />
+          <span className="absolute -inset-3 sm:-inset-4 rounded-full border border-primary-300/20 hero-scroll-ripple" style={{ animationDelay: "0.6s" }} />
+          <span className="absolute -inset-6 sm:-inset-8 rounded-full border border-primary-400/12 hero-scroll-ripple" style={{ animationDelay: "1.2s" }} />
+
+          {/* Orbiting sparkle dots */}
+          <span className="absolute w-full h-full hero-scroll-orbit">
+            <span className="absolute -top-1.5 left-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-yellow-300/80 shadow-[0_0_8px_rgba(253,224,71,0.7)]" />
+          </span>
+          <span className="absolute w-full h-full hero-scroll-orbit" style={{ animationDelay: "-1.5s", animationDuration: "5s" }}>
+            <span className="absolute top-1/2 -right-2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-pink-300/70 shadow-[0_0_6px_rgba(249,168,201,0.6)]" />
+          </span>
+          <span className="absolute w-full h-full hero-scroll-orbit" style={{ animationDelay: "-3s", animationDuration: "6s" }}>
+            <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-white/50 shadow-[0_0_5px_rgba(255,255,255,0.4)]" />
+          </span>
+
+          {/* Soft glow */}
+          <span className="absolute inset-0 rounded-full bg-white/10 blur-xl group-hover:bg-white/15 transition-all duration-500 hero-scroll-glow" />
+
+          {/* Bouncing double-chevron */}
+          <motion.div
+            animate={{ y: [0, 6, 0] }}
+            transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+            className="relative z-10 flex flex-col items-center gap-0"
+          >
+            <svg
+              width="32"
+              height="32"
+              viewBox="0 0 24 24"
+              fill="none"
+              className="sm:w-[38px] sm:h-[38px] drop-shadow-[0_0_10px_rgba(255,255,255,0.25)] group-hover:drop-shadow-[0_0_16px_rgba(255,255,255,0.4)] transition-[filter] duration-300"
+            >
+              <path
+                d="M7 8.5L12 13.5L17 8.5"
+                stroke="rgba(255,255,255,0.55)"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+              <path
+                d="M7 14L12 19L17 14"
+                stroke="rgba(255,255,255,0.3)"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </motion.div>
+        </a>
+      </motion.div>
     </section>
   );
 }
