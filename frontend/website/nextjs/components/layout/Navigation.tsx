@@ -29,7 +29,7 @@ function DesktopNavLink({
   );
 
   return (
-    <Link href={link.href} className={cls}>
+    <Link href={link.href} prefetch={false} className={cls}>
       {link.label}
     </Link>
   );
@@ -45,7 +45,7 @@ function MobileNavLink({
   const cls = "flex items-center px-6 py-3 text-slate-700 dark:text-slate-300 hover:bg-primary-50 dark:hover:bg-slate-800 hover:text-primary-600 dark:hover:text-primary-400 transition-colors";
 
   return (
-    <Link href={link.href} onClick={onClose} className={cls}>
+    <Link href={link.href} prefetch={false} onClick={onClose} className={cls}>
       {link.label}
     </Link>
   );
@@ -108,7 +108,7 @@ export function Navigation() {
         <div className="container-custom">
           <div className="flex items-center justify-between">
             {/* Logo — client logo from React site */}
-            <Link href="/" className="flex items-center gap-2 shrink-0">
+            <Link href="/" prefetch={false} className="flex items-center gap-2 shrink-0">
               {isScrolled ? (
                 <>
                   <img
@@ -152,7 +152,7 @@ export function Navigation() {
             <div className="hidden lg:flex items-center gap-3">
               <ThemeSwitcher />
               <LanguageSelector />
-              <Link href={donateUrl} className="btn-accent text-sm h-10 px-5 py-2.5 rounded-xl font-display font-semibold shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-200">
+              <Link href={donateUrl} prefetch={false} className="btn-accent text-sm h-10 px-5 py-2.5 rounded-xl font-display font-semibold shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-200">
                 <Heart className="w-4 h-4" />
                 {t("TOP_NAV_STATIC_BUTTON_GET_STARTED_LABEL")}
               </Link>
@@ -208,7 +208,7 @@ export function Navigation() {
         >
           {/* Mobile Header */}
           <div className="flex items-center justify-between p-4 border-b border-slate-200 dark:border-slate-700">
-            <Link href="/" onClick={closeMobile} className="flex items-center">
+            <Link href="/" prefetch={false} onClick={closeMobile} className="flex items-center">
               <img
                 src="/images/logo-dark.svg"
                 alt="WAN Aid"
@@ -252,6 +252,7 @@ export function Navigation() {
             </div>
             <Link
               href={donateUrl}
+              prefetch={false}
               onClick={closeMobile}
               className="btn-accent w-full text-sm"
             >

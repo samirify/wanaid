@@ -82,7 +82,7 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
           {/* Brand Column — client logo from React site */}
           <div className="lg:col-span-1">
-            <Link href="/" className="inline-block mb-4">
+            <Link href="/" prefetch={false} className="inline-block mb-4">
               <img
                 src="/images/logo-light.svg"
                 alt="WAN Aid"
@@ -124,6 +124,7 @@ export function Footer() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
+                    prefetch={false}
                     className="text-slate-300 hover:text-primary-400 transition-colors duration-200 text-sm flex items-center gap-2 group"
                   >
                     <ArrowRight className="w-3 h-3 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all rtl:rotate-180" />
@@ -144,6 +145,7 @@ export function Footer() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
+                    prefetch={false}
                     className="text-slate-300 hover:text-primary-400 transition-colors duration-200 text-sm flex items-center gap-2 group"
                   >
                     <ArrowRight className="w-3 h-3 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all rtl:rotate-180" />
@@ -208,6 +210,7 @@ export function Footer() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
+                    prefetch={false}
                     className="text-slate-400 hover:text-primary-400 transition-colors text-xs"
                   >
                     {link.label}
