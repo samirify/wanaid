@@ -1,9 +1,19 @@
 "use client";
 
 import { motion, animate } from "framer-motion";
-import { useEffect, useRef } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import type { ElementType } from "react";
 import { Link } from "@/i18n/navigation";
+
+/* ─── RTL detection hook ──────────────────────────────────────────────── */
+
+function useIsRtl() {
+  const [isRtl, setIsRtl] = useState(false);
+  useLayoutEffect(() => {
+    setIsRtl(document.documentElement.dir === "rtl");
+  }, []);
+  return isRtl;
+}
 
 /* ─── Types ───────────────────────────────────────────────────────────── */
 
@@ -252,10 +262,13 @@ function HeroCard({
   card,
   config,
   index,
+  rtlFlip,
 }: {
   card: HeroCardData;
   config: CardConfig;
   index: number;
+  /** 1 for LTR, -1 for RTL — mirrors offsets and rotations */
+  rtlFlip: 1 | -1;
 }) {
   const Icon = card.icon;
   const displayValue = card.valueDisplay ?? card.value;
@@ -267,9 +280,9 @@ function HeroCard({
       animate={{
         opacity: 1,
         y: 0,
-        rotate: config.rotation,
+        rotate: config.rotation * rtlFlip,
         scale: 1,
-        x: config.offsetX,
+        x: config.offsetX * rtlFlip,
       }}
       transition={{
         delay: 0.35 + index * 0.18,
@@ -535,6 +548,9 @@ const AMBIENT_SHAPES = [
 /* ─── Main export ─────────────────────────────────────────────────────── */
 
 export function HeroCards({ cards }: { cards: HeroCardData[] }) {
+  const isRtl = useIsRtl();
+  const rtlFlip: 1 | -1 = isRtl ? -1 : 1;
+
   return (
     <div className="relative py-6">
       {/* Large ambient glow behind the stack */}
@@ -542,9 +558,9 @@ export function HeroCards({ cards }: { cards: HeroCardData[] }) {
         <div className="absolute inset-0 bg-gradient-to-b from-rose-500/[0.07] via-amber-400/[0.04] to-sky-500/[0.07] rounded-[4rem] blur-3xl" />
       </div>
 
-      {/* Decorative connecting thread */}
+      {/* Decorative connecting thread — mirror in RTL */}
       <svg
-        className="absolute inset-0 w-full h-full pointer-events-none z-0"
+        className="absolute inset-0 w-full h-full pointer-events-none z-0 rtl:-scale-x-100"
         viewBox="0 0 320 480"
         preserveAspectRatio="none"
         aria-hidden
@@ -609,6 +625,7 @@ export function HeroCards({ cards }: { cards: HeroCardData[] }) {
             card={card}
             config={CARD_CONFIGS[index] ?? CARD_CONFIGS[0]}
             index={index}
+            rtlFlip={rtlFlip}
           />
         ))}
       </div>
