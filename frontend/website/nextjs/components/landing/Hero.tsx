@@ -112,7 +112,7 @@ export function Hero() {
       <div className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8 relative z-10 w-full pt-6 pb-20 sm:pt-12 sm:pb-16 sm:py-16 lg:py-0">
         <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center min-h-0 lg:min-h-screen">
           {/* Text Content */}
-          <div className="text-white">
+          <div className="text-white hero-text-shadow">
             <motion.div
               custom={0}
               initial="hidden"

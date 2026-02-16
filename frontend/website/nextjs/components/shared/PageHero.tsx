@@ -88,8 +88,8 @@ export function PageHero({
     : "container-custom w-full py-16 pt-28 pb-20";
 
   const contentInnerClass = isCenter
-    ? "flex flex-col items-center text-center max-w-6xl mx-auto"
-    : "flex flex-col lg:flex-row lg:items-center lg:justify-between gap-10";
+    ? "flex flex-col items-center text-center max-w-6xl mx-auto hero-text-shadow"
+    : "flex flex-col lg:flex-row lg:items-center lg:justify-between gap-10 hero-text-shadow";
 
   const titleClass = isCenter
     ? "display-headline text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-white leading-normal w-full"

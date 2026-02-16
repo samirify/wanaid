@@ -259,6 +259,14 @@
 
   .page-hero-content {
     @apply relative z-10 text-center text-white py-24 px-4;
+    text-shadow: 0 0 1px rgba(0, 0, 0, 0.8), 0 1px 3px rgba(0, 0, 0, 0.5),
+      0 2px 6px rgba(0, 0, 0, 0.3);
+  }
+
+  /* Sharper text on all hero sections (landing hero, PageHero, inline page-hero) */
+  .hero-text-shadow {
+    text-shadow: 0 0 1px rgba(0, 0, 0, 0.8), 0 1px 3px rgba(0, 0, 0, 0.5),
+      0 2px 6px rgba(0, 0, 0, 0.3);
   }
 
   /* PageHero wave fill — matches content area in light/dark for seamless transition */
