@@ -139,7 +139,8 @@ export function Hero() {
         <path d="M0 96V70C240 20 480 0 720 0s480 20 720 70V96H0z" fill="currentColor" />
       </svg>
 
-      <div className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8 relative z-10 w-full py-12 sm:py-16 lg:py-0">
+      {/* On mobile: less top padding so hero content sits higher and doesn’t overlap the scroll arrow */}
+      <div className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8 relative z-10 w-full pt-6 pb-20 sm:pt-12 sm:pb-16 sm:py-16 lg:py-0">
         <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center min-h-0 lg:min-h-screen">
           {/* Text Content */}
           <div className="text-white">
@@ -295,12 +296,12 @@ export function Hero() {
           </motion.div>
         </div>
 
-        {/* Scroll indicator — above safe area and fixed UI on mobile */}
+        {/* Scroll indicator — on mobile pushed down to clear buttons; above safe area on larger screens */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.8 }}
-          className="absolute bottom-12 sm:bottom-8 start-1/2 -translate-x-1/2 rtl:translate-x-1/2 text-white/60"
+          className="absolute bottom-6 sm:bottom-8 start-1/2 -translate-x-1/2 rtl:translate-x-1/2 text-white/60"
         >
           <motion.div
             animate={{ y: [0, 8, 0] }}
