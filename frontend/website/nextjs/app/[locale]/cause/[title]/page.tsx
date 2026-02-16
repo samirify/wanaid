@@ -75,8 +75,8 @@ export default function CauseDetailPage({ params }: PageProps) {
       <PageHero
         title={rawT(cause.title)}
         onTitleResolved={setPageTitleOverride}
-        topLine={headers?.main_header_top ? rawT(headers.main_header_top) : undefined}
-        bottomLine={headers?.main_header_bottom ? rawT(headers.main_header_bottom) : undefined}
+        topLine={headers?.main_header_top ? (rawT(headers.main_header_top) || undefined) : undefined}
+        bottomLine={headers?.main_header_bottom ? (rawT(headers.main_header_bottom) || undefined) : undefined}
         headerImageUrl={cause.header_img_url}
         variant="fixed"
         align="start"

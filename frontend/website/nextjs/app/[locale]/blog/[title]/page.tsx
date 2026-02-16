@@ -86,10 +86,16 @@ export default function BlogDetailPage({ params }: PageProps) {
     const r = rawT(key) || t(key) || "";
     return (r && !looksLikeKey(r) ? r : key).replace(/<[^>]*>/g, "").trim();
   };
+  /** For optional headers: only use rawT so missing message keys don't throw (next-intl t() throws on MISSING_MESSAGE). */
+  const resolveOptional = (key: string | null | undefined): string => {
+    if (key == null || key === "") return "";
+    const r = rawT(key) || "";
+    return (r && !looksLikeKey(r) ? r : "").replace(/<[^>]*>/g, "").trim();
+  };
   const fromMiddle = resolve(headers?.main_header_middle_big ?? undefined);
   const fromBlogTitle = resolve(blog.title ?? undefined);
-  const fromTop = resolve(headers?.main_header_top ?? undefined);
-  const fromBottom = resolve(headers?.main_header_bottom ?? undefined);
+  const fromTop = resolveOptional(headers?.main_header_top ?? undefined);
+  const fromBottom = resolveOptional(headers?.main_header_bottom ?? undefined);
   const slugToTitle = (slug: string) =>
     slug.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
 
@@ -107,8 +113,8 @@ export default function BlogDetailPage({ params }: PageProps) {
       <PageHero
         title={heroTitle}
         onTitleResolved={setPageTitleOverride}
-        topLine={headers?.main_header_top ? rawT(headers.main_header_top) : undefined}
-        bottomLine={headers?.main_header_bottom ? rawT(headers.main_header_bottom) : undefined}
+        topLine={headers?.main_header_top ? (rawT(headers.main_header_top) || undefined) : undefined}
+        bottomLine={headers?.main_header_bottom ? (rawT(headers.main_header_bottom) || undefined) : undefined}
         headerImageUrl={blog.header_img_url}
         variant="auto"
         align="center"

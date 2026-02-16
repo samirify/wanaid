@@ -41,7 +41,7 @@ export default function TeamMemberContent({ pageData, memberData, locale }: Prop
         <PageHero
           title={headers?.main_header_middle_big ?? ""}
           onTitleResolved={setPageTitleOverride}
-          bottomLine={headers?.main_header_bottom}
+          bottomLine={headers?.main_header_bottom ? (rawT(headers.main_header_bottom) || undefined) : undefined}
           headerImageUrl={pageData.main_header_img ?? null}
           variant="auto"
           align="center"
