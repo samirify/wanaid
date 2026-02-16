@@ -116,25 +116,25 @@ export function Navigation() {
                   <img
                     src="/images/logo-dark.svg"
                     alt="WAN Aid"
-                    width={120}
-                    height={36}
-                    className="h-9 w-auto dark:hidden"
+                    width={140}
+                    height={42}
+                    className="h-10 sm:h-11 w-auto dark:hidden"
                   />
                   <img
                     src="/images/logo-light.svg"
                     alt="WAN Aid"
-                    width={120}
-                    height={36}
-                    className="h-9 w-auto hidden dark:block"
+                    width={140}
+                    height={42}
+                    className="h-10 sm:h-11 w-auto hidden dark:block"
                   />
                 </>
               ) : (
                 <img
                   src="/images/logo-light.svg"
                   alt="WAN Aid"
-                  width={120}
-                  height={36}
-                  className="h-9 w-auto"
+                  width={140}
+                  height={42}
+                  className="h-10 sm:h-11 w-auto"
                 />
               )}
             </Link>
@@ -217,16 +217,16 @@ export function Navigation() {
               <img
                 src="/images/logo-dark.svg"
                 alt="WAN Aid"
-                width={100}
-                height={32}
-                className="h-8 w-auto dark:hidden"
+                width={112}
+                height={36}
+                className="h-9 w-auto dark:hidden"
               />
               <img
                 src="/images/logo-light.svg"
                 alt="WAN Aid"
-                width={100}
-                height={32}
-                className="h-8 w-auto hidden dark:block"
+                width={112}
+                height={36}
+                className="h-9 w-auto hidden dark:block"
               />
             </Link>
             <button
