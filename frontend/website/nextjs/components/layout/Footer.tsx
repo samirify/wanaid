@@ -217,7 +217,7 @@ export function Footer() {
         <div className="container-custom py-6">
           <div className="flex flex-col items-center gap-4">
             <p className="text-slate-400 text-sm">
-              &copy; {new Date().getFullYear()} {copyright}
+              {copyright}
             </p>
             <ul className="flex items-center gap-4">
               {legalLinks.map((link) => (
