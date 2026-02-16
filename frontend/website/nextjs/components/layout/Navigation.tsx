@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useLayoutEffect } from "react";
 import { useTranslations, useLocale } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { useAppData } from "@/context/AppContext";
@@ -64,7 +64,9 @@ export function Navigation() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  useEffect(() => {
+  // Apply body scroll lock in the same frame as open so the menu feels instant
+  // useLayoutEffect so scroll lock runs before paint — reduces perceived delay on mobile
+  useLayoutEffect(() => {
     if (isMobileMenuOpen) {
       document.body.style.overflow = "hidden";
     } else {
@@ -160,7 +162,7 @@ export function Navigation() {
 
             {/* Mobile Menu Button */}
             <button
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              onClick={() => setIsMobileMenuOpen((prev) => !prev)}
               className={cn(
                 "lg:hidden p-2 rounded-xl transition-colors",
                 isScrolled
@@ -182,16 +184,18 @@ export function Navigation() {
       {/* Mobile Menu Overlay */}
       <div
         className={cn(
-          "fixed inset-0 z-[99999] lg:hidden transition-all duration-300",
+          "fixed inset-0 z-[99999] lg:hidden transition-[opacity] duration-200 ease-out",
           isMobileMenuOpen
             ? "opacity-100 pointer-events-auto"
             : "opacity-0 pointer-events-none"
         )}
+        style={{ willChange: isMobileMenuOpen ? "opacity" : undefined }}
       >
         {/* Backdrop — opaque so hero doesn’t show through */}
         <div
-          className="absolute inset-0 bg-black/70 backdrop-blur-md"
+          className="absolute inset-0 bg-black/70"
           onClick={closeMobile}
+          aria-hidden
         />
 
         {/* Slide-out panel */}
@@ -199,7 +203,8 @@ export function Navigation() {
           className={cn(
             "absolute top-0 end-0 h-full w-[300px] max-w-[85vw]",
             "bg-white dark:bg-slate-900 shadow-2xl",
-            "transition-transform duration-300 ease-out",
+            "transition-[transform] duration-200 ease-out",
+            "will-change-transform",
             "flex flex-col",
             isMobileMenuOpen
               ? "translate-x-0 rtl:-translate-x-0"
