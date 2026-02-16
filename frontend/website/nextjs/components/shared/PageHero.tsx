@@ -92,8 +92,8 @@ export function PageHero({
     : "flex flex-col lg:flex-row lg:items-center lg:justify-between gap-10";
 
   const titleClass = isCenter
-    ? "display-headline text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-white leading-tight w-full"
-    : "display-headline text-4xl sm:text-5xl lg:text-6xl font-bold mb-4 text-white";
+    ? "display-headline text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-white leading-normal w-full"
+    : "display-headline text-4xl sm:text-5xl lg:text-6xl font-bold mb-4 text-white leading-normal";
 
   const topLineClass = "font-display text-primary-200 font-medium mb-3";
   const bottomLineClass = isCenter
