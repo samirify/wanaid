@@ -1,5 +1,7 @@
+name: wanaid
+
 services:
-  website-nextjs:
+  wanaid:
     build:
       context: ../../
       dockerfile: docker/website-nextjs/Dockerfile
@@ -12,7 +14,7 @@ services:
         - NEXT_PUBLIC_GOOGLE_RECAPTCHA_SITE_KEY=${NEXT_PUBLIC_GOOGLE_RECAPTCHA_SITE_KEY:-}
         - NEXT_PUBLIC_GA_TRACKING_ID=${NEXT_PUBLIC_GA_TRACKING_ID:-}
         - NEXT_PUBLIC_PAYPAL_CLIENT_ID=${NEXT_PUBLIC_PAYPAL_CLIENT_ID:-}
-    container_name: charity-website-nextjs
+    container_name: wanaid
     ports:
       - "${PORT:-9331}:${PORT:-9331}"
     environment:

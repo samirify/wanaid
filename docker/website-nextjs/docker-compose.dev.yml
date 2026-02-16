@@ -1,11 +1,13 @@
+name: wanaid
+
 services:
-  website-nextjs-dev:
+  website-dev:
     build:
       context: ../../
       dockerfile: docker/website-nextjs/Dockerfile.dev
       args:
         - PORT=${PORT:-9331}
-    container_name: charity-website-nextjs-dev
+    container_name: wanaid-website
     ports:
       - "${PORT:-9331}:${PORT:-9331}"
     environment:
