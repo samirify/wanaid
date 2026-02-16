@@ -526,6 +526,36 @@
     }
   }
 
+  /* ── Hero cards ── */
+
+  /* Rainbow border: slow hue rotation for a living, colorful edge */
+  .hero-card-border-spin {
+    animation: heroCardBorderSpin 6s linear infinite;
+  }
+
+  @keyframes heroCardBorderSpin {
+    0% {
+      filter: hue-rotate(0deg);
+    }
+    100% {
+      filter: hue-rotate(360deg);
+    }
+  }
+
+  /* Shimmer sweep that glides across the card on hover */
+  .hero-card-shimmer {
+    animation: heroCardShimmer 2.4s ease-in-out infinite;
+  }
+
+  @keyframes heroCardShimmer {
+    0% {
+      background-position: 200% 0;
+    }
+    100% {
+      background-position: -100% 0;
+    }
+  }
+
   /* Shimmer loading effect */
   .shimmer {
     background: linear-gradient(

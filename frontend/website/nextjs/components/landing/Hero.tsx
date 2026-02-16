@@ -5,8 +5,10 @@ import { motion } from "framer-motion";
 import { useAppData } from "@/context/AppContext";
 import { useRawTranslation } from "@/hooks/useRawTranslation";
 import { Link } from "@/i18n/navigation";
-import { Heart, ArrowDown, Users, BookOpen, Target, Facebook } from "lucide-react";
+import { Heart, Users, BookOpen, Target, Facebook } from "lucide-react";
 import { HeroAnimatedPattern } from "./HeroAnimatedPattern";
+import { HeroCards } from "./HeroCards";
+import type { HeroCardData } from "./HeroCards";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 20 },
@@ -27,25 +29,25 @@ export function Hero() {
   const ctas = header?.ctas || [];
 
   // Hero cards: open causes, blog, Facebook members (external)
-  const heroCards = [
+  const heroCards: HeroCardData[] = [
     {
       icon: Target,
       value: openCauses?.length ?? 0,
-      labelKey: "OPEN_CAUSES_HEADER_LABEL",
+      label: t("OPEN_CAUSES_HEADER_LABEL"),
       href: "/open-causes",
       external: false,
     },
     {
       icon: BookOpen,
       value: blogs?.length ?? 0,
-      labelKey: "LANDING_PAGE_BLOG_HEADER_LABEL",
+      label: t("LANDING_PAGE_BLOG_HEADER_LABEL"),
       href: "/blog",
       external: false,
     },
     {
       icon: Facebook,
       valueDisplay: "2.6k+",
-      labelKey: "FACEBOOK_MEMBERS_LABEL",
+      label: t("FACEBOOK_MEMBERS_LABEL"),
       href: facebookUrl,
       external: true,
     },
@@ -202,64 +204,14 @@ export function Hero() {
             </motion.div>
           </div>
 
-          {/* Hero cards — open causes, blog, Facebook members (sexier glass + glow) */}
+          {/* Hero cards — creative animated cards */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
             className="hidden lg:block"
           >
-            <div className="grid grid-cols-1 gap-5 max-w-sm ms-auto">
-              {heroCards.map((card, index) => {
-                const displayValue = "valueDisplay" in card && card.valueDisplay != null ? card.valueDisplay : String(card.value);
-                const resolvedLabel = "label" in card && card.label != null ? card.label : t(card.labelKey);
-                const displayLabel: string =
-                  typeof resolvedLabel === "string" ? resolvedLabel : "";
-                const cardContent = (
-                  <motion.div
-                    initial={{ opacity: 0, y: 16 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.25 + index * 0.1, duration: 0.35 }}
-                    whileHover={{ scale: 1.02, y: -4 }}
-                    className="relative overflow-hidden rounded-2xl p-6
-                      bg-white/[0.12] backdrop-blur-2xl
-                      border border-white/25 shadow-2xl shadow-black/25
-                      hover:bg-white/[0.18] hover:border-white/40 hover:shadow-accent-500/20 hover:shadow-[0_0_40px_-8px_rgba(231,62,133,0.5)]
-                      transition-all duration-300 ease-out group"
-                  >
-                    <div className="absolute inset-0 bg-gradient-to-br from-white/[0.08] to-transparent pointer-events-none" />
-                    <div className="relative flex items-center gap-5">
-                      <div className="w-16 h-16 rounded-2xl bg-white/20 flex items-center justify-center shadow-lg border border-white/20 group-hover:bg-accent-500/30 group-hover:border-accent-300/40 transition-all duration-300 shrink-0">
-                        <card.icon className="w-8 h-8 text-white drop-shadow-sm" />
-                      </div>
-                      <div className="min-w-0">
-                        <div className="text-3xl font-bold tabular-nums text-white tracking-tight drop-shadow-sm">
-                          {displayValue}
-                        </div>
-                        <div className="text-sm font-medium text-white/70 mt-0.5">
-                          {displayLabel}
-                        </div>
-                      </div>
-                    </div>
-                  </motion.div>
-                );
-                return card.external ? (
-                  <a
-                    key={card.labelKey}
-                    href={card.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="block focus:outline-none focus-visible:ring-2 focus-visible:ring-white/50 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent rounded-2xl"
-                  >
-                    {cardContent}
-                  </a>
-                ) : (
-                  <Link key={card.labelKey} href={card.href}>
-                    {cardContent}
-                  </Link>
-                );
-              })}
-            </div>
+            <HeroCards cards={heroCards} />
           </motion.div>
         </div>
 

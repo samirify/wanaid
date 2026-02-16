@@ -6,7 +6,7 @@ import { mediaUrl } from "@/lib/utils";
 
 const curveSvg = (
   <svg
-    className="page-hero-wave-fill w-full h-16 shrink-0 rtl:-scale-x-100"
+    className="page-hero-wave-fill block w-full h-16 shrink-0 rtl:-scale-x-100"
     viewBox="0 0 1440 64"
     fill="none"
     preserveAspectRatio="none"
@@ -279,11 +279,11 @@ export function PageHero({
       </div>
       {showCurve &&
         (isFixed ? (
-          <div className="absolute bottom-0 left-0 right-0 w-full pointer-events-none">
+          <div className="absolute -bottom-px left-0 right-0 w-full pointer-events-none">
             {curveSvg}
           </div>
         ) : (
-          <div className="relative w-full pointer-events-none">{curveSvg}</div>
+          <div className="relative -mb-px w-full pointer-events-none">{curveSvg}</div>
         ))}
     </Wrapper>
   );
