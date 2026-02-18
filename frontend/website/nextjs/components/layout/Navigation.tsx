@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useLayoutEffect } from "react";
+import { useState, useEffect, useLayoutEffect, useRef } from "react";
 import { useTranslations, useLocale } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { useAppData } from "@/context/AppContext";
@@ -57,12 +57,40 @@ export function Navigation() {
   const { settings, blogs, galleryCount } = useAppData();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  // Keep overlay in DOM during close animation, then unmount so it never blocks the hamburger (fixes mobile “can’t re-open” and hero stutter)
+  const [isOverlayMounted, setIsOverlayMounted] = useState(false);
+  const [isOverlayVisible, setIsOverlayVisible] = useState(false);
+  const openAnimationScheduled = useRef(false);
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // When opening: mount overlay so it can animate in. When closing: hide then unmount after animation.
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      setIsOverlayMounted(true);
+    } else {
+      setIsOverlayVisible(false);
+      if (isOverlayMounted) {
+        const t = setTimeout(() => {
+          setIsOverlayMounted(false);
+          openAnimationScheduled.current = false;
+        }, 220);
+        return () => clearTimeout(t);
+      }
+    }
+  }, [isMobileMenuOpen, isOverlayMounted]);
+
+  // After overlay mounts for "open", trigger visible on next frame so open animation runs
+  useLayoutEffect(() => {
+    if (!isOverlayMounted || !isMobileMenuOpen || openAnimationScheduled.current) return;
+    openAnimationScheduled.current = true;
+    const frame = requestAnimationFrame(() => setIsOverlayVisible(true));
+    return () => cancelAnimationFrame(frame);
+  }, [isOverlayMounted, isMobileMenuOpen]);
 
   // Apply body scroll lock in the same frame as open so the menu feels instant
   // useLayoutEffect so scroll lock runs before paint — reduces perceived delay on mobile
@@ -162,7 +190,11 @@ export function Navigation() {
 
             {/* Mobile Menu Button */}
             <button
-              onClick={() => setIsMobileMenuOpen((prev) => !prev)}
+              onClick={() => {
+                const next = !isMobileMenuOpen;
+                setIsMobileMenuOpen(next);
+                if (next) setIsOverlayMounted(true);
+              }}
               className={cn(
                 "lg:hidden p-2 rounded-xl transition-colors",
                 isScrolled
@@ -181,15 +213,16 @@ export function Navigation() {
         </div>
       </nav>
 
-      {/* Mobile Menu Overlay — when closed, disable pointer events on self and all descendants so the hamburger can be tapped immediately */}
+      {/* Mobile Menu Overlay — unmount after close animation so it never blocks the hamburger (fixes re-open delay and hero stutter on mobile) */}
+      {isOverlayMounted && (
       <div
         className={cn(
           "fixed inset-0 z-[99999] lg:hidden transition-[opacity] duration-200 ease-out",
-          isMobileMenuOpen
+          isOverlayVisible
             ? "opacity-100 pointer-events-auto"
-            : "opacity-0 pointer-events-none [&_*]:pointer-events-none"
+            : "opacity-0 pointer-events-none"
         )}
-        style={{ willChange: isMobileMenuOpen ? "opacity" : undefined }}
+        style={{ willChange: isOverlayVisible ? "opacity" : undefined }}
       >
         {/* Backdrop — opaque so hero doesn’t show through */}
         <div
@@ -206,7 +239,7 @@ export function Navigation() {
             "transition-[transform] duration-200 ease-out",
             "will-change-transform",
             "flex flex-col",
-            isMobileMenuOpen
+            isOverlayVisible
               ? "translate-x-0 rtl:-translate-x-0"
               : "translate-x-full rtl:-translate-x-full"
           )}
@@ -267,6 +300,7 @@ export function Navigation() {
           </div>
         </div>
       </div>
+      )}
     </>
   );
 }
