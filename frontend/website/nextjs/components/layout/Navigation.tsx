@@ -154,14 +154,19 @@ export function Navigation() {
         </div>
       </nav>
 
-      {/* Mobile overlay + slide panel — always in DOM, CSS handles animation */}
+      {/* Mobile overlay + slide panel — always in DOM, CSS handles animation.
+         visibility:hidden (not just pointer-events:none) ensures mobile WebKit
+         fully removes the layer from hit-testing after the fade-out finishes. */}
       <div
         className={cn(
-          "fixed inset-0 z-[99999] lg:hidden transition-opacity duration-300 ease-out",
-          isMobileMenuOpen
-            ? "opacity-100 pointer-events-auto"
-            : "opacity-0 pointer-events-none"
+          "fixed inset-0 z-[99999] lg:hidden",
+          isMobileMenuOpen ? "opacity-100 visible" : "opacity-0 invisible"
         )}
+        style={{
+          transition: isMobileMenuOpen
+            ? "opacity 300ms ease-out, visibility 0s linear 0s"
+            : "opacity 300ms ease-out, visibility 0s linear 300ms",
+        }}
       >
         <div
           className="absolute inset-0 bg-black/70"

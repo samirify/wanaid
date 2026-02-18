@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
 import { useAppData } from "@/context/AppContext";
@@ -24,6 +25,15 @@ export function Hero() {
   const rawT = useRawTranslation();
   const { pageContents, settings, openCauses, blogs } = useAppData();
   const facebookUrl = settings?.social_media_facebook || "https://www.facebook.com/Womenaccessnetwork/";
+
+  const [isLg, setIsLg] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 1024px)");
+    setIsLg(mq.matches);
+    const handler = (e: MediaQueryListEvent) => setIsLg(e.matches);
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
+  }, []);
 
   const header = pageContents?.LANDING?.HEADER;
   const ctas = header?.ctas || [];
@@ -204,15 +214,17 @@ export function Hero() {
             </motion.div>
           </div>
 
-          {/* Hero cards — creative animated cards */}
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="hidden lg:block"
-          >
-            <HeroCards cards={heroCards} />
-          </motion.div>
+          {/* Hero cards — only mounted on desktop to avoid framer-motion
+             animations running (and blocking the main thread) on mobile */}
+          {isLg && (
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+            >
+              <HeroCards cards={heroCards} />
+            </motion.div>
+          )}
         </div>
 
       </div>
