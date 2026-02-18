@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 
 interface FloatingShape {
   id: number;
-  type: "heart" | "star" | "circle" | "hand" | "plane" | "sparkle";
+  type: "heart" | "star" | "circle" | "hand" | "balloon" | "sparkle";
   x: string; // CSS left %
   y: string; // CSS top %
   size: number; // px
@@ -50,9 +50,9 @@ const SHAPES: FloatingShape[] = [
   { id: 40, type: "hand", x: "22%", y: "20%", size: 30, delay: 1, duration: 9, opacity: 0.18, color: "#f9a8c9", rotate: -15 },
   { id: 41, type: "hand", x: "75%", y: "70%", size: 26, delay: 3, duration: 11, opacity: 0.15, color: "#ff8ab5", rotate: 20 },
 
-  // Paper planes — hope taking flight
-  { id: 50, type: "plane", x: "5%", y: "40%", size: 24, delay: 0, duration: 16, opacity: 0.25, color: "#ffffff", rotate: -30 },
-  { id: 51, type: "plane", x: "65%", y: "80%", size: 20, delay: 5, duration: 18, opacity: 0.2, color: "#ffe4f0", rotate: -20 },
+  // Balloons — play, celebration and hope for children
+  { id: 50, type: "balloon", x: "5%", y: "40%", size: 28, delay: 0, duration: 14, opacity: 0.28, color: "#ff8ab5", rotate: -12 },
+  { id: 51, type: "balloon", x: "65%", y: "80%", size: 24, delay: 5, duration: 16, opacity: 0.22, color: "#ffe4f0", rotate: 8 },
 ];
 
 /* ─── SVG shape renderers ──────────────────────────────────────────────── */
@@ -98,10 +98,11 @@ function HandSVG({ size, color }: { size: number; color: string }) {
   );
 }
 
-function PlaneSVG({ size, color }: { size: number; color: string }) {
+function BalloonSVG({ size, color }: { size: number; color: string }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill={color}>
-      <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z" />
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+      <ellipse cx="12" cy="10" rx="6" ry="8" fill={color} opacity="0.85" />
+      <path d="M12 18v4M10 22h4" stroke={color} />
     </svg>
   );
 }
@@ -112,7 +113,7 @@ const shapeRenderers: Record<FloatingShape["type"], React.FC<{ size: number; col
   sparkle: SparkleSVG,
   circle: CircleSVG,
   hand: HandSVG,
-  plane: PlaneSVG,
+  balloon: BalloonSVG,
 };
 
 /* ─── Animated floating shapes layer ───────────────────────────────────── */
@@ -120,13 +121,11 @@ const shapeRenderers: Record<FloatingShape["type"], React.FC<{ size: number; col
 function FloatingElement({ shape }: { shape: FloatingShape }) {
   const Renderer = shapeRenderers[shape.type];
 
-  const floatY = shape.type === "plane" ? [-20, -40, -20] : [0, -18, 0];
+  const floatY = [0, -18, 0];
   const floatX =
-    shape.type === "plane"
-      ? [0, 60, 120]
-      : shape.type === "heart"
-        ? [0, 8, -6, 0]
-        : [0, 5, -5, 0];
+    shape.type === "heart"
+      ? [0, 8, -6, 0]
+      : [0, 5, -5, 0];
   const scaleAnim =
     shape.type === "sparkle"
       ? [0.6, 1.2, 0.6]

@@ -181,13 +181,13 @@ export function Navigation() {
         </div>
       </nav>
 
-      {/* Mobile Menu Overlay */}
+      {/* Mobile Menu Overlay — when closed, disable pointer events on self and all descendants so the hamburger can be tapped immediately */}
       <div
         className={cn(
           "fixed inset-0 z-[99999] lg:hidden transition-[opacity] duration-200 ease-out",
           isMobileMenuOpen
             ? "opacity-100 pointer-events-auto"
-            : "opacity-0 pointer-events-none"
+            : "opacity-0 pointer-events-none [&_*]:pointer-events-none"
         )}
         style={{ willChange: isMobileMenuOpen ? "opacity" : undefined }}
       >
