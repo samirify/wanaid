@@ -61,6 +61,7 @@ export function Navigation() {
   const [isOverlayMounted, setIsOverlayMounted] = useState(false);
   const [isOverlayVisible, setIsOverlayVisible] = useState(false);
   const openAnimationScheduled = useRef(false);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
@@ -69,16 +70,22 @@ export function Navigation() {
   }, []);
 
   // When opening: mount overlay so it can animate in. When closing: hide then unmount after animation.
+  // Use 350ms unmount delay on real mobile so compositor clears the overlay layer before next tap.
+  const overlayUnmountDelay = 350;
   useEffect(() => {
     if (isMobileMenuOpen) {
       setIsOverlayMounted(true);
     } else {
       setIsOverlayVisible(false);
+      // Return focus to menu button so next tap on real mobile hits it (focus can stick to unmounted close button)
+      requestAnimationFrame(() => {
+        menuButtonRef.current?.focus({ preventScroll: true });
+      });
       if (isOverlayMounted) {
         const t = setTimeout(() => {
           setIsOverlayMounted(false);
           openAnimationScheduled.current = false;
-        }, 220);
+        }, overlayUnmountDelay);
         return () => clearTimeout(t);
       }
     }
@@ -123,7 +130,13 @@ export function Navigation() {
   navLinks.push({ href: "/contact", label: t("TOP_NAV_CONTACT_LABEL") });
 
   const donateUrl = settings.static_button_get_started_url || "/cause/help-us";
-  const closeMobile = () => setIsMobileMenuOpen(false);
+  const closeMobile = () => {
+    setIsMobileMenuOpen(false);
+    // Return focus immediately so real mobile doesn’t keep focus on the (about to unmount) close button
+    requestAnimationFrame(() => {
+      menuButtonRef.current?.focus({ preventScroll: true });
+    });
+  };
 
   return (
     <>
@@ -188,20 +201,24 @@ export function Navigation() {
               </Link>
             </div>
 
-            {/* Mobile Menu Button */}
+            {/* Mobile Menu Button — ref for focus return on close; touch-action so real mobile taps register immediately */}
             <button
+              ref={menuButtonRef}
+              type="button"
               onClick={() => {
                 const next = !isMobileMenuOpen;
                 setIsMobileMenuOpen(next);
                 if (next) setIsOverlayMounted(true);
               }}
               className={cn(
-                "lg:hidden p-2 rounded-xl transition-colors",
+                "lg:hidden p-2 rounded-xl transition-colors touch-manipulation",
                 isScrolled
                   ? "text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
                   : "text-white hover:bg-white/10"
               )}
+              style={{ touchAction: "manipulation" }}
               aria-label="Toggle menu"
+              aria-expanded={isMobileMenuOpen}
             >
               {isMobileMenuOpen ? (
                 <X className="w-6 h-6" />
@@ -213,7 +230,7 @@ export function Navigation() {
         </div>
       </nav>
 
-      {/* Mobile Menu Overlay — unmount after close animation so it never blocks the hamburger (fixes re-open delay and hero stutter on mobile) */}
+      {/* Mobile Menu Overlay — when closed (animating out), inert + invisible so real mobile doesn’t capture touch; unmount after delay */}
       {isOverlayMounted && (
       <div
         className={cn(
@@ -222,7 +239,11 @@ export function Navigation() {
             ? "opacity-100 pointer-events-auto"
             : "opacity-0 pointer-events-none"
         )}
-        style={{ willChange: isOverlayVisible ? "opacity" : undefined }}
+        style={{
+          willChange: isOverlayVisible ? "opacity" : undefined,
+          // When closed (animating out), don’t capture touch on real mobile so hamburger stays tappable
+          touchAction: isOverlayVisible ? "auto" : "none",
+        }}
       >
         {/* Backdrop — opaque so hero doesn’t show through */}
         <div
