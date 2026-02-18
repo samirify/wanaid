@@ -488,6 +488,16 @@
     }
   }
 
+  /* Mobile nav — open-only animations (close is instant unmount to avoid
+     GPU compositing stall over hero blur layers on real mobile devices) */
+  @keyframes navFadeIn {
+    from { opacity: 0; }
+  }
+  @keyframes navSlideIn {
+    from { transform: translateX(var(--nav-slide-dir, 100%)); }
+  }
+  [dir="rtl"] { --nav-slide-dir: -100%; }
+
   /* Hero floating shapes — compositor-thread animations (replaces framer-motion) */
   @keyframes heroFloatHeart {
     0%, 100% { transform: translate(0, 0) scale(1); }

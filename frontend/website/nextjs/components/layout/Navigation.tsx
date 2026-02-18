@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { useAppData } from "@/context/AppContext";
@@ -18,14 +18,7 @@ export function Navigation() {
   const t = useTranslations();
   const { settings, blogs, galleryCount } = useAppData();
   const [isScrolled, setIsScrolled] = useState(false);
-
-  // Two states for mount/unmount animation:
-  // overlayMounted = whether the overlay DOM exists
-  // overlayOpen    = whether the overlay is in its "open" visual state
-  const [overlayMounted, setOverlayMounted] = useState(false);
-  const [overlayOpen, setOverlayOpen] = useState(false);
-  const openRafRef = useRef(0);
-  const closeTimerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
@@ -33,47 +26,12 @@ export function Navigation() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // After overlay mounts, animate it open on the next frame
   useEffect(() => {
-    if (!overlayMounted) return;
-    openRafRef.current = requestAnimationFrame(() => setOverlayOpen(true));
-    return () => cancelAnimationFrame(openRafRef.current);
-  }, [overlayMounted]);
-
-  // Block background scrolling while overlay is up (iOS-safe: no body.overflow)
-  useEffect(() => {
-    if (!overlayMounted) return;
-    const prevent = (e: TouchEvent) => {
-      if (!(e.target as Element)?.closest?.("[data-nav-panel]")) {
-        e.preventDefault();
-      }
-    };
-    document.addEventListener("touchmove", prevent, { passive: false });
-    return () => document.removeEventListener("touchmove", prevent);
-  }, [overlayMounted]);
-
-  useEffect(() => {
+    document.body.style.overflow = isMobileMenuOpen ? "hidden" : "";
     return () => {
-      clearTimeout(closeTimerRef.current);
-      cancelAnimationFrame(openRafRef.current);
+      document.body.style.overflow = "";
     };
-  }, []);
-
-  const openMobile = () => {
-    clearTimeout(closeTimerRef.current);
-    cancelAnimationFrame(openRafRef.current);
-    if (overlayMounted) {
-      setOverlayOpen(true);
-    } else {
-      setOverlayMounted(true);
-    }
-  };
-
-  const closeMobile = () => {
-    cancelAnimationFrame(openRafRef.current);
-    setOverlayOpen(false);
-    closeTimerRef.current = setTimeout(() => setOverlayMounted(false), 300);
-  };
+  }, [isMobileMenuOpen]);
 
   const navLinks: NavLink[] = [
     { href: "/", label: t("TOP_NAV_HOME_LABEL") },
@@ -96,6 +54,7 @@ export function Navigation() {
   navLinks.push({ href: "/contact", label: t("TOP_NAV_CONTACT_LABEL") });
 
   const donateUrl = settings.static_button_get_started_url || "/cause/help-us";
+  const closeMobile = () => setIsMobileMenuOpen(false);
 
   return (
     <>
@@ -175,7 +134,7 @@ export function Navigation() {
 
             <button
               type="button"
-              onClick={() => (overlayOpen ? closeMobile() : openMobile())}
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className={cn(
                 "lg:hidden p-2 rounded-xl transition-colors",
                 isScrolled
@@ -183,9 +142,9 @@ export function Navigation() {
                   : "text-white hover:bg-white/10"
               )}
               aria-label="Toggle menu"
-              aria-expanded={overlayOpen}
+              aria-expanded={isMobileMenuOpen}
             >
-              {overlayOpen ? (
+              {isMobileMenuOpen ? (
                 <X className="w-6 h-6" />
               ) : (
                 <Menu className="w-6 h-6" />
@@ -195,96 +154,94 @@ export function Navigation() {
         </div>
       </nav>
 
-      {/* Mobile overlay — fully unmounted when closed so iOS cannot
-          capture stale touch events on a hidden layer */}
-      {overlayMounted && (
+      {/* Mobile overlay + slide panel — always in DOM, CSS handles animation */}
+      <div
+        className={cn(
+          "fixed inset-0 z-[99999] lg:hidden transition-opacity duration-300 ease-out",
+          isMobileMenuOpen
+            ? "opacity-100 pointer-events-auto"
+            : "opacity-0 pointer-events-none"
+        )}
+      >
+        <div
+          className="absolute inset-0 bg-black/70"
+          onClick={closeMobile}
+          aria-hidden
+        />
+
         <div
           className={cn(
-            "fixed inset-0 z-[99999] lg:hidden transition-opacity duration-300 ease-out",
-            overlayOpen ? "opacity-100" : "opacity-0"
+            "absolute top-0 end-0 h-full w-[300px] max-w-[85vw]",
+            "bg-white dark:bg-slate-900 shadow-2xl",
+            "transition-transform duration-300 ease-out",
+            "flex flex-col",
+            isMobileMenuOpen
+              ? "translate-x-0 rtl:-translate-x-0"
+              : "translate-x-full rtl:-translate-x-full"
           )}
         >
-          <div
-            className="absolute inset-0 bg-black/70"
-            onClick={closeMobile}
-            aria-hidden
-          />
+          <div className="flex items-center justify-between p-4 border-b border-slate-200 dark:border-slate-700">
+            <Link
+              href="/"
+              prefetch={false}
+              onClick={closeMobile}
+              className="flex items-center"
+            >
+              <img
+                src="/images/logo-dark.svg"
+                alt="WAN Aid"
+                width={112}
+                height={36}
+                className="h-9 w-auto dark:hidden"
+              />
+              <img
+                src="/images/logo-light.svg"
+                alt="WAN Aid"
+                width={112}
+                height={36}
+                className="h-9 w-auto hidden dark:block"
+              />
+            </Link>
+            <button
+              onClick={closeMobile}
+              className="p-2 rounded-xl text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800"
+              aria-label="Close menu"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
 
-          <div
-            data-nav-panel
-            className={cn(
-              "absolute top-0 end-0 h-full w-[300px] max-w-[85vw]",
-              "bg-white dark:bg-slate-900 shadow-2xl",
-              "transition-transform duration-300 ease-out",
-              "flex flex-col",
-              overlayOpen
-                ? "translate-x-0 rtl:-translate-x-0"
-                : "translate-x-full rtl:-translate-x-full"
-            )}
-          >
-            <div className="flex items-center justify-between p-4 border-b border-slate-200 dark:border-slate-700">
+          <div className="flex-1 overflow-y-auto py-4">
+            {navLinks.map((link) => (
               <Link
-                href="/"
+                key={link.href}
+                href={link.href}
                 prefetch={false}
                 onClick={closeMobile}
-                className="flex items-center"
+                className="flex items-center px-6 py-3 text-slate-700 dark:text-slate-300 hover:bg-primary-50 dark:hover:bg-slate-800 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
               >
-                <img
-                  src="/images/logo-dark.svg"
-                  alt="WAN Aid"
-                  width={112}
-                  height={36}
-                  className="h-9 w-auto dark:hidden"
-                />
-                <img
-                  src="/images/logo-light.svg"
-                  alt="WAN Aid"
-                  width={112}
-                  height={36}
-                  className="h-9 w-auto hidden dark:block"
-                />
+                {link.label}
               </Link>
-              <button
-                onClick={closeMobile}
-                className="p-2 rounded-xl text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800"
-                aria-label="Close menu"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
+            ))}
+          </div>
 
-            <div className="flex-1 overflow-y-auto py-4">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  prefetch={false}
-                  onClick={closeMobile}
-                  className="flex items-center px-6 py-3 text-slate-700 dark:text-slate-300 hover:bg-primary-50 dark:hover:bg-slate-800 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
-                >
-                  {link.label}
-                </Link>
-              ))}
+          <div className="p-4 space-y-3 border-t border-slate-200 dark:border-slate-700">
+            <div className="flex items-center gap-2">
+              <ThemeSwitcher />
+              <LanguageSelector />
             </div>
-
-            <div className="p-4 space-y-3 border-t border-slate-200 dark:border-slate-700">
-              <div className="flex items-center gap-2">
-                <ThemeSwitcher />
-                <LanguageSelector />
-              </div>
-              <Link
-                href={donateUrl}
-                prefetch={false}
-                onClick={closeMobile}
-                className="btn-accent w-full text-sm"
-              >
-                <Heart className="w-4 h-4" />
-                {t("TOP_NAV_STATIC_BUTTON_GET_STARTED_LABEL")}
-              </Link>
-            </div>
+            <Link
+              href={donateUrl}
+              prefetch={false}
+              onClick={closeMobile}
+              className="btn-accent w-full text-sm"
+            >
+              <Heart className="w-4 h-4" />
+              {t("TOP_NAV_STATIC_BUTTON_GET_STARTED_LABEL")}
+            </Link>
           </div>
         </div>
-      )}
+      </div>
     </>
   );
 }
