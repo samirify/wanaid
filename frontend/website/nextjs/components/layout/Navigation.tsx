@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect, useLayoutEffect, useRef } from "react";
-import { useTranslations, useLocale } from "next-intl";
+import { useState, useEffect } from "react";
+import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { useAppData } from "@/context/AppContext";
 import { ThemeSwitcher } from "./ThemeSwitcher";
@@ -14,54 +14,11 @@ interface NavLink {
   label: string;
 }
 
-function DesktopNavLink({
-  link,
-  isScrolled,
-}: {
-  link: NavLink;
-  isScrolled: boolean;
-}) {
-  const cls = cn(
-    "px-3 py-2 rounded-xl text-sm font-medium transition-all duration-200",
-    isScrolled
-      ? "text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-primary-600 dark:hover:text-primary-400"
-      : "text-white/90 hover:text-white hover:bg-white/10"
-  );
-
-  return (
-    <Link href={link.href} prefetch={false} className={cls}>
-      {link.label}
-    </Link>
-  );
-}
-
-function MobileNavLink({
-  link,
-  onClose,
-}: {
-  link: NavLink;
-  onClose: () => void;
-}) {
-  const cls = "flex items-center px-6 py-3 text-slate-700 dark:text-slate-300 hover:bg-primary-50 dark:hover:bg-slate-800 hover:text-primary-600 dark:hover:text-primary-400 transition-colors";
-
-  return (
-    <Link href={link.href} prefetch={false} onClick={onClose} className={cls}>
-      {link.label}
-    </Link>
-  );
-}
-
 export function Navigation() {
   const t = useTranslations();
-  const locale = useLocale();
   const { settings, blogs, galleryCount } = useAppData();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  // Keep overlay in DOM during close animation, then unmount so it never blocks the hamburger (fixes mobile “can’t re-open” and hero stutter)
-  const [isOverlayMounted, setIsOverlayMounted] = useState(false);
-  const [isOverlayVisible, setIsOverlayVisible] = useState(false);
-  const openAnimationScheduled = useRef(false);
-  const menuButtonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
@@ -69,44 +26,8 @@ export function Navigation() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // When opening: mount overlay so it can animate in. When closing: hide then unmount after animation.
-  // Use 350ms unmount delay on real mobile so compositor clears the overlay layer before next tap.
-  const overlayUnmountDelay = 350;
   useEffect(() => {
-    if (isMobileMenuOpen) {
-      setIsOverlayMounted(true);
-    } else {
-      setIsOverlayVisible(false);
-      // Return focus to menu button so next tap on real mobile hits it (focus can stick to unmounted close button)
-      requestAnimationFrame(() => {
-        menuButtonRef.current?.focus({ preventScroll: true });
-      });
-      if (isOverlayMounted) {
-        const t = setTimeout(() => {
-          setIsOverlayMounted(false);
-          openAnimationScheduled.current = false;
-        }, overlayUnmountDelay);
-        return () => clearTimeout(t);
-      }
-    }
-  }, [isMobileMenuOpen, isOverlayMounted]);
-
-  // After overlay mounts for "open", trigger visible on next frame so open animation runs
-  useLayoutEffect(() => {
-    if (!isOverlayMounted || !isMobileMenuOpen || openAnimationScheduled.current) return;
-    openAnimationScheduled.current = true;
-    const frame = requestAnimationFrame(() => setIsOverlayVisible(true));
-    return () => cancelAnimationFrame(frame);
-  }, [isOverlayMounted, isMobileMenuOpen]);
-
-  // Apply body scroll lock in the same frame as open so the menu feels instant
-  // useLayoutEffect so scroll lock runs before paint — reduces perceived delay on mobile
-  useLayoutEffect(() => {
-    if (isMobileMenuOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
+    document.body.style.overflow = isMobileMenuOpen ? "hidden" : "";
     return () => {
       document.body.style.overflow = "";
     };
@@ -121,7 +42,10 @@ export function Navigation() {
     navLinks.push({ href: "/blog", label: t("TOP_NAV_BLOG_LABEL") });
   }
 
-  navLinks.push({ href: "/marital-therapy-clinic", label: t("DR_MAGDI_CLINIC_TOP_HEADER") });
+  navLinks.push({
+    href: "/marital-therapy-clinic",
+    label: t("DR_MAGDI_CLINIC_TOP_HEADER"),
+  });
 
   if (galleryCount > 0) {
     navLinks.push({ href: "/gallery", label: t("GALLERY_TOP_HEADER") });
@@ -130,13 +54,7 @@ export function Navigation() {
   navLinks.push({ href: "/contact", label: t("TOP_NAV_CONTACT_LABEL") });
 
   const donateUrl = settings.static_button_get_started_url || "/cause/help-us";
-  const closeMobile = () => {
-    setIsMobileMenuOpen(false);
-    // Return focus immediately so real mobile doesn’t keep focus on the (about to unmount) close button
-    requestAnimationFrame(() => {
-      menuButtonRef.current?.focus({ preventScroll: true });
-    });
-  };
+  const closeMobile = () => setIsMobileMenuOpen(false);
 
   return (
     <>
@@ -150,8 +68,11 @@ export function Navigation() {
       >
         <div className="container-custom">
           <div className="flex items-center justify-between">
-            {/* Logo — client logo from React site */}
-            <Link href="/" prefetch={false} className="flex items-center gap-2 shrink-0">
+            <Link
+              href="/"
+              prefetch={false}
+              className="flex items-center gap-2 shrink-0"
+            >
               {isScrolled ? (
                 <>
                   <img
@@ -180,43 +101,46 @@ export function Navigation() {
               )}
             </Link>
 
-            {/* Desktop Navigation */}
             <div className="hidden lg:flex items-center gap-1">
               {navLinks.map((link) => (
-                <DesktopNavLink
+                <Link
                   key={link.href}
-                  link={link}
-                  isScrolled={isScrolled}
-                />
+                  href={link.href}
+                  prefetch={false}
+                  className={cn(
+                    "px-3 py-2 rounded-xl text-sm font-medium transition-all duration-200",
+                    isScrolled
+                      ? "text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-primary-600 dark:hover:text-primary-400"
+                      : "text-white/90 hover:text-white hover:bg-white/10"
+                  )}
+                >
+                  {link.label}
+                </Link>
               ))}
             </div>
 
-            {/* Desktop Actions */}
             <div className="hidden lg:flex items-center gap-3">
               <ThemeSwitcher />
               <LanguageSelector />
-              <Link href={donateUrl} prefetch={false} className="btn-accent text-sm h-10 px-5 py-2.5 rounded-xl font-display font-semibold shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-200">
+              <Link
+                href={donateUrl}
+                prefetch={false}
+                className="btn-accent text-sm h-10 px-5 py-2.5 rounded-xl font-display font-semibold shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-200"
+              >
                 <Heart className="w-4 h-4" />
                 {t("TOP_NAV_STATIC_BUTTON_GET_STARTED_LABEL")}
               </Link>
             </div>
 
-            {/* Mobile Menu Button — ref for focus return on close; touch-action so real mobile taps register immediately */}
             <button
-              ref={menuButtonRef}
               type="button"
-              onClick={() => {
-                const next = !isMobileMenuOpen;
-                setIsMobileMenuOpen(next);
-                if (next) setIsOverlayMounted(true);
-              }}
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className={cn(
-                "lg:hidden p-2 rounded-xl transition-colors touch-manipulation",
+                "lg:hidden p-2 rounded-xl transition-colors",
                 isScrolled
                   ? "text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
                   : "text-white hover:bg-white/10"
               )}
-              style={{ touchAction: "manipulation" }}
               aria-label="Toggle menu"
               aria-expanded={isMobileMenuOpen}
             >
@@ -230,44 +154,39 @@ export function Navigation() {
         </div>
       </nav>
 
-      {/* Mobile Menu Overlay — when closed (animating out), inert + invisible so real mobile doesn’t capture touch; unmount after delay */}
-      {isOverlayMounted && (
+      {/* Mobile overlay + slide panel — always in DOM, CSS handles animation */}
       <div
         className={cn(
-          "fixed inset-0 z-[99999] lg:hidden transition-[opacity] duration-200 ease-out",
-          isOverlayVisible
+          "fixed inset-0 z-[99999] lg:hidden transition-opacity duration-300 ease-out",
+          isMobileMenuOpen
             ? "opacity-100 pointer-events-auto"
             : "opacity-0 pointer-events-none"
         )}
-        style={{
-          willChange: isOverlayVisible ? "opacity" : undefined,
-          // When closed (animating out), don’t capture touch on real mobile so hamburger stays tappable
-          touchAction: isOverlayVisible ? "auto" : "none",
-        }}
       >
-        {/* Backdrop — opaque so hero doesn’t show through */}
         <div
           className="absolute inset-0 bg-black/70"
           onClick={closeMobile}
           aria-hidden
         />
 
-        {/* Slide-out panel */}
         <div
           className={cn(
             "absolute top-0 end-0 h-full w-[300px] max-w-[85vw]",
             "bg-white dark:bg-slate-900 shadow-2xl",
-            "transition-[transform] duration-200 ease-out",
-            "will-change-transform",
+            "transition-transform duration-300 ease-out",
             "flex flex-col",
-            isOverlayVisible
+            isMobileMenuOpen
               ? "translate-x-0 rtl:-translate-x-0"
               : "translate-x-full rtl:-translate-x-full"
           )}
         >
-          {/* Mobile Header */}
           <div className="flex items-center justify-between p-4 border-b border-slate-200 dark:border-slate-700">
-            <Link href="/" prefetch={false} onClick={closeMobile} className="flex items-center">
+            <Link
+              href="/"
+              prefetch={false}
+              onClick={closeMobile}
+              className="flex items-center"
+            >
               <img
                 src="/images/logo-dark.svg"
                 alt="WAN Aid"
@@ -292,18 +211,20 @@ export function Navigation() {
             </button>
           </div>
 
-          {/* Mobile Nav Links */}
           <div className="flex-1 overflow-y-auto py-4">
             {navLinks.map((link) => (
-              <MobileNavLink
+              <Link
                 key={link.href}
-                link={link}
-                onClose={closeMobile}
-              />
+                href={link.href}
+                prefetch={false}
+                onClick={closeMobile}
+                className="flex items-center px-6 py-3 text-slate-700 dark:text-slate-300 hover:bg-primary-50 dark:hover:bg-slate-800 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+              >
+                {link.label}
+              </Link>
             ))}
           </div>
 
-          {/* Mobile Actions */}
           <div className="p-4 space-y-3 border-t border-slate-200 dark:border-slate-700">
             <div className="flex items-center gap-2">
               <ThemeSwitcher />
@@ -321,7 +242,6 @@ export function Navigation() {
           </div>
         </div>
       </div>
-      )}
     </>
   );
 }
