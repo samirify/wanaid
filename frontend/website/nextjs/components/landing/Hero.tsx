@@ -249,10 +249,9 @@ export function Hero() {
           <span className="absolute inset-0 rounded-full bg-white/10 blur-xl group-hover:bg-white/15 transition-all duration-500 hero-scroll-glow" />
 
           {/* Bouncing double-chevron */}
-          <motion.div
-            animate={{ y: [0, 6, 0] }}
-            transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+          <div
             className="relative z-10 flex flex-col items-center gap-0"
+            style={{ animation: "heroChevronBounce 2s ease-in-out infinite" }}
           >
             <svg
               width="32"
@@ -276,7 +275,7 @@ export function Hero() {
                 strokeLinejoin="round"
               />
             </svg>
-          </motion.div>
+          </div>
         </a>
       </motion.div>
     </section>
