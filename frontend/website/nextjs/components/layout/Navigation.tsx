@@ -51,7 +51,7 @@ export function Navigation() {
     <>
       <nav
         className={cn(
-          "fixed top-0 start-0 end-0 z-50 transition-all duration-500",
+          "fixed top-0 start-0 end-0 z-[100] transition-all duration-500",
           isScrolled
             ? "glass-strong py-2.5 shadow-lg shadow-black/10 dark:shadow-black/20 backdrop-blur-2xl"
             : "py-4 bg-gradient-to-b from-black/25 via-black/10 to-transparent dark:from-white/15 dark:via-white/5 dark:to-transparent"

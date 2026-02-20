@@ -64,7 +64,7 @@ export function Hero() {
   ];
 
   return (
-    <section className="hero-section relative min-h-screen flex items-center overflow-hidden">
+    <section className="hero-section relative z-0 min-h-screen flex items-center overflow-hidden">
       {/* Rich gradient background — reacts to dark mode via CSS variables */}
       <div
         className="absolute inset-0 transition-[background] duration-500"

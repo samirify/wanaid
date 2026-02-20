@@ -69,7 +69,7 @@ export function PageHero({
   const wave3 = `${id}-w3`;
 
   const wrapperClass =
-    "hero-section relative flex flex-col overflow-hidden transition-[background] duration-300 " +
+    "hero-section relative z-0 flex flex-col overflow-hidden transition-[background] duration-300 " +
     (asHeader ? "pt-24 md:pt-28 " : "") +
     (isFixed
       ? "h-[min(36rem,36vh)] min-h-[280px] lg:h-[32rem] lg:min-h-[320px] justify-center"
