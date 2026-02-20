@@ -76,7 +76,7 @@ export function PageHero({
   const wave3 = `${id}-w3`;
 
   const wrapperClass =
-    "relative flex flex-col overflow-hidden transition-[background] duration-300 isolate [contain:content] " +
+    "hero-section relative flex flex-col overflow-hidden transition-[background] duration-300 " +
     (asHeader ? "pt-24 md:pt-28 " : "") +
     (isFixed
       ? "h-[min(36rem,36vh)] min-h-[280px] lg:h-[32rem] lg:min-h-[320px] justify-center"
@@ -127,19 +127,11 @@ export function PageHero({
         style={{ background: "var(--hero-spotlight)" }}
         aria-hidden
       />
-      {/* Decorative orbs — soft lighting like landing hero; scaled for smaller hero */}
-      <div className="absolute top-0 -start-16 w-64 h-64 sm:w-80 sm:h-80 bg-primary-400/25 dark:bg-primary-500/12 rounded-full blur-[80px] animate-float pointer-events-none transition-opacity duration-300" aria-hidden />
-      <div
-        className="absolute bottom-0 -end-16 w-72 h-72 sm:w-96 sm:h-96 bg-primary-500/20 dark:bg-primary-600/10 rounded-full blur-[90px] animate-float pointer-events-none transition-opacity duration-300"
-        style={{ animationDelay: "2s" }}
-        aria-hidden
-      />
-      <div
-        className="absolute top-1/2 end-1/4 w-40 h-40 sm:w-52 sm:h-52 bg-white/5 dark:bg-slate-400/5 rounded-full blur-3xl animate-float pointer-events-none transition-opacity duration-300"
-        style={{ animationDelay: "1s" }}
-        aria-hidden
-      />
-      <div className="absolute top-1/3 end-1/3 w-32 h-32 sm:w-40 sm:h-40 bg-primary-300/15 dark:bg-primary-500/8 rounded-full blur-2xl animate-float pointer-events-none transition-opacity duration-300" style={{ animationDelay: "0.5s" }} aria-hidden />
+      {/* Decorative orbs — no animation on mobile to avoid blocking touch */}
+      <div className="hero-orb absolute top-0 -start-16 w-64 h-64 sm:w-80 sm:h-80 bg-primary-400/25 dark:bg-primary-500/12 rounded-full blur-[80px] animate-float pointer-events-none transition-opacity duration-300" aria-hidden />
+      <div className="hero-orb absolute bottom-0 -end-16 w-72 h-72 sm:w-96 sm:h-96 bg-primary-500/20 dark:bg-primary-600/10 rounded-full blur-[90px] animate-float pointer-events-none transition-opacity duration-300" style={{ animationDelay: "2s" }} aria-hidden />
+      <div className="hero-orb absolute top-1/2 end-1/4 w-40 h-40 sm:w-52 sm:h-52 bg-white/5 dark:bg-slate-400/5 rounded-full blur-3xl animate-float pointer-events-none transition-opacity duration-300" style={{ animationDelay: "1s" }} aria-hidden />
+      <div className="hero-orb absolute top-1/3 end-1/3 w-32 h-32 sm:w-40 sm:h-40 bg-primary-300/15 dark:bg-primary-500/8 rounded-full blur-2xl animate-float pointer-events-none transition-opacity duration-300" style={{ animationDelay: "0.5s" }} aria-hidden />
       {/* Floating particles — gentle drift + twinkle */}
       <div
         className="page-hero-particles absolute inset-0 overflow-hidden pointer-events-none opacity-70 dark:opacity-60 transition-opacity duration-300 rtl:-scale-x-100"

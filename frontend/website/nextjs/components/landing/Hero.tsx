@@ -64,7 +64,7 @@ export function Hero() {
   ];
 
   return (
-    <section className="relative min-h-screen flex items-center overflow-hidden isolate [contain:content]">
+    <section className="hero-section relative min-h-screen flex items-center overflow-hidden">
       {/* Rich gradient background — reacts to dark mode via CSS variables */}
       <div
         className="absolute inset-0 transition-[background] duration-500"
@@ -83,19 +83,13 @@ export function Hero() {
         className="absolute inset-0 opacity-60 transition-opacity duration-500"
         style={{ background: "var(--hero-spotlight)" }}
       />
-      {/* Animated children's charity pattern — replaces hero image */}
-      <HeroAnimatedPattern />
-      {/* Decorative orbs — light mode: brighter; dark mode: subtler */}
-      <div className="absolute top-10 -start-20 w-[420px] h-[420px] bg-primary-400/30 dark:bg-primary-500/15 rounded-full blur-[100px] animate-float transition-colors duration-500" />
-      <div
-        className="absolute bottom-10 -end-20 w-[480px] h-[480px] bg-primary-500/25 dark:bg-primary-600/20 rounded-full blur-[120px] animate-float transition-colors duration-500"
-        style={{ animationDelay: "2s" }}
-      />
-      <div
-        className="absolute top-1/2 end-1/4 w-[320px] h-[320px] bg-white/5 dark:bg-slate-400/5 rounded-full blur-3xl animate-float transition-colors duration-500"
-        style={{ animationDelay: "1s" }}
-      />
-      <div className="absolute top-1/3 end-1/3 w-[200px] h-[200px] bg-primary-300/15 dark:bg-primary-500/10 rounded-full blur-2xl animate-float transition-colors duration-500" style={{ animationDelay: "0.5s" }} />
+      {/* Pattern only on desktop — on mobile it can block touch after nav close */}
+      {isLg && <HeroAnimatedPattern />}
+      {/* Decorative orbs — no animation on mobile to avoid GPU blocking touch */}
+      <div className="hero-orb absolute top-10 -start-20 w-[420px] h-[420px] bg-primary-400/30 dark:bg-primary-500/15 rounded-full blur-[100px] animate-float transition-colors duration-500" />
+      <div className="hero-orb absolute bottom-10 -end-20 w-[480px] h-[480px] bg-primary-500/25 dark:bg-primary-600/20 rounded-full blur-[120px] animate-float transition-colors duration-500" style={{ animationDelay: "2s" }} />
+      <div className="hero-orb absolute top-1/2 end-1/4 w-[320px] h-[320px] bg-white/5 dark:bg-slate-400/5 rounded-full blur-3xl animate-float transition-colors duration-500" style={{ animationDelay: "1s" }} />
+      <div className="hero-orb absolute top-1/3 end-1/3 w-[200px] h-[200px] bg-primary-300/15 dark:bg-primary-500/10 rounded-full blur-2xl animate-float transition-colors duration-500" style={{ animationDelay: "0.5s" }} />
 
       {/* Subtle grid texture */}
       <div
