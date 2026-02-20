@@ -1,7 +1,6 @@
 "use client";
 
 import { useId, useLayoutEffect } from "react";
-import { motion } from "framer-motion";
 import { mediaUrl } from "@/lib/utils";
 
 const curveSvg = (
@@ -43,12 +42,6 @@ export interface PageHeroProps {
   /** Called with the title string when rendered (for document title). Plain string only, no HTML. */
   onTitleResolved?: (title: string | null) => void;
 }
-
-const motionProps = {
-  initial: { opacity: 0, y: 16 },
-  animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.4, ease: "easeOut" },
-} as const;
 
 export function PageHero({
   title,
@@ -237,17 +230,13 @@ export function PageHero({
         <div className={contentInnerClass}>
           <div className={isCenter ? undefined : "lg:flex-1 text-white shrink-0"}>
             {topLine != null && topLine !== "" && (
-              <motion.p {...motionProps} className={topLineClass}>
+              <p className={`${topLineClass} page-hero-fade`}>
                 {topLine}
-              </motion.p>
+              </p>
             )}
-            <motion.h1
-              {...motionProps}
-              transition={{ ...motionProps.transition, delay: 0.05 }}
-              className={titleClass}
-            >
+            <h1 className={`${titleClass} page-hero-fade page-hero-fade-delay-1`}>
               {title}
-            </motion.h1>
+            </h1>
             {bottomLine != null && bottomLine !== "" && (
               <>
                 {isCenter && (
@@ -256,13 +245,9 @@ export function PageHero({
                     aria-hidden
                   />
                 )}
-                <motion.p
-                  {...motionProps}
-                  transition={{ ...motionProps.transition, delay: 0.1 }}
-                  className={bottomLineClass + (isCenter ? " mt-4" : "")}
-                >
+                <p className={`${bottomLineClass + (isCenter ? " mt-4" : "")} page-hero-fade page-hero-fade-delay-2`}>
                   {bottomLine}
-                </motion.p>
+                </p>
               </>
             )}
           </div>

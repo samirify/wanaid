@@ -419,6 +419,27 @@
     animation: waveShimmer 6s ease-in-out infinite;
   }
 
+  /* PageHero text entrance — CSS-only so we can disable on mobile */
+  @keyframes pageHeroFade {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  .page-hero-fade {
+    animation: pageHeroFade 0.4s ease-out both;
+  }
+  .page-hero-fade-delay-1 {
+    animation-delay: 0.05s;
+  }
+  .page-hero-fade-delay-2 {
+    animation-delay: 0.1s;
+  }
+
   @keyframes waveShimmer {
     0%,
     100% {
@@ -488,7 +509,7 @@
     }
   }
 
-  /* On mobile, hero orbs and float animations can block touch after nav close — disable */
+  /* On mobile, hero animations can block touch or delay nav open — disable */
   @media (max-width: 1023px) {
     .hero-section .hero-orb {
       animation: none !important;
@@ -496,10 +517,22 @@
     .hero-section .animate-float {
       animation: none !important;
     }
+    .hero-section .page-hero-particles,
     .hero-section .page-hero-particle,
     .hero-section .page-hero-particle-accent,
     .hero-section .page-hero-waves-drift,
     .hero-section .page-hero-wave-shimmer {
+      animation: none !important;
+    }
+    /* PageHero text entrance — no animation on mobile so nav stays responsive */
+    .hero-section .page-hero-fade {
+      animation: none !important;
+    }
+    /* Home hero scroll indicator: no ripple/orbit/glow/chevron bounce so nav opens immediately */
+    .hero-section .hero-scroll-indicator .hero-scroll-ripple,
+    .hero-section .hero-scroll-indicator .hero-scroll-orbit,
+    .hero-section .hero-scroll-indicator .hero-scroll-glow,
+    .hero-section .hero-scroll-indicator .hero-chevron-bounce {
       animation: none !important;
     }
   }

@@ -228,14 +228,14 @@ export function Hero() {
         initial={{ opacity: 0, scale: 0.6 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: 1.2, duration: 0.7, ease: "easeOut" }}
-        className="absolute bottom-28 sm:bottom-32 left-0 right-0 flex justify-center z-20"
+        className="hero-scroll-indicator absolute bottom-28 sm:bottom-32 left-0 right-0 flex justify-center z-20"
       >
         <a
           href="#content"
           className="group relative flex items-center justify-center w-20 h-20 sm:w-24 sm:h-24 focus:outline-none"
           aria-label="Scroll to content"
         >
-          {/* Ripple rings radiating outward */}
+          {/* Ripple rings — no animation on mobile to avoid delaying nav open */}
           <span className="absolute inset-0 rounded-full border border-white/25 hero-scroll-ripple" />
           <span className="absolute -inset-3 sm:-inset-4 rounded-full border border-primary-300/20 hero-scroll-ripple" style={{ animationDelay: "0.6s" }} />
           <span className="absolute -inset-6 sm:-inset-8 rounded-full border border-primary-400/12 hero-scroll-ripple" style={{ animationDelay: "1.2s" }} />
@@ -254,9 +254,9 @@ export function Hero() {
           {/* Soft glow */}
           <span className="absolute inset-0 rounded-full bg-white/10 blur-xl group-hover:bg-white/15 transition-all duration-500 hero-scroll-glow" />
 
-          {/* Bouncing double-chevron */}
+          {/* Bouncing double-chevron — class so we can disable on mobile */}
           <div
-            className="relative z-10 flex flex-col items-center gap-0"
+            className="hero-chevron-bounce relative z-10 flex flex-col items-center gap-0"
             style={{ animation: "heroChevronBounce 2s ease-in-out infinite" }}
           >
             <svg
