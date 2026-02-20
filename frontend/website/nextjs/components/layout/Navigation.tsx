@@ -98,7 +98,7 @@ export function Navigation() {
             <button
               type="button"
               onClick={() => setIsOpen(!isOpen)}
-              className={cn("lg:hidden p-2 rounded-xl transition-colors", isScrolled ? "text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800" : "text-white hover:bg-white/10")}
+              className={cn("lg:hidden p-2 rounded-xl transition-colors touch-manipulation", isScrolled ? "text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800" : "text-white hover:bg-white/10")}
               aria-label="Toggle menu"
               aria-expanded={isOpen}
             >
@@ -108,11 +108,17 @@ export function Navigation() {
         </div>
       </nav>
 
+      {/* visibility:hidden after close animation so overlay doesn't capture first tap on reopen */}
       <div
         className={cn(
-          "fixed inset-0 z-[99999] lg:hidden transition-[opacity,transform] duration-300 ease-out",
-          isOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+          "fixed inset-0 z-[99999] lg:hidden ease-out",
+          isOpen ? "opacity-100 pointer-events-auto visible" : "opacity-0 pointer-events-none invisible"
         )}
+        style={{
+          transition: isOpen
+            ? "opacity 300ms ease-out, visibility 0s"
+            : "opacity 300ms ease-out, visibility 0s 300ms",
+        }}
       >
         <div className="absolute inset-0 bg-black/70" onClick={close} aria-hidden />
         <div
