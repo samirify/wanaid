@@ -83,9 +83,9 @@ export function Hero() {
         className="absolute inset-0 opacity-60 transition-opacity duration-500"
         style={{ background: "var(--hero-spotlight)" }}
       />
-      {/* Pattern only on desktop — on mobile it can block touch after nav close */}
-      {isLg && <HeroAnimatedPattern />}
-      {/* Decorative orbs — no animation on mobile to avoid GPU blocking touch */}
+      {/* Animated pattern — enabled on all viewports */}
+      <HeroAnimatedPattern />
+      {/* Decorative orbs */}
       <div className="hero-orb absolute top-10 -start-20 w-[420px] h-[420px] bg-primary-400/30 dark:bg-primary-500/15 rounded-full blur-[100px] animate-float transition-colors duration-500" />
       <div className="hero-orb absolute bottom-10 -end-20 w-[480px] h-[480px] bg-primary-500/25 dark:bg-primary-600/20 rounded-full blur-[120px] animate-float transition-colors duration-500" style={{ animationDelay: "2s" }} />
       <div className="hero-orb absolute top-1/2 end-1/4 w-[320px] h-[320px] bg-white/5 dark:bg-slate-400/5 rounded-full blur-3xl animate-float transition-colors duration-500" style={{ animationDelay: "1s" }} />

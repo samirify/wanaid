@@ -517,34 +517,6 @@
     }
   }
 
-  /* On mobile, hero animations can block touch or delay nav open — disable */
-  @media (max-width: 1023px) {
-    .hero-section .hero-orb {
-      animation: none !important;
-    }
-    .hero-section .animate-float {
-      animation: none !important;
-    }
-    .hero-section .page-hero-particles,
-    .hero-section .page-hero-particle,
-    .hero-section .page-hero-particle-accent,
-    .hero-section .page-hero-waves-drift,
-    .hero-section .page-hero-wave-shimmer {
-      animation: none !important;
-    }
-    /* PageHero text entrance — no animation on mobile so nav stays responsive */
-    .hero-section .page-hero-fade {
-      animation: none !important;
-    }
-    /* Home hero scroll indicator: no ripple/orbit/glow/chevron bounce so nav opens immediately */
-    .hero-section .hero-scroll-indicator .hero-scroll-ripple,
-    .hero-section .hero-scroll-indicator .hero-scroll-orbit,
-    .hero-section .hero-scroll-indicator .hero-scroll-glow,
-    .hero-section .hero-scroll-indicator .hero-chevron-bounce {
-      animation: none !important;
-    }
-  }
-
   /* Hero floating shapes — compositor-thread animations (replaces framer-motion) */
   @keyframes heroFloatHeart {
     0%, 100% { transform: translate(0, 0) scale(1); }
