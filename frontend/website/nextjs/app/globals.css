@@ -62,6 +62,14 @@
     -moz-osx-font-smoothing: grayscale;
   }
 
+  /* Touch devices: fast tap delivery (no 300ms wait, no double-tap zoom delay) so nav and buttons feel instant */
+  @media (pointer: coarse) {
+    html,
+    body {
+      touch-action: manipulation;
+    }
+  }
+
   body {
     @apply bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100;
     @apply transition-colors duration-300;

@@ -108,11 +108,10 @@ export function Navigation() {
         </div>
       </nav>
 
-      {/* When closed: z-0 so overlay is behind nav (z-50) and can't receive touch. When open: z-[99999]. */}
       <div
         className={cn(
-          "fixed inset-0 lg:hidden transition-opacity duration-300 ease-out",
-          isOpen ? "z-[99999] opacity-100 pointer-events-auto" : "z-0 opacity-0 pointer-events-none"
+          "fixed inset-0 z-[99999] lg:hidden transition-opacity duration-300 ease-out",
+          isOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
         )}
       >
         <div className="absolute inset-0 bg-black/70" onClick={close} aria-hidden />
