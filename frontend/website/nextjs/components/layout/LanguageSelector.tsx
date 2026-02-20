@@ -5,6 +5,7 @@ import { useRouter, usePathname } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
 import { Globe } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { NAVIGATION_START_EVENT } from "@/components/shared/NavigationProgress";
 
 const languageLabels: Record<string, string> = {
   en: "EN",
@@ -17,7 +18,10 @@ export function LanguageSelector() {
   const pathname = usePathname();
 
   const switchLocale = (newLocale: string) => {
-    router.replace(pathname, { locale: newLocale });
+    if (newLocale !== locale) {
+      document.dispatchEvent(new CustomEvent(NAVIGATION_START_EVENT));
+      router.replace(pathname, { locale: newLocale });
+    }
   };
 
   return (

@@ -26,11 +26,17 @@ export function Navigation() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Prevent background scroll on mobile without touching body.overflow
+  // (changing overflow triggers heavy iOS relayout and can block touch for seconds)
   useEffect(() => {
-    document.body.style.overflow = isMobileMenuOpen ? "hidden" : "";
-    return () => {
-      document.body.style.overflow = "";
+    if (!isMobileMenuOpen) return;
+    const prevent = (e: TouchEvent) => {
+      if (!(e.target as Element)?.closest?.("[data-nav-panel]")) {
+        e.preventDefault();
+      }
     };
+    document.addEventListener("touchmove", prevent, { passive: false });
+    return () => document.removeEventListener("touchmove", prevent);
   }, [isMobileMenuOpen]);
 
   const navLinks: NavLink[] = [
@@ -154,7 +160,8 @@ export function Navigation() {
         </div>
       </nav>
 
-      {/* Mobile overlay + slide panel — always in DOM, CSS handles animation */}
+      {/* Mobile overlay + slide panel — always in DOM, CSS handles animation.
+          will-change during transition so overlay animates on its own GPU layer. */}
       <div
         className={cn(
           "fixed inset-0 z-[99999] lg:hidden transition-opacity duration-300 ease-out",
@@ -162,6 +169,9 @@ export function Navigation() {
             ? "opacity-100 pointer-events-auto"
             : "opacity-0 pointer-events-none"
         )}
+        style={{
+          willChange: isMobileMenuOpen ? "opacity" : undefined,
+        }}
       >
         <div
           className="absolute inset-0 bg-black/70"
@@ -170,6 +180,7 @@ export function Navigation() {
         />
 
         <div
+          data-nav-panel
           className={cn(
             "absolute top-0 end-0 h-full w-[300px] max-w-[85vw]",
             "bg-white dark:bg-slate-900 shadow-2xl",
@@ -179,6 +190,9 @@ export function Navigation() {
               ? "translate-x-0 rtl:-translate-x-0"
               : "translate-x-full rtl:-translate-x-full"
           )}
+          style={{
+            willChange: "transform",
+          }}
         >
           <div className="flex items-center justify-between p-4 border-b border-slate-200 dark:border-slate-700">
             <Link

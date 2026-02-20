@@ -659,12 +659,13 @@
   transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
-/* Navigation overlay — active: appears instantly (no transition) */
+/* Navigation overlay — active: appears instantly, above mobile nav (z-[99999]) */
 .area-loader-container.area-loader-nav.area-loader-nav-active {
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
   transition: none;
+  z-index: 100000;
 }
 
 .area-loader-container.hide {

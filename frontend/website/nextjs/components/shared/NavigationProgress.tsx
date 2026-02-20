@@ -5,6 +5,9 @@ import { usePathname, useSearchParams } from "next/navigation";
 
 const MIN_DISPLAY_MS = 300;
 
+/** Dispatched by LanguageSelector (and any programmatic nav) so the loader shows */
+export const NAVIGATION_START_EVENT = "navigationstart";
+
 function RouteChangeLoader() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -74,9 +77,18 @@ function RouteChangeLoader() {
       }
     };
 
+    const handleNavigationStart = () => {
+      clearTimers();
+      showTimeRef.current = Date.now();
+      setActive(true);
+    };
+
     document.addEventListener("click", handleClick, { capture: true });
-    return () =>
+    document.addEventListener(NAVIGATION_START_EVENT, handleNavigationStart);
+    return () => {
       document.removeEventListener("click", handleClick, { capture: true });
+      document.removeEventListener(NAVIGATION_START_EVENT, handleNavigationStart);
+    };
   }, [clearTimers]);
 
   return (
