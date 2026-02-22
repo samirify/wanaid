@@ -40,7 +40,7 @@ function RouteChangeLoader() {
       prevPathRef.current = pathname;
       prevSearchRef.current = currentSearch;
 
-      // Don't scroll to top when navigating to open-causes/blog — the section page scrolls to the target
+      // Don't scroll to top for open-causes/blog — section page scrolls to target in useLayoutEffect (before paint).
       if (!isLandingSectionPath(pathname)) {
         window.scrollTo(0, 0);
       }
@@ -96,6 +96,7 @@ function RouteChangeLoader() {
 
         if (isLandingSectionPath(url.pathname)) {
           setSkipFlagIfLandingSection(anchor);
+          window.scrollTo(0, 0);
           return;
         }
 

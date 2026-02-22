@@ -64,15 +64,18 @@ function LandingWithScroll({ section }: { section: string }) {
     pageTitle = settings.static_page_open_causes_title || `${clientName} | Open Causes`;
   }
 
-  // Scroll to section before paint: top first (avoid footer flash), then instant scroll to target. No delay, no smooth.
+  // Scroll to section before paint. Prevent browser scroll restoration so we don't flash footer on mobile.
   useLayoutEffect(() => {
     if (isLoading || hasScrolled.current) return;
     const el = scrollTargetRef.current;
     if (!el) return;
     hasScrolled.current = true;
+    const prevRestoration = history.scrollRestoration;
+    history.scrollRestoration = "manual";
     window.scrollTo(0, 0);
-    const top = el.getBoundingClientRect().top + window.scrollY - 70;
+    const top = el.offsetTop - 70;
     window.scrollTo({ top, left: 0, behavior: "auto" });
+    history.scrollRestoration = prevRestoration;
   }, [isLoading]);
 
   // Only show full-page loader when we have no cached data (e.g. direct load/refresh of /open-causes).
