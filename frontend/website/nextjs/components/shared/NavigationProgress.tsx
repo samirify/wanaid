@@ -110,7 +110,16 @@ function RouteChangeLoader() {
 
     const handleTouchStart = (e: TouchEvent) => {
       const anchor = (e.target as HTMLElement).closest("a");
-      if (anchor?.href) setSkipFlagIfLandingSection(anchor);
+      if (!anchor?.href) return;
+      try {
+        const url = new URL(anchor.href, window.location.origin);
+        if (url.origin === window.location.origin && isLandingSectionPath(url.pathname)) {
+          setSkipFlagIfLandingSection(anchor);
+          window.scrollTo(0, 0);
+        }
+      } catch {
+        /* ignore */
+      }
     };
 
     const handleNavigationStart = () => {

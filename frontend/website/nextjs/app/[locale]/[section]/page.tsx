@@ -52,7 +52,7 @@ export default function SectionPage({ params }: PageProps) {
 function LandingWithScroll({ section }: { section: string }) {
   const { pageContents, settings, isLoading, error, refetch } = useAppData();
   const scrollTargetRef = useRef<HTMLDivElement>(null);
-  const hasScrolled = useRef(false);
+  const lastScrolledSectionRef = useRef<string | null>(null);
 
   const clientName = process.env.NEXT_PUBLIC_CLIENT_NAME || "Client Name";
 
@@ -64,19 +64,20 @@ function LandingWithScroll({ section }: { section: string }) {
     pageTitle = settings.static_page_open_causes_title || `${clientName} | Open Causes`;
   }
 
-  // Scroll to section before paint. Prevent browser scroll restoration so we don't flash footer on mobile.
+  // Scroll to section before paint. Re-run when section changes so Back (e.g. blog → open-causes) scrolls correctly.
   useLayoutEffect(() => {
-    if (isLoading || hasScrolled.current) return;
+    if (isLoading) return;
+    if (lastScrolledSectionRef.current === section) return;
     const el = scrollTargetRef.current;
     if (!el) return;
-    hasScrolled.current = true;
+    lastScrolledSectionRef.current = section;
     const prevRestoration = history.scrollRestoration;
     history.scrollRestoration = "manual";
     window.scrollTo(0, 0);
     const top = el.offsetTop - 70;
     window.scrollTo({ top, left: 0, behavior: "auto" });
     history.scrollRestoration = prevRestoration;
-  }, [isLoading]);
+  }, [isLoading, section]);
 
   // Only show full-page loader when we have no cached data (e.g. direct load/refresh of /open-causes).
   // When navigating from home, data is already in context — no loader (fixes mobile too).
