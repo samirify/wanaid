@@ -55,6 +55,22 @@ function RouteChangeLoader() {
     return clearTimers;
   }, [pathname, searchParams, active, clearTimers]);
 
+  const setSkipFlagIfLandingSection = useCallback((anchor: HTMLAnchorElement) => {
+    try {
+      const url = new URL(anchor.href, window.location.origin);
+      if (url.origin !== window.location.origin) return;
+      if (isLandingSectionPath(url.pathname)) {
+        try {
+          sessionStorage.setItem("skipLocaleLoading", "1");
+        } catch {
+          /* ignore */
+        }
+      }
+    } catch {
+      /* ignore */
+    }
+  }, []);
+
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
       if (e.button !== 0 || e.ctrlKey || e.metaKey || e.shiftKey || e.altKey)
@@ -78,8 +94,8 @@ function RouteChangeLoader() {
         )
           return;
 
-        // To open-causes/blog: same content as landing, just scroll — don't show loader (desktop + mobile).
         if (isLandingSectionPath(url.pathname)) {
+          setSkipFlagIfLandingSection(anchor);
           return;
         }
 
@@ -91,6 +107,11 @@ function RouteChangeLoader() {
       }
     };
 
+    const handleTouchStart = (e: TouchEvent) => {
+      const anchor = (e.target as HTMLElement).closest("a");
+      if (anchor?.href) setSkipFlagIfLandingSection(anchor);
+    };
+
     const handleNavigationStart = () => {
       clearTimers();
       showTimeRef.current = Date.now();
@@ -98,12 +119,14 @@ function RouteChangeLoader() {
     };
 
     document.addEventListener("click", handleClick, { capture: true });
+    document.addEventListener("touchstart", handleTouchStart, { capture: true });
     document.addEventListener(NAVIGATION_START_EVENT, handleNavigationStart);
     return () => {
       document.removeEventListener("click", handleClick, { capture: true });
+      document.removeEventListener("touchstart", handleTouchStart, { capture: true });
       document.removeEventListener(NAVIGATION_START_EVENT, handleNavigationStart);
     };
-  }, [clearTimers]);
+  }, [clearTimers, setSkipFlagIfLandingSection]);
 
   return (
     <div
