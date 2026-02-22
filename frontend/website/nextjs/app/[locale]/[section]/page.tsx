@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, use, useRef } from "react";
+import { useState, useEffect, useLayoutEffect, use, useRef } from "react";
 import { useLocale } from "next-intl";
 import { motion } from "framer-motion";
 import { api } from "@/lib/api";
@@ -64,17 +64,15 @@ function LandingWithScroll({ section }: { section: string }) {
     pageTitle = settings.static_page_open_causes_title || `${clientName} | Open Causes`;
   }
 
-  // Scroll to the section after content loads
-  useEffect(() => {
-    if (!isLoading && scrollTargetRef.current && !hasScrolled.current) {
-      hasScrolled.current = true;
-      setTimeout(() => {
-        if (scrollTargetRef.current) {
-          const top = scrollTargetRef.current.offsetTop - 70;
-          window.scrollTo({ top, left: 0, behavior: "smooth" });
-        }
-      }, 100);
-    }
+  // Scroll to section before paint: top first (avoid footer flash), then instant scroll to target. No delay, no smooth.
+  useLayoutEffect(() => {
+    if (isLoading || hasScrolled.current) return;
+    const el = scrollTargetRef.current;
+    if (!el) return;
+    hasScrolled.current = true;
+    window.scrollTo(0, 0);
+    const top = el.getBoundingClientRect().top + window.scrollY - 70;
+    window.scrollTo({ top, left: 0, behavior: "auto" });
   }, [isLoading]);
 
   // Only show full-page loader when we have no cached data (e.g. direct load/refresh of /open-causes).
