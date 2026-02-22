@@ -5,6 +5,18 @@ import { usePathname, useSearchParams } from "next/navigation";
 
 const MIN_DISPLAY_MS = 300;
 
+/** Paths that are just the landing page with scroll-to-section (no loading should show when coming from landing) */
+const LANDING_SECTION_PATHS = ["/open-causes", "/blog"];
+
+function isLandingPath(pathname: string): boolean {
+  const segments = pathname.replace(/^\/|\/$/g, "").split("/").filter(Boolean);
+  return segments.length <= 1;
+}
+
+function isLandingSectionPath(pathname: string): boolean {
+  return LANDING_SECTION_PATHS.some((p) => pathname === p || pathname.endsWith(p));
+}
+
 /** Dispatched by LanguageSelector (and any programmatic nav) so the loader shows */
 export const NAVIGATION_START_EVENT = "navigationstart";
 
@@ -33,8 +45,10 @@ function RouteChangeLoader() {
       prevPathRef.current = pathname;
       prevSearchRef.current = currentSearch;
 
-      // Scroll to top on navigation so the new page is shown from the top
-      window.scrollTo(0, 0);
+      // Don't scroll to top when navigating to open-causes/blog — the section page scrolls to the target
+      if (!isLandingSectionPath(pathname)) {
+        window.scrollTo(0, 0);
+      }
 
       if (active) {
         const elapsed = Date.now() - showTimeRef.current;
@@ -68,6 +82,12 @@ function RouteChangeLoader() {
           url.search === window.location.search
         )
           return;
+
+        // From landing to open-causes/blog: same page content, just scroll — don't show loader
+        const currentPath = window.location.pathname;
+        if (isLandingPath(currentPath) && isLandingSectionPath(url.pathname)) {
+          return;
+        }
 
         clearTimers();
         showTimeRef.current = Date.now();
