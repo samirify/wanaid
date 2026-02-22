@@ -77,7 +77,9 @@ function LandingWithScroll({ section }: { section: string }) {
     }
   }, [isLoading]);
 
-  if (isLoading) return <Loader fullPage />;
+  // Only show full-page loader when we have no cached data (e.g. direct load/refresh of /open-causes).
+  // When navigating from home, data is already in context — no loader (fixes mobile too).
+  if (isLoading && !pageContents?.LANDING) return <Loader fullPage />;
   if (error) return <ErrorDisplay variant="page" errorCode="500" onRetry={refetch} showHomeButton />;
 
   const pillars = pageContents?.LANDING?.PILLARS || [];

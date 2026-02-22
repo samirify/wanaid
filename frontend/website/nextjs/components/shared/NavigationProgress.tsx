@@ -8,11 +8,6 @@ const MIN_DISPLAY_MS = 300;
 /** Paths that are just the landing page with scroll-to-section (no loading should show when coming from landing) */
 const LANDING_SECTION_PATHS = ["/open-causes", "/blog"];
 
-function isLandingPath(pathname: string): boolean {
-  const segments = pathname.replace(/^\/|\/$/g, "").split("/").filter(Boolean);
-  return segments.length <= 1;
-}
-
 function isLandingSectionPath(pathname: string): boolean {
   return LANDING_SECTION_PATHS.some((p) => pathname === p || pathname.endsWith(p));
 }
@@ -83,9 +78,8 @@ function RouteChangeLoader() {
         )
           return;
 
-        // From landing to open-causes/blog: same page content, just scroll — don't show loader
-        const currentPath = window.location.pathname;
-        if (isLandingPath(currentPath) && isLandingSectionPath(url.pathname)) {
+        // To open-causes/blog: same content as landing, just scroll — don't show loader (desktop + mobile).
+        if (isLandingSectionPath(url.pathname)) {
           return;
         }
 
