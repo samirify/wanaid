@@ -12,6 +12,7 @@ services:
     environment:
       APP_NAME: cms-api
       APP_ENV: local
+      APP_TIMEZONE: Europe/London
       APP_DEBUG: "true"
       APP_URL: http://localhost:${CMS_API_PORT:-9332}
       DB_CONNECTION: mysql

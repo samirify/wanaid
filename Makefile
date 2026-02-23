@@ -1,8 +1,15 @@
 .PHONY: help dev website-nextjs website-nextjs-dev website-nextjs-down website-nextjs-dev-down website-nextjs-logs website-nextjs-dev-logs website-nextjs-rebuild
-.PHONY: cms-api cms-api-down cms-api-clean cms-api-logs cms-api-migrate cms-api-install
+.PHONY: reset cms-api cms-api-down cms-api-clean cms-api-logs cms-api-migrate cms-api-migrate-fresh cms-api-seed cms-api-passport-install cms-api-passport-client-password cms-api-install cms-api-dump-autoload cms-api-composer-update
 
 # Default target
 help: ## Show available commands
+
+reset: ## Stop all, then start dev stack (clean slate). One command: install, migrate, Passport, serve.
+	$(MAKE) website-nextjs-dev-down
+	$(MAKE) cms-api-down
+	$(MAKE) dev
+	@echo "  ✓ Reset complete."
+	@echo ""
 
 dev: ## Start website + cms-api (one command for both)
 	$(MAKE) website-nextjs-dev
@@ -56,6 +63,7 @@ website-nextjs-dev-logs: ## Tail dev container logs
 	docker compose -f docker/website-nextjs/docker-compose.dev.yml logs -f
 
 # ── CMS API (Laravel) – shared API for all apps (Docker, project "wanaid") ─
+#    All cms-api commands run INSIDE the cms-api container. Do not run composer/artisan on the host.
 
 cms-api: cms-api-clean ## Build & run cms-api + MySQL + phpMyAdmin + Mailpit (Docker)
 	docker compose -f docker/cms-api/docker-compose.yml up --build -d
@@ -77,5 +85,27 @@ cms-api-logs: ## Tail cms-api container logs
 cms-api-migrate: ## Run Laravel migrations in cms-api container
 	docker compose -f docker/cms-api/docker-compose.yml run --rm cms-api php artisan migrate --force
 
-cms-api-install: ## Run composer install in cms-api container
+cms-api-migrate-fresh: ## Drop all tables and re-run migrations (destructive)
+	docker compose -f docker/cms-api/docker-compose.yml run --rm cms-api php artisan migrate:fresh --force
+
+cms-api-seed: ## Run database seeders in cms-api container
+	docker compose -f docker/cms-api/docker-compose.yml run --rm cms-api php artisan db:seed --force
+
+cms-api-passport-install: ## Install Passport (keys + default OAuth clients). Run once after migrate.
+	docker compose -f docker/cms-api/docker-compose.yml run --rm cms-api php artisan passport:install --force
+	@echo ""
+	@echo "  ✓ Passport installed. Add the client IDs and secrets above to your .env (PASSPORT_*)."
+	@echo "    For password grant run: make cms-api-passport-client-password"
+	@echo ""
+
+cms-api-passport-client-password: ## Create Passport password grant client (output id/secret for .env)
+	docker compose -f docker/cms-api/docker-compose.yml run --rm cms-api php artisan passport:client --password --no-interaction
+
+cms-api-install: ## Run composer install inside cms-api container (Docker only)
 	docker compose -f docker/cms-api/docker-compose.yml run --rm cms-api composer install --no-interaction
+
+cms-api-dump-autoload: ## Regenerate Composer autoload inside cms-api container (Docker only)
+	docker compose -f docker/cms-api/docker-compose.yml run --rm cms-api composer dump-autoload
+
+cms-api-composer-update: ## Run composer update inside cms-api container (Docker only)
+	docker compose -f docker/cms-api/docker-compose.yml run --rm cms-api composer update --no-interaction

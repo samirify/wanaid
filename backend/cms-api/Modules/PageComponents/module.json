@@ -1,0 +1,11 @@
+{
+    "name": "PageComponents",
+    "alias": "pagecomponents",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\PageComponents\\Providers\\PageComponentsServiceProvider"
+    ],
+    "files": []
+}
