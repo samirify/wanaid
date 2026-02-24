@@ -156,18 +156,17 @@ class ClientIdentitySeeder extends Seeder
         $arLangCode = DB::table('language')->where('locales_id', $arabicLocale->id)->first();
 
         $generalTranslations = [
-            // About us page
             'CLIENT_IDENTITY_' . $clientIdentity->id . '_BUSINESS_NAME' => [
-                $enLangCode->id => 'Samirify CMS',
-                $arLangCode->id => 'Samirify CMS',
+                $enLangCode->id => 'WAN Aid',
+                $arLangCode->id => 'وان ايد',
             ],
             'CLIENT_IDENTITY_' . $clientIdentity->id . '_BUSINESS_SLOGAN' => [
-                $enLangCode->id => "Let's make our life easier!",
-                $arLangCode->id => 'دعونا نجعل حياتنا أسهل!',
+                $enLangCode->id => 'We need your support',
+                $arLangCode->id => 'نحن بحاجة إلى دعمكم',
             ],
             'CLIENT_IDENTITY_' . $clientIdentity->id . '_BUSINESS_SHORT_DESCRIPTION' => [
-                $enLangCode->id => "Your business' short description...",
-                $arLangCode->id => 'الوصف المختصر لشركتك...',
+                $enLangCode->id => 'Any contribution makes a huge difference! Thanks for your generosity.',
+                $arLangCode->id => 'أي مساهمة تحدث فرقا كبيرا! شكرا على كرمكم.',
                 'is_html' => true
             ],
         ];

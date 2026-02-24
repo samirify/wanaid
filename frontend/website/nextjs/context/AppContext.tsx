@@ -17,6 +17,9 @@ import type {
   CauseSummary,
   AppSettings,
   PageContents,
+  ClientIdentity,
+  AppNavigation,
+  AppTheme,
 } from "@/lib/types";
 
 const defaultLanguages: Languages = {
@@ -118,28 +121,44 @@ const AppContext = createContext<AppContextValue>({
   refetch: async () => {},
 });
 
-/** Initial data from server (e.g. layout) to avoid duplicate fetch on first load */
+/** Initial data from server; matches new backend initialize response shape */
 export type InitialAppData = {
   languages: Languages;
   currencies: Currencies;
-  blogs: BlogSummary[];
-  gallery_count: number;
-  categories: unknown[];
-  open_causes: CauseSummary[];
+  available_modules?: unknown[];
+  identity?: ClientIdentity;
   settings: AppSettings;
   page_contents: PageContents;
+  navigation?: AppNavigation;
+  theme?: AppTheme;
+  blogs?: BlogSummary[];
+  gallery_count?: number;
+  categories?: unknown[];
+  open_causes?: CauseSummary[];
 };
+
+/** Normalize page_contents: new backend uses `main`, components expect `LANDING`. */
+function normalizePageContents(pc: PageContents): PageContents {
+  if (!pc) return pc;
+  const landing = pc.LANDING ?? pc.main;
+  if (!landing) return pc;
+  return { ...pc, LANDING: landing };
+}
 
 function toAppData(init: InitialAppData): AppData {
   return {
     languages: init.languages,
     currencies: init.currencies,
-    blogs: init.blogs,
-    galleryCount: init.gallery_count,
-    categories: init.categories,
-    openCauses: init.open_causes,
+    available_modules: init.available_modules,
+    identity: init.identity,
     settings: init.settings,
-    pageContents: init.page_contents,
+    pageContents: normalizePageContents(init.page_contents),
+    navigation: init.navigation,
+    theme: init.theme,
+    blogs: init.blogs ?? [],
+    galleryCount: init.gallery_count ?? 0,
+    categories: init.categories ?? [],
+    openCauses: init.open_causes ?? [],
     isInitialized: true,
     isLoading: false,
     error: null,

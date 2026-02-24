@@ -56,6 +56,22 @@ class DepartmentsAndTeamsSeeder extends Seeder
                 ]
             ],
             [
+                'unique_title' => $this->formatUniqueTitle('Volenteers'),
+                'name' => 'DEPARTMENT_{DEPARTMENT_ID}_NAME',
+                'sub_header' => 'DEPARTMENT_{DEPARTMENT_ID}_SUB_HEADER',
+                'order' => 2,
+                'translations' => [
+                    'DEPARTMENT_{DEPARTMENT_ID}_NAME' => [
+                        $enLangCode->id => 'Volenteers',
+                        $arLangCode->id => 'المتطوعين',
+                    ],
+                    'DEPARTMENT_{DEPARTMENT_ID}_SUB_HEADER' => [
+                        $enLangCode->id => '',
+                        $arLangCode->id => '',
+                    ],
+                ]
+            ],
+            [
                 'unique_title' => $this->formatUniqueTitle('Tech Team'),
                 'name' => 'DEPARTMENT_{DEPARTMENT_ID}_NAME',
                 'sub_header' => 'DEPARTMENT_{DEPARTMENT_ID}_SUB_HEADER',

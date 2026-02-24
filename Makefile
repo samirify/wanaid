@@ -1,14 +1,18 @@
 .PHONY: help dev website-nextjs website-nextjs-dev website-nextjs-down website-nextjs-dev-down website-nextjs-logs website-nextjs-dev-logs website-nextjs-rebuild
-.PHONY: reset cms-api cms-api-down cms-api-clean cms-api-logs cms-api-migrate cms-api-migrate-fresh cms-api-seed cms-api-passport-install cms-api-passport-client-password cms-api-install cms-api-dump-autoload cms-api-composer-update
+.PHONY: reset cms-api cms-api-down cms-api-restart cms-api-clean cms-api-logs cms-api-migrate cms-api-migrate-fresh cms-api-seed cms-api-passport-install cms-api-passport-client-password cms-api-install cms-api-dump-autoload cms-api-composer-update
 
 # Default target
 help: ## Show available commands
 
-reset: ## Stop all, then start dev stack (clean slate). One command: install, migrate, Passport, serve.
+reset: ## Stop all, wipe DB (migrate:fresh + seed), then start dev stack.
 	$(MAKE) website-nextjs-dev-down
 	$(MAKE) cms-api-down
-	$(MAKE) dev
-	@echo "  ✓ Reset complete."
+	$(MAKE) cms-api
+	@echo "  Wiping DB and seeding..."
+	docker compose -f docker/cms-api/docker-compose.yml run --rm --entrypoint sh cms-api -c "php artisan migrate:fresh --drop-views --force --no-interaction && php artisan module:migrate --force --no-interaction && php artisan db:seed --force --no-interaction"
+	$(MAKE) website-nextjs-dev
+	@echo ""
+	@echo "  ✓ Reset complete (DB wiped + seeded)."
 	@echo ""
 
 dev: ## Start website + cms-api (one command for both)
@@ -75,6 +79,10 @@ cms-api: cms-api-clean ## Build & run cms-api + MySQL + phpMyAdmin + Mailpit (Do
 
 cms-api-down: ## Stop cms-api stack
 	docker compose -f docker/cms-api/docker-compose.yml down
+
+cms-api-restart: ## Restart cms-api container (e.g. after bootstrap/config changes)
+	docker compose -f docker/cms-api/docker-compose.yml restart cms-api
+	@echo "  ✓ cms-api restarted."
 
 cms-api-clean: ## Remove leftover cms-api containers by name (fixes name conflicts)
 	-docker rm -f cms-api-mailpit cms-api-mysql cms-api-phpmyadmin 2>/dev/null || true

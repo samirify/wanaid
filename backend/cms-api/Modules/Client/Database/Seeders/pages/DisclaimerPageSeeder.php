@@ -105,8 +105,16 @@ class DisclaimerPageSeeder extends Seeder
                 'active' => 1,
                 'translations' => [
                     'PAGE_SECTION_{PAGE_CONTENT_ID}_VALUE' => [
-                        $enLangCode->id => '<h1 style="text-align: justify;">Disclaimer</h1>',
-                        $arLangCode->id => '<h1 style="text-align: justify;">إخلاء المسؤولية</h1>',
+                        $enLangCode->id => '<p><strong>Disclaimer of Warranty and Limitation of Liability</strong></p>
+                <p>The Website is provided &quot;AS IS.&quot; appfigures, its suppliers, officers, directors, employees, and agents
+                exclude and disclaim all representations and warranties, express or implied, related to this Website
+                or in connection with the Services. You exclude WAN from all liability for damages related to or
+                arising out of the use of this Website.</p>',
+                        $arLangCode->id => '<p><strong>Disclaimer of Warranty and Limitation of Liability</strong></p>
+                <p>The Website is provided &quot;AS IS.&quot; appfigures, its suppliers, officers, directors, employees, and agents
+                exclude and disclaim all representations and warranties, express or implied, related to this Website
+                or in connection with the Services. You exclude WAN from all liability for damages related to or
+                arising out of the use of this Website.</p>',
                     ]
                 ],
             ]

@@ -1,11 +1,12 @@
 /* ───────────────────────── Language & Localization ───────────────────────── */
 
 export interface LanguageInfo {
+  id?: number;
   country_code: string;
   locale: string;
   name: string;
   direction: "ltr" | "rtl";
-  default: string;
+  default: string | number;
 }
 
 export interface Languages {
@@ -17,9 +18,10 @@ export interface Languages {
 /* ───────────────────────────── Currency ──────────────────────────────────── */
 
 export interface Currency {
+  id?: number;
   code: string;
   name: string;
-  default: string;
+  default: string | number;
 }
 
 export interface Currencies {
@@ -157,58 +159,70 @@ export interface GalleryItem {
 
 /* ─────────────────────────── Settings ────────────────────────────────────── */
 
+/** New backend: social_media is array; main_contacts has emails/addresses/phones. Legacy flat fields still supported. */
 export interface AppSettings {
-  main_contact_phone_number: string;
-  main_contact_address: string;
-  google_maps_iframe_url: string;
-  main_contact_email: string;
-  social_media_facebook: string | null;
-  social_media_instagram: string | null;
-  social_media_linkedin: string | null;
-  social_media_twitter: string | null;
-  social_media_youtube: string | null;
-  static_button_get_started_label: string;
-  static_button_get_started_url: string;
-  static_button_get_started_url_type: string;
-  static_button_get_started_ga_label: string;
-  static_button_get_started_ga_action: string;
-  static_button_get_started_ga_category: string;
-  static_page_home_title: string | null;
-  static_page_home_meta_keywords: string;
-  static_page_home_meta_description: string;
-  static_page_open_causes_title: string | null;
-  static_page_open_causes_meta_keywords: string;
-  static_page_open_causes_meta_description: string;
-  static_page_blog_title: string | null;
-  static_page_blog_meta_keywords: string;
-  static_page_blog_meta_description: string;
-  static_page_contact_title: string | null;
-  static_page_contact_meta_keywords: string;
-  static_page_contact_meta_description: string;
-  [key: string]: string | null;
+  google_maps_iframe_url?: string;
+  organisation?: string;
+  social_media?: Array<{ code: string; url: string }>;
+  main_contacts?: {
+    emails?: Array<{ id: number; value: string }>;
+    addresses?: Array<{ id: number; value: string }>;
+    phones?: Array<{ id: number; value: string }>;
+  };
+  main_contact_phone_number?: string;
+  main_contact_address?: string;
+  main_contact_email?: string;
+  social_media_facebook?: string | null;
+  social_media_instagram?: string | null;
+  social_media_linkedin?: string | null;
+  social_media_twitter?: string | null;
+  social_media_youtube?: string | null;
+  static_button_get_started_label?: string;
+  static_button_get_started_url?: string;
+  static_button_get_started_url_type?: string;
+  static_button_get_started_ga_label?: string;
+  static_button_get_started_ga_action?: string;
+  static_button_get_started_ga_category?: string;
+  static_page_home_title?: string | null;
+  static_page_home_meta_keywords?: string;
+  static_page_home_meta_description?: string;
+  static_page_open_causes_title?: string | null;
+  static_page_open_causes_meta_keywords?: string;
+  static_page_open_causes_meta_description?: string;
+  static_page_blog_title?: string | null;
+  static_page_blog_meta_keywords?: string;
+  static_page_blog_meta_description?: string;
+  static_page_contact_title?: string | null;
+  static_page_contact_meta_keywords?: string;
+  static_page_contact_meta_description?: string;
+  [key: string]: unknown;
 }
 
 /* ───────────────────── Page Contents / Headers ──────────────────────────── */
 
 export interface HeaderCta {
-  id: string;
+  id: number | string;
+  name?: string;
   label: string;
-  url: string;
+  url?: string;
+  url_id?: number | null;
   url_type: "internal" | "external";
   style: "dark" | "light";
-  order: string;
-  active: string;
-  ga_actions_id: string | null;
-  ga_label: string | null;
-  ga_action: string | null;
-  ga_category: string | null;
+  order: number | string;
+  active: number | string;
+  ga_actions_id?: string | null;
+  ga_label?: string | null;
+  ga_action?: string | null;
+  ga_category?: string | null;
 }
 
 export interface PageHeaders {
+  size_code?: string;
+  size_name?: string;
   ctas: HeaderCta[];
   main_header_top: string;
   main_header_middle_big: string;
-  main_header_bottom: string | null;
+  main_header_bottom?: string | null;
   /** Optional hero image URL (from CMS or relative path e.g. /images/hero.jpg) */
   main_header_img?: string | null;
 }
@@ -220,17 +234,76 @@ export interface Pillar {
   cta: boolean | string;
 }
 
+/** New backend uses `main`; legacy uses `LANDING`. */
 export interface PageContents {
-  id: string;
-  LANDING: {
-    META: {
+  id: string | number;
+  main?: {
+    META?: {
       title: string | null;
       description: string | null;
       keywords: string | null;
     };
-    HEADER: PageHeaders;
-    PILLARS: Pillar[];
+    HEADER?: PageHeaders;
+    PILLARS?: Pillar[];
   };
+  LANDING?: {
+    META?: { title: string | null; description: string | null; keywords: string | null };
+    HEADER?: PageHeaders;
+    PILLARS?: Pillar[];
+  };
+}
+
+/* ─────────────────────── Identity & Theme (new backend) ──────────────────── */
+
+export interface ClientIdentity {
+  name: string;
+  slogan: string;
+  short_description: string;
+}
+
+export interface ThemeColors {
+  name: string;
+  red: string;
+  green: string;
+  blue: string;
+  hex: string;
+}
+
+export interface ThemeLogos {
+  logo_coloured_light?: string;
+  logo_coloured_dark?: string;
+}
+
+export interface AppTheme {
+  colors?: {
+    primary: ThemeColors;
+    secondary: ThemeColors;
+  };
+  logos?: ThemeLogos;
+}
+
+export interface NavItem {
+  key: string;
+  label: string;
+  pathId?: number | null;
+  nodeStyle: string;
+  path?: string;
+  pathLocation?: string;
+  children?: NavItem[];
+  translations?: Record<string, Record<string, string>>;
+}
+
+export interface NavSection {
+  code: string;
+  name: string;
+  items: NavItem[];
+}
+
+export interface AppNavigation {
+  top?: NavSection;
+  "top-right"?: NavSection;
+  footer?: NavSection;
+  [key: string]: NavSection | undefined;
 }
 
 /* ─────────────────────── Meta ────────────────────────────────────────────── */
@@ -247,12 +320,16 @@ export interface InitializeResponse {
   data: {
     languages: Languages;
     currencies: Currencies;
-    blogs: BlogSummary[];
-    gallery_count: number;
-    categories: unknown[];
-    open_causes: CauseSummary[];
+    available_modules?: unknown[];
+    identity?: ClientIdentity;
     settings: AppSettings;
     page_contents: PageContents;
+    navigation?: AppNavigation;
+    theme?: AppTheme;
+    blogs?: BlogSummary[];
+    gallery_count?: number;
+    categories?: unknown[];
+    open_causes?: CauseSummary[];
   };
   user?: {
     access_token: string;
@@ -261,7 +338,7 @@ export interface InitializeResponse {
     user_full_name: string;
     user_img: string;
     session_expires_at: string;
-  };
+  } | null;
 }
 
 export interface AboutPageResponse {
@@ -356,12 +433,16 @@ export interface CookiePreferences {
 export interface AppData {
   languages: Languages;
   currencies: Currencies;
+  available_modules?: unknown[];
+  identity?: ClientIdentity;
+  settings: AppSettings;
+  pageContents: PageContents;
+  navigation?: AppNavigation;
+  theme?: AppTheme;
   blogs: BlogSummary[];
   galleryCount: number;
   categories: unknown[];
   openCauses: CauseSummary[];
-  settings: AppSettings;
-  pageContents: PageContents;
   isInitialized: boolean;
   isLoading: boolean;
   error: string | null;

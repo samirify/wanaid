@@ -2,85 +2,50 @@
 
 namespace Modules\Client\Database\Seeders;
 
-use App\Traits\AppHelperTrait;
 use Illuminate\Database\Seeder;
-use Illuminate\Database\Eloquent\Model;
+use Modules\Client\Models\ClientModule;
 use Modules\Client\Models\ClientModuleCategory;
-use Modules\Client\Models\ClientModuleCategoryCustomColumn;
+use Modules\Client\Services\ClientModulesService;
 
+/**
+ * Seeds Blog and Charity Causes into client_modules and creates their
+ * module tables (cl_blog, cl_charity_causes) and views.
+ * Delete-before-insert for make reset workflow.
+ */
 class ClientModulesSeeder extends Seeder
 {
-    use AppHelperTrait;
-
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
-    public function run()
+    public function run(): void
     {
-        Model::unguard();
+        $clientModulesService = app(ClientModulesService::class);
 
-        $blogCategory = ClientModuleCategory::create([
+        $codes = ['blog', 'causes'];
+
+        foreach ($codes as $code) {
+            $module = ClientModule::where('code', $code)->first();
+            if ($module) {
+                $clientModulesService->removeModuleTableAndView($module);
+                $module->delete();
+            }
+        }
+
+        $blogCategory = ClientModuleCategory::where('code', 'blog')->firstOrFail();
+        $charityCausesCategory = ClientModuleCategory::where('code', 'charity_causes')->firstOrFail();
+
+        ClientModule::create([
             'name' => 'Blog',
             'code' => 'blog',
+            'category_id' => $blogCategory->id,
+            'active' => true,
         ]);
 
-        $blogCustomColums = [
-            [
-                'name' => 'resource_link',
-                'type' => 'string',
-            ],
-            [
-                'name' => 'user_id',
-                'type' => 'foreign',
-                'foreign_table' => 'users',
-                'foreign_column' => 'id',
-                'options' => json_encode([
-                    'label' => 'Author',
-                    'key_column' => 'id',
-                    'value_column' => 'username',
-                    'filters' => [],
-                ])
-            ],
-        ];
-
-        foreach ($blogCustomColums as $column) {
-            ClientModuleCategoryCustomColumn::create(array_merge($column, ['client_module_categories_id' => $blogCategory->id]));
-        }
-
-        $charityCausesCategory = ClientModuleCategory::create([
+        ClientModule::create([
             'name' => 'Charity Causes',
-            'code' => 'charity_causes',
+            'code' => 'causes',
+            'category_id' => $charityCausesCategory->id,
+            'active' => true,
         ]);
 
-        $charityCausesCustomColums = [
-            [
-                'name' => 'price',
-                'type' => 'float',
-            ],
-            [
-                'name' => 'target',
-                'type' => 'float',
-            ],
-            [
-                'name' => 'currencies_id',
-                'type' => 'foreign',
-                'foreign_table' => 'currencies',
-                'foreign_column' => 'id',
-                'options' => json_encode([
-                    'label' => 'Currency',
-                    'key_column' => 'id',
-                    'value_column' => 'name',
-                    'filters' => [
-                        ['active', '=', true]
-                    ],
-                ])
-            ],
-        ];
-
-        foreach ($charityCausesCustomColums as $column) {
-            ClientModuleCategoryCustomColumn::create(array_merge($column, ['client_module_categories_id' => $charityCausesCategory->id]));
-        }
+        // Tables cl_blog and cl_causes are created by migration
+        // 2025_02_24_000002_create_blog_and_charity_causes_module_tables
     }
 }

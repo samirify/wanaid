@@ -10,12 +10,19 @@ services:
     container_name: wanaid-website
     ports:
       - "${PORT:-9331}:${PORT:-9331}"
+    env_file:
+      - ../../frontend/website/nextjs/.env.local
+      # Same API key as backend (single source of truth for server-side x-api-key)
+      - ../../backend/cms-api/.env
     environment:
       - NODE_ENV=development
       - PORT=${PORT:-9331}
-      - NEXT_PUBLIC_API_URL=https://api.wanaid.org/api
+      # Client (browser) talks to backend on host
+      - NEXT_PUBLIC_API_URL=http://localhost:${CMS_API_PORT:-9332}/api
+      # Server-side fetch from container must use host (Docker Mac/Windows)
+      - CMS_API_URL=http://host.docker.internal:${CMS_API_PORT:-9332}/api
       - NEXT_PUBLIC_SITE_URL=http://localhost:${PORT:-9331}
-      - TRANSLATIONS_URL=https://www.wanaid.org
+      - TRANSLATIONS_URL=http://localhost:${CMS_API_PORT:-9332}
     volumes:
       - ../../frontend/website/nextjs/app:/app/app
       - ../../frontend/website/nextjs/components:/app/components

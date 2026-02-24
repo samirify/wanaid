@@ -30,6 +30,9 @@ class ClientDatabaseSeeder extends Seeder
         $this->call(TermsOfUsePageSeeder::class);
         $this->call(PrivacyPolicyPageSeeder::class);
         $this->call(NavigationSeeder::class);
+        $this->call(ClientModuleCategoriesSeeder::class);
         $this->call(ClientModulesSeeder::class);
+        $this->call(BlogAndCausesDataSeeder::class);
+        $this->call(BlogAndCausesTranslationsSeeder::class);
     }
 }

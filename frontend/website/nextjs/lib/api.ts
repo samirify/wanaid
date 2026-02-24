@@ -17,6 +17,12 @@ import type {
 const getApiUrl = (): string =>
   process.env.NEXT_PUBLIC_API_URL || "https://api.wanaid.org/api";
 
+/** Base URL for same-origin API routes (proxies). Client: ""; server: site origin. */
+function getWebsiteApiUrl(): string {
+  if (typeof window !== "undefined") return "";
+  return process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:9331";
+}
+
 /* ─────────────────────── Error Class ─────────────────────────────────────── */
 
 export class ApiError extends Error {
@@ -38,6 +44,8 @@ interface RequestOptions {
   revalidate?: number;
   /** Extra headers (e.g. Cookie for server-side auth) */
   headers?: Record<string, string>;
+  /** Use website origin (for proxy routes like /api/about-data). Omit to use backend API URL. */
+  useWebsiteOrigin?: boolean;
 }
 
 async function request<T>(
@@ -50,9 +58,11 @@ async function request<T>(
     cache = "no-cache",
     revalidate,
     headers: extraHeaders,
+    useWebsiteOrigin = false,
   } = options;
 
-  const url = `${getApiUrl()}${endpoint}`;
+  const base = useWebsiteOrigin ? getWebsiteApiUrl() : getApiUrl();
+  const url = base ? `${base}${endpoint}` : endpoint;
 
   const headers: Record<string, string> = {
     "Content-Type": "application/json",
@@ -99,12 +109,12 @@ export const api = {
     }).then((res) => res.data);
   },
 
-  /** About page: team members, pillars, header image. */
+  /** About page: team members, pillars, header image (proxied via /api/about-data). */
   getAboutData(locale?: string) {
     const params = locale ? `?locale=${locale}` : "";
-    return request<AboutPageResponse>(`/about-data${params}`).then(
-      (res) => res.data
-    );
+    return request<AboutPageResponse>(`/api/about-data${params}`, {
+      useWebsiteOrigin: true,
+    }).then((res) => res.data);
   },
 
   /** Single cause by slug. */

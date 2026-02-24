@@ -11,9 +11,11 @@ export default getRequestConfig(async ({ requestLocale }) => {
   let messages: Record<string, string> = {};
 
   try {
-    const translationsUrl =
-      process.env.TRANSLATIONS_URL || "https://www.wanaid.org";
-    const url = `${translationsUrl}/translations/${locale}.json?_t=${Date.now()}`;
+    // Use our API proxy (same-origin) so server-side fetch works in Docker and no API key exposure
+    const baseUrl =
+      process.env.NEXT_PUBLIC_SITE_URL ||
+      (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:9331");
+    const url = `${baseUrl}/api/translations/${locale}?_t=${Date.now()}`;
 
     const response = await fetch(url, { cache: "no-cache" });
 

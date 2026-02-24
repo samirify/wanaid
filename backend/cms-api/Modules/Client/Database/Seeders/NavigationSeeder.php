@@ -229,8 +229,8 @@ class NavigationSeeder extends Seeder
                 $arLangCode->id => 'المزيد',
             ],
             'NAV_GET_STARTED_LABEL' => [
-                $enLangCode->id => 'Get Started',
-                $arLangCode->id => 'لنبدأ',
+                $enLangCode->id => 'Donate Now',
+                $arLangCode->id => 'تبرع الآن',
             ],
             'NAV_WHO_ARE_WE_LABEL' => [
                 $enLangCode->id => 'Who are we?',
